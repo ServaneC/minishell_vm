@@ -6,13 +6,13 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 02:26:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 15:01:47 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:01:29 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*variable_value(t_list *env, char *var)
+char		*variable_value(t_list *env, char *var)
 {
 	char	*name;
 
@@ -23,10 +23,10 @@ char	*variable_value(t_list *env, char *var)
 			return (ft_strrchr(env->content, '=') + 1);
 		env = env->next;
 	}
-	return(NULL);
+	return (NULL);
 }
 
-char	*echo_str(char *cmd, int status, t_list *env)
+char		*echo_str(char *cmd, int status, t_list *env)
 {
 	if (cmd == NULL)
 		return (NULL);
@@ -35,17 +35,17 @@ char	*echo_str(char *cmd, int status, t_list *env)
 		if (cmd[1] == '?')
 			return (ft_itoa(status));
 		else
-			return(variable_value(env, cmd));
+			return (variable_value(env, cmd));
 	}
 	else
 		return (cmd);
 }
 
-void	builtin_echo(t_list *env, char **cmd, int status, char *line)
+void		builtin_echo(t_list *env, char **cmd, int status, char *line)
 {
 	char	*str;
 	char	*to_print;
-	int 	i;
+	int		i;
 
 	str = NULL;
 	(void)line;

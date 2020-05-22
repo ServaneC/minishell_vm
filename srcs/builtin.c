@@ -6,13 +6,13 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 15:01:42 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:03:44 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int is_builtin(char *cmd)
+int		is_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "cd", 3) == 0)
 		return (1);
@@ -55,7 +55,6 @@ int		change_value(t_list *env, char *name, char *newvalue)
 
 	new = ft_strjoin(name, "=");
 	new = ft_strjoin(new, newvalue);
-
 	while (env->next)
 	{
 		if (ft_strncmp(env->content, name, ft_strlen(name)) == 0)
@@ -65,12 +64,11 @@ int		change_value(t_list *env, char *name, char *newvalue)
 		}
 		env = env->next;
 	}
-	return (0);	
+	return (0);
 }
 
 void	builtin_cd(char *path, t_list *env)
 {
-	(void)env;
 	char	old_pwd[MAX_PATH];
 	char	pwd[MAX_PATH];
 
@@ -82,7 +80,7 @@ void	builtin_cd(char *path, t_list *env)
 		path = variable_value(env, path);
 	}
 	if (path[0] == '~')
-			path = ft_strjoin(variable_value(env, "$HOME"), &path[1]);
+		path = ft_strjoin(variable_value(env, "$HOME"), &path[1]);
 	if (chdir(path) == 0)
 	{
 		getcwd(pwd, MAX_PATH);

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 15:11:33 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:08:18 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ static int	free_mallocs(char **buffer, int *size)
 
 static int	ft_nbword(char const *s)
 {
-	int i;
-	char c;
-	int nbword;
+	int		i;
+	char	c;
+	int		nbword;
 
 	i = 0;
 	nbword = 0;
@@ -53,11 +53,11 @@ static int	ft_nbword(char const *s)
 
 static int	*fill_tab_size(char const *s)
 {
-	int i;
-	int j;
-	char c;
-	int *size;
-	int nbword;
+	int		i;
+	int		j;
+	char	c;
+	int		*size;
+	int		nbword;
 
 	i = -1;
 	nbword = ft_nbword(s);

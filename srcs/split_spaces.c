@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 15:24:20 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:09:00 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	**free_mallocs(char **buffer, int *size)
 	return (NULL);
 }
 
-static int		is_sep(char c, const char *charset)
+static int	is_sep(char c, const char *charset)
 {
 	int	i;
 
@@ -41,12 +41,12 @@ static int		is_sep(char c, const char *charset)
 	return (0);
 }
 
-static int		is_word(char c, char cbefore, const char *charset)
+static int	is_word(char c, char cbefore, const char *charset)
 {
 	return (!(is_sep(c, charset)) && is_sep(cbefore, charset));
 }
 
-static int		ft_nbwords(const char *str, const char *charset)
+static int	ft_nbwords(const char *str, const char *charset)
 {
 	int		i;
 	int		nbwords;
@@ -71,7 +71,7 @@ static int		ft_nbwords(const char *str, const char *charset)
 	return (nbwords);
 }
 
-static int		*ft_size(const char *str, const char *charset)
+static int	*ft_size(const char *str, const char *charset)
 {
 	int		i;
 	int		j;
@@ -108,7 +108,7 @@ static int		*ft_size(const char *str, const char *charset)
 	return (size);
 }
 
-char	**split_spaces(char *s, char *charset)
+char		**split_spaces(char *s, char *charset)
 {
 	char	**tab;
 	int		i;

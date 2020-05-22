@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 15:01:51 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:00:18 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,35 +35,10 @@ t_list			*create_env(char **env)
 		next = ft_lstnew(env[i]);
 		ft_lstadd_back(&my_env, next);
 	}
-	return(my_env);
+	return (my_env);
 }
 
-void	ft_lstadd_env(t_list **env, t_list *elem)
-{
-	t_list	*my_env;
-	int		i;
-	int		size;
-
-	if (env == NULL)
-		return ;
-	my_env = *env;
-	size = ft_lstsize(my_env) - 2;
-	i = 0;
-	if (*env == NULL)
-		*env = elem;
-	else
-	{
-		while (my_env->next && i < size)
-		{
-			my_env = my_env->next;
-			i++;
-		}
-		elem->next = my_env->next;
-		my_env->next = elem;
-	}
-}
-
-int		replace_ifexist(t_list *env, char	*str)
+int				replace_ifexist(t_list *env, char *str)
 {
 	int		i;
 
@@ -79,10 +54,10 @@ int		replace_ifexist(t_list *env, char	*str)
 		}
 		env = env->next;
 	}
-	return (0);	
+	return (0);
 }
 
-void	builtin_export(char **cmd, t_list *env)
+void			builtin_export(char **cmd, t_list *env)
 {
 	t_list	*new;
 	char	*str;
@@ -100,7 +75,7 @@ void	builtin_export(char **cmd, t_list *env)
 			if ((ret = replace_ifexist(env, str)) == 0)
 			{
 				new = ft_lstnew(str);
-				ft_lstadd_env(&env, new);
+				ft_lstadd_back(&env, new);
 			}
 			else if (ret == -1)
 				ft_putendl_fd(strerror(errno), 2);
@@ -108,7 +83,7 @@ void	builtin_export(char **cmd, t_list *env)
 	}
 }
 
-int		len_variable(void *str)
+int				len_variable(void *str)
 {
 	int		len;
 	char	*s;
@@ -120,25 +95,25 @@ int		len_variable(void *str)
 	return (len);
 }
 
-t_list *env_delete_elem(t_list *env, char *str)
+t_list			*env_delete_elem(t_list *env, char *str)
 {
-	t_list *tmp;
+	t_list	*tmp;
 	int		len;
 
 	if (env == NULL)
-    	return NULL;
+		return (NULL);
 	len = len_variable(env->content);
 	if (ft_strncmp(str, env->content, len) == 0)
 	{
-    	tmp = env->next;
-    	free(env);
-    	return (tmp);
+		tmp = env->next;
+		free(env);
+		return (tmp);
 	}
 	env->next = env_delete_elem(env->next, str);
 	return (env);
 }
 
-void	builtin_unset(char	**cmd, t_list *env)
+void			builtin_unset(char **cmd, t_list *env)
 {
 	int	i;
 

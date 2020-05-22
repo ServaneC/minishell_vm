@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 15:33:52 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/22 16:07:01 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	get_path(t_list *env, char **cmd)
 	char		**path_tab;
 	char		*bin;
 	int			i;
-	
+
 	path = ft_strdup(variable_value(env, "$PATH"));
 	bin = NULL;
 	if (cmd[0][0] != '/' && (ft_strncmp(cmd[0], "./", 2) != 0))
@@ -41,16 +41,16 @@ void	get_path(t_list *env, char **cmd)
 		path_tab = ft_split(path, ':');
 		buf = malloc(sizeof(struct stat));
 		i = -1;
-		while(path_tab[++i])
+		while (path_tab[++i])
 		{
-			if (!(bin = malloc(sizeof(char *)*(ft_strlen(path_tab[i]) + 
-					ft_strlen(cmd[0]) + 2))))
-					break;
+			if (!(bin = malloc(sizeof(char *) * (ft_strlen(path_tab[i]) +
+				ft_strlen(cmd[0]) + 2))))
+				break ;
 			ft_strlcat(bin, path_tab[i], ft_strlen(path_tab[i]) + 1);
 			ft_strlcat(bin, "/", ft_strlen(path_tab[i]) + 2);
 			ft_strlcat(bin, cmd[0], ft_strlen(path_tab[i]) + ft_strlen(cmd[0]) + 2);
 			if (stat(bin, buf) == 0)
-				break;
+				break ;
 			free(bin);
 			bin = NULL;
 		}
@@ -85,7 +85,7 @@ int		exec_cmd(char **cmd)
 	{
 		if (execve(cmd[0], cmd, NULL) == -1)
 			ft_putstr_fd(strerror(errno), 2);
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	if (status > 255)
 		status -= 255;
@@ -125,14 +125,14 @@ void	exec_line(t_list *env, char *line, int status)
 
 int		main(int ac, char **av, char **env)
 {
-	(void)ac;
-	(void)av;
 	int		status;
 	char	*line;
 	char	**multi;
 	t_list	*my_env;
 	int		i;
 
+	(void)ac;
+	(void)av;
 	ft_putstr("minishell>> ");
 	signal(SIGINT, &ctr_c);
 	my_env = create_env(env);
@@ -143,12 +143,12 @@ int		main(int ac, char **av, char **env)
 		multi = split_quotes(line);
 		while (multi[++i])
 		{
-			exec_line(my_env, multi[i], status);	
+			exec_line(my_env, multi[i], status);
 		}
 		ft_free(multi);
 		ft_putstr("minishell>> ");
 	}
 	ft_putendl_fd("Bye !", 1);
 	exit(EXIT_SUCCESS);
-	return(0);
+	return (0);
 }
