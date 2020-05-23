@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 16:03:44 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/23 14:00:53 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,19 @@
 
 int		is_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "cd", 3) == 0)
+	if (ft_strncmp(cmd, "cd", ft_strlen(cmd)) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "pwd", 4) == 0)
+	else if (ft_strncmp(cmd, "pwd", ft_strlen(cmd)) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "env", 4) == 0)
+	else if (ft_strncmp(cmd, "env", ft_strlen(cmd)) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "export", 7) == 0)
+	else if (ft_strncmp(cmd, "export", ft_strlen(cmd)) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "unset", 6) == 0)
+	else if (ft_strncmp(cmd, "unset", ft_strlen(cmd)) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "exit", 5) == 0)
+	else if (ft_strncmp(cmd, "exit", ft_strlen(cmd)) == 0)
 		return (1);
-	else if (ft_strncmp(cmd, "echo", 5) == 0)
+	else if (ft_strncmp(cmd, "echo", ft_strlen(cmd)) == 0)
 		return (1);
 	return (0);
 }
@@ -35,17 +35,17 @@ void	exec_builtin(char **cmd, t_list *env, int status, char *line)
 {
 	if (ft_strncmp(cmd[0], "cd", ft_strlen(cmd[0])) == 0)
 		builtin_cd(cmd[1], env);
-	if (ft_strncmp(cmd[0], "pwd", 3) == 0)
+	if (ft_strncmp(cmd[0], "pwd", ft_strlen(cmd[0])) == 0)
 		builtin_pwd();
-	if (ft_strncmp(cmd[0], "env", 3) == 0)
+	if (ft_strncmp(cmd[0], "env", ft_strlen(cmd[0])) == 0)
 		print_env(env);
-	if (ft_strncmp(cmd[0], "export", 6) == 0)
+	if (ft_strncmp(cmd[0], "export", ft_strlen(cmd[0])) == 0)
 		builtin_export(cmd, env);
-	if (ft_strncmp(cmd[0], "unset", 5) == 0)
+	if (ft_strncmp(cmd[0], "unset", ft_strlen(cmd[0])) == 0)
 		builtin_unset(cmd, env);
-	if (ft_strncmp(cmd[0], "exit", 4) == 0)
+	if (ft_strncmp(cmd[0], "exit", ft_strlen(cmd[0])) == 0)
 		builtin_exit();
-	if (ft_strncmp(cmd[0], "echo", 4) == 0)
+	if (ft_strncmp(cmd[0], "echo", ft_strlen(cmd[0])) == 0)
 		builtin_echo(env, cmd, status, line);
 }
 

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 16:07:01 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/23 15:50:50 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,20 @@ void	ctr_c(int num)
 {
 	(void)num;
 	ft_putstr("\nminishell>> ");
+}
+
+char	*remove_quotes(char *cmd)
+{
+	char *tmp;
+
+	if (cmd[0] == '\'')
+		tmp = ft_strtrim(cmd, "\'");
+	else if (cmd[0] == '\"')
+		tmp = ft_strtrim(cmd, "\"");
+	else
+		tmp = ft_strdup(cmd);
+	free(cmd);
+	return (tmp);
 }
 
 void	exec_line(t_list *env, char *line, int status)

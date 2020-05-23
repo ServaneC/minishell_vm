@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 16:09:00 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/23 14:17:01 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ char		**split_spaces(char *s, char *charset)
 		if (!(tab[i] = malloc(sizeof(char) * (size[i] + 1))))
 			return (free_mallocs(tab, size));
 		tab[i] = ft_substr(s, len, size[i]);
+		tab[i] = remove_quotes(tab[i]);
 		len += size[i] + 1;
 		tab[i + 1] = NULL;
 	}
