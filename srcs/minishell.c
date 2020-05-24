@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/23 15:50:50 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/24 14:00:01 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,56 +112,69 @@ char	*remove_quotes(char *cmd)
 	return (tmp);
 }
 
-void	exec_line(t_list *env, char *line, int status)
+t_data		*init_data(char **main_env)
 {
-	char	**cmd;
+	t_data	*data;
+
+	if (!(data = (t_data *)malloc(sizeof(t_data))))
+		return (NULL);
+	data->env = create_env(main_env);
+	data->cmd = NULL;
+	data->fd = 1;
+	data->line = NULL;
+	data->status = 0;
+	return (data);
+}
+
+void	exec_line(t_data *data)
+{
 	char	*save;
 
-	cmd = split_spaces(line, " \n\t");
-	if (cmd[0] && is_builtin(cmd[0]))
-		exec_builtin(cmd, env, status, line);
-	else if (cmd[0])
+	data->cmd = split_spaces(data->line, " \n\t");
+	if (data->cmd[0] && is_builtin(data->cmd[0]))
+		exec_builtin(data);
+	else if (data->cmd[0])
 	{
-		save = ft_strdup(cmd[0]);
-		get_path(env, cmd);
-		if (cmd[0] != NULL)
-			status = exec_cmd(cmd);
+		save = ft_strdup(data->cmd[0]);
+		get_path(data->env, data->cmd);
+		if (data->cmd[0] != NULL)
+			data->status = exec_cmd(data->cmd);
 		else
 		{
-			status = 127;
+			data->status = 127;
 			ft_printf("minishell: command not found: %s\n", save);
 		}
 		free(save);
 		save = NULL;
 	}
-	ft_free(cmd);
+	ft_free(data->cmd);
 }
 
 int		main(int ac, char **av, char **env)
 {
-	int		status;
 	char	*line;
 	char	**multi;
-	t_list	*my_env;
+	t_data	*data;
 	int		i;
 
 	(void)ac;
 	(void)av;
 	ft_putstr("minishell>> ");
 	signal(SIGINT, &ctr_c);
-	my_env = create_env(env);
-	status = 0;
+	data = init_data(env);
 	while (get_next_line(0, &line) > 0)
 	{
 		i = -1;
 		multi = split_quotes(line);
 		while (multi[++i])
 		{
-			exec_line(my_env, multi[i], status);
+			data->line = multi[i];
+			exec_line(data);
 		}
 		ft_free(multi);
 		ft_putstr("minishell>> ");
 	}
+	free(data);
 	ft_putendl_fd("Bye !", 1);
 	exit(EXIT_SUCCESS);
 	return (0);

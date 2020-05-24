@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 02:26:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/23 15:31:18 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/24 14:02:44 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 char		*variable_value(t_list *env, char *var)
 {
 	char	*name;
+	int		len;
 
 	name = &var[1];
 	while (env->next)
 	{
-		if (ft_strncmp(env->content, name, ft_strlen(name)) == 0)
+		len = (ft_strlen(env->content) - ft_strlen(ft_strchr(env->content, '=')));
+		if (ft_strncmp(env->content, name, len) == 0)
 			return (ft_strrchr(env->content, '=') + 1);
 		env = env->next;
 	}
@@ -41,23 +43,22 @@ char		*echo_str(char *cmd, int status, t_list *env)
 		return (cmd);
 }
 
-void		builtin_echo(t_list *env, char **cmd, int status, char *line)
+void		builtin_echo(t_data *data)
 {
 	char	*str;
 	char	*to_print;
 	int		i;
 
 	str = NULL;
-	(void)line;
 	to_print = ft_strdup("\0");
-	if (cmd[1] && ft_strncmp(cmd[1], "-n", ft_strlen(cmd[1])) == 0)
+	if (data->cmd[1] && ft_strncmp(data->cmd[1], "-n", ft_strlen(data->cmd[1])) == 0)
 	{
 		i = 1;
-		while (cmd[++i])
+		while (data->cmd[++i])
 		{
 			if (i > 2 && str)
 				to_print = ft_strjoin(to_print, " ");
-			str = echo_str(cmd[i], status, env);
+			str = echo_str(data->cmd[i], data->status, data->env);
 			if (str)
 				to_print = ft_strjoin(to_print, str);
 		}
@@ -66,11 +67,11 @@ void		builtin_echo(t_list *env, char **cmd, int status, char *line)
 	else
 	{
 		i = 0;
-		while (cmd[++i])
+		while (data->cmd[++i])
 		{
 			if (i > 1 && str)
 				to_print = ft_strjoin(to_print, " ");
-			str = echo_str(cmd[i], status, env);
+			str = echo_str(data->cmd[i], data->status, data->env);
 			if (str)
 				to_print = ft_strjoin(to_print, str);
 		}

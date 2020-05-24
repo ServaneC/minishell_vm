@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 15:23:20 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/24 14:02:59 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,17 @@
 
 # define MAX_PATH 4096
 
+typedef struct	s_data
+{
+	t_list		*env;
+	char		*line;
+	char		**cmd;
+	int			status;
+	int			fd;
+}				t_data;
+
 int		is_builtin(char *cmd);
-void	exec_builtin(char **cmd, t_list *env, int status, char *line);
+void	exec_builtin(t_data *data);
 void	builtin_cd(char *path, t_list *env);
 void	builtin_pwd(void);
 t_list	*create_env(char	**env);
@@ -34,9 +43,10 @@ void	print_env(t_list *env);
 void	builtin_export(char **cmd, t_list *env);
 void	builtin_unset(char	**cmd, t_list *env);
 void	builtin_exit(void);
-void	builtin_echo(t_list *env, char **cmd, int status, char *line);
+void	builtin_echo(t_data *data);
 char	*variable_value(t_list *env, char *var);
 char	**split_quotes(char const *s);
 char	**split_spaces(char *s, char *charset);
+char	*remove_quotes(char *cmd);
 
 #endif 

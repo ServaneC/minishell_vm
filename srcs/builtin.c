@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/23 14:00:53 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/24 14:03:06 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,22 @@ int		is_builtin(char *cmd)
 	return (0);
 }
 
-void	exec_builtin(char **cmd, t_list *env, int status, char *line)
+void	exec_builtin(t_data *data)
 {
-	if (ft_strncmp(cmd[0], "cd", ft_strlen(cmd[0])) == 0)
-		builtin_cd(cmd[1], env);
-	if (ft_strncmp(cmd[0], "pwd", ft_strlen(cmd[0])) == 0)
+	if (ft_strncmp(data->cmd[0], "cd", ft_strlen(data->cmd[0])) == 0)
+		builtin_cd(data->cmd[1], data->env);
+	if (ft_strncmp(data->cmd[0], "pwd", ft_strlen(data->cmd[0])) == 0)
 		builtin_pwd();
-	if (ft_strncmp(cmd[0], "env", ft_strlen(cmd[0])) == 0)
-		print_env(env);
-	if (ft_strncmp(cmd[0], "export", ft_strlen(cmd[0])) == 0)
-		builtin_export(cmd, env);
-	if (ft_strncmp(cmd[0], "unset", ft_strlen(cmd[0])) == 0)
-		builtin_unset(cmd, env);
-	if (ft_strncmp(cmd[0], "exit", ft_strlen(cmd[0])) == 0)
+	if (ft_strncmp(data->cmd[0], "env", ft_strlen(data->cmd[0])) == 0)
+		print_env(data->env);
+	if (ft_strncmp(data->cmd[0], "export", ft_strlen(data->cmd[0])) == 0)
+		builtin_export(data->cmd, data->env);
+	if (ft_strncmp(data->cmd[0], "unset", ft_strlen(data->cmd[0])) == 0)
+		builtin_unset(data->cmd, data->env);
+	if (ft_strncmp(data->cmd[0], "exit", ft_strlen(data->cmd[0])) == 0)
 		builtin_exit();
-	if (ft_strncmp(cmd[0], "echo", ft_strlen(cmd[0])) == 0)
-		builtin_echo(env, cmd, status, line);
+	if (ft_strncmp(data->cmd[0], "echo", ft_strlen(data->cmd[0])) == 0)
+		builtin_echo(data);
 }
 
 int		change_value(t_list *env, char *name, char *newvalue)
