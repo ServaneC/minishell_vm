@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/05/24 14:02:59 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 16:52:16 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,19 @@ typedef struct	s_data
 }				t_data;
 
 int		is_builtin(char *cmd);
-void	exec_builtin(t_data *data);
+void	exec_builtin(t_data *data, char **multi);
 void	builtin_cd(char *path, t_list *env);
 void	builtin_pwd(void);
 t_list	*create_env(char	**env);
 void	print_env(t_list *env);
 void	builtin_export(char **cmd, t_list *env);
 void	builtin_unset(char	**cmd, t_list *env);
-void	builtin_exit(void);
+void	builtin_exit(t_data *data, char **multi);
 void	builtin_echo(t_data *data);
 char	*variable_value(t_list *env, char *var);
-char	**split_quotes(char const *s);
-char	**split_spaces(char *s, char *charset);
+char	**split_quotes(char *s);
+char	**split_spaces(char *s, char const *charset);
 char	*remove_quotes(char *cmd);
+void	ft_free(char **tab);
 
 #endif 
