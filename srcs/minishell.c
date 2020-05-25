@@ -6,13 +6,13 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 18:24:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 19:09:35 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ft_free(char **tab)
+void		ft_free(char **tab)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ void	ft_free(char **tab)
 	tab = NULL;
 }
 
-void	get_path(t_list *env, char **cmd)
+void		get_path(t_list *env, char **cmd)
 {
 	struct stat	*buf;
 	char		*path;
@@ -68,7 +68,7 @@ void	get_path(t_list *env, char **cmd)
 	}
 }
 
-int		exec_cmd(char **cmd)
+int			exec_cmd(char **cmd)
 {
 	pid_t	pid;
 	int		status;
@@ -94,13 +94,13 @@ int		exec_cmd(char **cmd)
 	return (status);
 }
 
-void	ctr_c(int num)
+void		ctr_c(int num)
 {
 	(void)num;
 	ft_putstr("\nminishell>> ");
 }
 
-char	*remove_quotes(char *cmd)
+char		*remove_quotes(char *cmd)
 {
 	char *tmp;
 
@@ -129,7 +129,7 @@ t_data		*init_data(char **main_env)
 	return (data);
 }
 
-void	exec_line(t_data *data)
+void		exec_line(t_data *data)
 {
 	char	*save;
 
@@ -154,7 +154,7 @@ void	exec_line(t_data *data)
 	data->cmd = NULL;
 }
 
-int		main(int ac, char **av, char **env)
+int			main(int ac, char **av, char **env)
 {
 	char	*line;
 	t_data	*data;

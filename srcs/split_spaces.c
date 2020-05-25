@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 17:52:55 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 19:22:35 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	w_len(char *s, int i, const char *charset)
 		}
 		else if (!is_sep(s[i], charset))
 			len++;
-		else if (i > 0 && !is_sep(s[i-1], charset))
+		else if (i > 0 && !is_sep(s[i - 1], charset))
 			return (len);
 		i++;
 	}
@@ -108,6 +108,7 @@ char		**split_spaces(char *s, char const *charset)
 		tab[j][k] = 0;
 		if (s[i] && is_sep(s[i], charset))
 			i++;
+		tab[j] = remove_quotes(tab[j]);
 	}
 	tab[j] = 0;
 	free(tmp);

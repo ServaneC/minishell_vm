@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 18:55:44 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 19:20:32 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,25 +61,30 @@ static int	w_len(char *s, int i)
 	return (len);
 }
 
-static int			check_parse_error(char *s)
+static int	check_parse_error(char *s)
 {
 	char	c;
 	int		i;
-	char 	*ptr;
+	char	*ptr;
+	char	*ptr2;
 
-	ptr = ft_strchr(s, (c = '\"'));
-	if (ptr == NULL)
-		ptr = ft_strchr(s, (c = '\''));
+	ptr = ft_strchr(s, '\"');
+	ptr2 = ft_strchr(s, '\'');
+	c = '\'';
+	if ((ptr == NULL && ptr2) || ft_strlen(ptr2) > ft_strlen(ptr))
+		ptr = ptr2;
+	else if ((ptr && ptr2 == NULL) || ft_strlen(ptr2) < ft_strlen(ptr))
+		c = '\"';
 	if (ptr == NULL)
 	{
 		if (ft_strnstr(s, ";;", ft_strlen(s)))
-			return(1);
+			return (1);
 		else
-			return(0);
+			return (0);
 	}
 	if (ft_strnstr(s, ";;", ft_strlen(s) - ft_strlen(ptr)))
-			return(1);
-	i= 1;
+		return (1);
+	i = 1;
 	while (ptr[i] && ptr[i] != c)
 		i++;
 	return (check_parse_error(&ptr[i + 1]));
@@ -99,7 +104,7 @@ char		**split_quotes(char *s)
 	if (check_parse_error(s))
 	{
 		ft_putendl_fd("parse error near `;;'", 2);
-		return(NULL);
+		return (NULL);
 	}
 	tmp = ft_strtrim(s, " ;");
 	if (!(tab = (char **)malloc(sizeof(char *) * (word_count(tmp) + 1))))
