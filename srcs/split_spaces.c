@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 16:56:29 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 17:52:55 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ static int	word_count(char *str, const char *charset)
 	nbwords = 0;
 	while (str[i])
 	{
-		if ((!is_sep(str[i], charset) && i == 0) ||
-			(is_word(str[i], str[i - 1], charset)))
+		if ((i == 0 && !is_sep(str[i], charset)) ||
+			(i > 0 && (is_word(str[i], str[i - 1], charset))))
 			nbwords++;
 		else if (str[i] == '\'' || str[i] == '\"')
 		{
@@ -50,6 +50,7 @@ static int	word_count(char *str, const char *charset)
 			i++;
 			while (str[i] && str[i] != c)
 				i++;
+			i--;
 		}
 		i++;
 	}

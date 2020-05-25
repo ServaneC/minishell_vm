@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 17:33:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 18:15:36 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		is_builtin(char *cmd)
 	return (0);
 }
 
-void	exec_builtin(t_data *data, char **multi)
+void	exec_builtin(t_data *data)
 {
 	if (ft_strncmp(data->cmd[0], "cd", ft_strlen(data->cmd[0])) == 0)
 		builtin_cd(data->cmd[1], data->env);
@@ -44,7 +44,7 @@ void	exec_builtin(t_data *data, char **multi)
 	if (ft_strncmp(data->cmd[0], "unset", ft_strlen(data->cmd[0])) == 0)
 		builtin_unset(data->cmd, data->env);
 	if (ft_strncmp(data->cmd[0], "exit", ft_strlen(data->cmd[0])) == 0)
-		builtin_exit(data, multi);
+		builtin_exit(data);
 	if (ft_strncmp(data->cmd[0], "echo", ft_strlen(data->cmd[0])) == 0)
 		builtin_echo(data);
 }
@@ -104,15 +104,14 @@ void	builtin_pwd(void)
 		ft_putendl_fd(strerror(errno), 2);
 }
 
-void	builtin_exit(t_data *data, char **multi)
+void	builtin_exit(t_data *data)
 {
 	t_list *tmp;
 
-	(void)multi;
 	if (data->cmd)
 		ft_free(data->cmd);
-	if (multi)
-		ft_free(multi);
+	if (data->multi)
+		ft_free(data->multi);
 	while (data->env != NULL)
 	{
 		tmp = data->env;

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 02:26:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/24 14:02:44 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 17:55:18 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void		builtin_echo(t_data *data)
 {
 	char	*str;
 	char	*to_print;
+	char	*tmp;
 	int		i;
 
 	str = NULL;
@@ -57,10 +58,18 @@ void		builtin_echo(t_data *data)
 		while (data->cmd[++i])
 		{
 			if (i > 2 && str)
-				to_print = ft_strjoin(to_print, " ");
+			{
+				tmp = ft_strjoin(to_print, str);
+				free(to_print);
+				to_print = tmp;
+			}
 			str = echo_str(data->cmd[i], data->status, data->env);
 			if (str)
-				to_print = ft_strjoin(to_print, str);
+			{
+				tmp = ft_strjoin(to_print, str);
+				free(to_print);
+				to_print = tmp;
+			}
 		}
 		ft_putstr(to_print);
 	}
@@ -70,10 +79,18 @@ void		builtin_echo(t_data *data)
 		while (data->cmd[++i])
 		{
 			if (i > 1 && str)
-				to_print = ft_strjoin(to_print, " ");
+			{
+				tmp = ft_strjoin(to_print, str);
+				free(to_print);
+				to_print = tmp;
+			}
 			str = echo_str(data->cmd[i], data->status, data->env);
 			if (str)
-				to_print = ft_strjoin(to_print, str);
+			{
+				tmp = ft_strjoin(to_print, str);
+				free(to_print);
+				to_print = tmp;
+			}
 		}
 		ft_putendl_fd(to_print, 1);
 	}

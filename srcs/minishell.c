@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 17:31:46 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 18:24:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int		exec_cmd(char **cmd)
 	status = 0;
 	pid = fork();
 	if (pid == -1)
-		ft_putstr_fd(strerror(errno), 2);
+		ft_putendl_fd(strerror(errno), 2);
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
@@ -86,7 +86,7 @@ int		exec_cmd(char **cmd)
 	else
 	{
 		if (execve(cmd[0], cmd, NULL) == -1)
-			ft_putstr_fd(strerror(errno), 2);
+			ft_putendl_fd(strerror(errno), 2);
 		exit(EXIT_FAILURE);
 	}
 	if (status > 255)
@@ -124,17 +124,18 @@ t_data		*init_data(char **main_env)
 	data->cmd = NULL;
 	data->fd = 1;
 	data->line = NULL;
+	data->multi = NULL;
 	data->status = 0;
 	return (data);
 }
 
-void	exec_line(t_data *data, char **multi)
+void	exec_line(t_data *data)
 {
 	char	*save;
 
 	data->cmd = split_spaces(data->line, " \n\t");
 	if (data->cmd[0] && is_builtin(data->cmd[0]))
-		exec_builtin(data, multi);
+		exec_builtin(data);
 	else if (data->cmd[0])
 	{
 		save = ft_strdup(data->cmd[0]);
@@ -150,39 +151,41 @@ void	exec_line(t_data *data, char **multi)
 		save = NULL;
 	}
 	ft_free(data->cmd);
+	data->cmd = NULL;
 }
 
 int		main(int ac, char **av, char **env)
 {
 	char	*line;
-	char	**multi;
 	t_data	*data;
 	int		i;
 
 	(void)ac;
 	(void)av;
 	line = NULL;
-	multi = NULL;
 	ft_putstr("minishell>> ");
 	signal(SIGINT, &ctr_c);
 	data = init_data(env);
 	while (get_next_line(0, &line) > 0)
 	{
 		i = -1;
-		multi = split_quotes(line);
+		data->multi = split_quotes(line);
 		free(line);
-		while (multi[++i])
+		if (data->multi)
 		{
-			data->line = multi[i];
-			exec_line(data, multi);
+			while (data->multi[++i])
+			{
+				data->line = data->multi[i];
+				exec_line(data);
+			}
+			ft_free(data->multi);
+			data->multi = NULL;
 		}
-		ft_free(multi);
-		multi = NULL;
 		ft_putstr("minishell>> ");
 	}
 	if (line)
 		free(line);
 	ft_putendl_fd("Bye !", 1);
-	builtin_exit(data, multi);
+	builtin_exit(data);
 	return (0);
 }

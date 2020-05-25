@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 17:11:10 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 18:55:44 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,30 @@ static int	w_len(char *s, int i)
 	return (len);
 }
 
+static int			check_parse_error(char *s)
+{
+	char	c;
+	int		i;
+	char 	*ptr;
+
+	ptr = ft_strchr(s, (c = '\"'));
+	if (ptr == NULL)
+		ptr = ft_strchr(s, (c = '\''));
+	if (ptr == NULL)
+	{
+		if (ft_strnstr(s, ";;", ft_strlen(s)))
+			return(1);
+		else
+			return(0);
+	}
+	if (ft_strnstr(s, ";;", ft_strlen(s) - ft_strlen(ptr)))
+			return(1);
+	i= 1;
+	while (ptr[i] && ptr[i] != c)
+		i++;
+	return (check_parse_error(&ptr[i + 1]));
+}
+
 char		**split_quotes(char *s)
 {
 	char	**tab;
@@ -72,6 +96,11 @@ char		**split_quotes(char *s)
 
 	if (!s)
 		return (NULL);
+	if (check_parse_error(s))
+	{
+		ft_putendl_fd("parse error near `;;'", 2);
+		return(NULL);
+	}
 	tmp = ft_strtrim(s, " ;");
 	if (!(tab = (char **)malloc(sizeof(char *) * (word_count(tmp) + 1))))
 		return (NULL);
