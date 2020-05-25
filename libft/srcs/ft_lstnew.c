@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: schene <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 11:04:08 by schene            #+#    #+#             */
-/*   Updated: 2019/10/18 09:44:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 17:22:29 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,6 @@ t_list	*ft_lstnew(void *content)
 		new->content = NULL;
 	else
 	{
-		if (!(new->content = malloc(sizeof(content))))
-		{
-			free(new);
-			return (NULL);
-		}
 		new->content = content;
 	}
 	new->next = NULL;

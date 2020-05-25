@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 16:00:18 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 17:22:45 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,17 @@ void			print_env(t_list *env)
 t_list			*create_env(char **env)
 {
 	int		i;
+	char	*str;
 	t_list	*my_env;
 	t_list	*next;
 
-	my_env = ft_lstnew(env[0]);
+	str = ft_strdup(env[0]);
+	my_env = ft_lstnew(str);
 	i = 0;
 	while (env[++i])
 	{
-		next = ft_lstnew(env[i]);
+		str = ft_strdup(env[i]);
+		next = ft_lstnew(str);
 		ft_lstadd_back(&my_env, next);
 	}
 	return (my_env);

@@ -6,117 +6,90 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/22 16:08:18 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 17:11:10 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	free_mallocs(char **buffer, int *size)
-{
-	int i;
-
-	i = 0;
-	while (buffer[i])
-	{
-		free(buffer[i]);
-		i++;
-	}
-	free(buffer);
-	free(size);
-	return (0);
-}
-
-static int	ft_nbword(char const *s)
+static int	word_count(char *s)
 {
 	int		i;
-	char	c;
-	int		nbword;
-
-	i = 0;
-	nbword = 0;
-	while (s[i])
-	{
-		if ((s[i] != ';' && s[i - 1] == ';') || (s[i] != ';' && i == 0))
-			nbword++;
-		if (s[i] == '\'' || s[i] == '\"')
-		{
-			c = s[i];
-			i++;
-			while (s[i] != c && s[i])
-				i++;
-		}
-		i++;
-	}
-	return (nbword);
-}
-
-static int	*fill_tab_size(char const *s)
-{
-	int		i;
-	int		j;
-	char	c;
-	int		*size;
-	int		nbword;
+	char	c2;
+	int		count;
 
 	i = -1;
-	nbword = ft_nbword(s);
-	if (!(size = malloc(sizeof(int) * nbword)))
-		return (NULL);
-	while (++i <= nbword)
-		size[i] = 0;
-	i = 0;
-	j = 0;
+	count = 0;
+	while (s[++i])
+	{
+		while (s[i] && s[i] == ';')
+			i++;
+		if ((s[i] != ';' && i == 0) || (s[i] != ';' && s[i - 1] == ';'))
+			count++;
+		if (s[i] == '\'' || s[i] == '\"')
+		{
+			c2 = s[i];
+			i++;
+			while (s[i] != c2 && s[i])
+				i++;
+		}
+	}
+	return (count);
+}
+
+static int	w_len(char *s, int i)
+{
+	int		len;
+	char	c2;
+
+	len = 0;
 	while (s[i])
 	{
 		if (s[i] == '\'' || s[i] == '\"')
 		{
-			c = s[i];
-			while (s[++i] != c && s[i])
-				size[j]++;
-			size[j] += 2;
+			c2 = s[i];
+			while (s[++i] != c2 && s[i])
+				len++;
+			len += 2;
 		}
 		else if (s[i] != ';')
-			size[j]++;
+			len++;
 		else if (i > 0 && s[i - 1] != ';')
-			j++;
+			return (len);
 		i++;
 	}
-	return (size);
+	return (len);
 }
 
-static int	create_tab(char const *s, char **tab, int *size)
-{
-	int		i;
-	int		len;
-
-	i = 0;
-	len = 0;
-	while (size[i])
-	{
-		if (!(tab[i] = malloc(sizeof(char) * (size[i] + 1))))
-			return (free_mallocs(tab, size));
-		tab[i] = ft_substr((char *)s, len, size[i]);
-		len += size[i] + 1;
-		i++;
-	}
-	return (1);
-}
-
-char		**split_quotes(char const *s)
+char		**split_quotes(char *s)
 {
 	char	**tab;
-	int		*size;
-	int		nb_word;
+	char	*tmp;
+	int		len;
+	int		i;
+	int		j;
+	int		k;
 
-	s = ft_strtrim((char *)s, "; ");
-	nb_word = ft_nbword(s);
-	if (!(tab = malloc(sizeof(char *) * (nb_word + 1))))
+	if (!s)
 		return (NULL);
-	size = fill_tab_size(s);
-	if (!create_tab(s, tab, size))
+	tmp = ft_strtrim(s, " ;");
+	if (!(tab = (char **)malloc(sizeof(char *) * (word_count(tmp) + 1))))
 		return (NULL);
-	free(size);
-	tab[nb_word] = 0;
+	i = 0;
+	j = -1;
+	while (++j < word_count(tmp) && tmp[i])
+	{
+		len = w_len(tmp, i);
+		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
+			return (NULL);
+		k = 0;
+		while (tmp[i] && k < len)
+			tab[j][k++] = tmp[i++];
+		tab[j][k] = 0;
+		if (s[i] && s[i] == ';')
+			i++;
+	}
+	tab[j] = 0;
+	free(tmp);
 	return (tab);
 }

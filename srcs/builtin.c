@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/24 14:03:06 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 17:33:45 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		is_builtin(char *cmd)
 	return (0);
 }
 
-void	exec_builtin(t_data *data)
+void	exec_builtin(t_data *data, char **multi)
 {
 	if (ft_strncmp(data->cmd[0], "cd", ft_strlen(data->cmd[0])) == 0)
 		builtin_cd(data->cmd[1], data->env);
@@ -44,21 +44,24 @@ void	exec_builtin(t_data *data)
 	if (ft_strncmp(data->cmd[0], "unset", ft_strlen(data->cmd[0])) == 0)
 		builtin_unset(data->cmd, data->env);
 	if (ft_strncmp(data->cmd[0], "exit", ft_strlen(data->cmd[0])) == 0)
-		builtin_exit();
+		builtin_exit(data, multi);
 	if (ft_strncmp(data->cmd[0], "echo", ft_strlen(data->cmd[0])) == 0)
 		builtin_echo(data);
 }
 
 int		change_value(t_list *env, char *name, char *newvalue)
 {
+	char	*tmp;
 	char	*new;
 
-	new = ft_strjoin(name, "=");
-	new = ft_strjoin(new, newvalue);
+	tmp = ft_strjoin(name, "=");
+	new = ft_strjoin(tmp, newvalue);
+	free(tmp);
 	while (env->next)
 	{
 		if (ft_strncmp(env->content, name, ft_strlen(name)) == 0)
 		{
+			free(env->content);
 			env->content = new;
 			return (1);
 		}
@@ -101,7 +104,22 @@ void	builtin_pwd(void)
 		ft_putendl_fd(strerror(errno), 2);
 }
 
-void	builtin_exit(void)
+void	builtin_exit(t_data *data, char **multi)
 {
+	t_list *tmp;
+
+	(void)multi;
+	if (data->cmd)
+		ft_free(data->cmd);
+	if (multi)
+		ft_free(multi);
+	while (data->env != NULL)
+	{
+		tmp = data->env;
+		data->env = data->env->next;
+		free(tmp->content);
+		free(tmp);
+	}
+	free(data);
 	exit(EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/24 14:00:01 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 17:31:46 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,14 @@ void	get_path(t_list *env, char **cmd)
 	if (cmd[0][0] != '/' && (ft_strncmp(cmd[0], "./", 2) != 0))
 	{
 		path_tab = ft_split(path, ':');
-		buf = malloc(sizeof(struct stat));
+		buf = (struct stat *)malloc(sizeof(struct stat));
 		i = -1;
 		while (path_tab[++i])
 		{
-			if (!(bin = malloc(sizeof(char *) * (ft_strlen(path_tab[i]) +
+			if (!(bin = (char *)malloc(sizeof(char *) * (ft_strlen(path_tab[i]) +
 				ft_strlen(cmd[0]) + 2))))
 				break ;
+			bin[0] = '\0';
 			ft_strlcat(bin, path_tab[i], ft_strlen(path_tab[i]) + 1);
 			ft_strlcat(bin, "/", ft_strlen(path_tab[i]) + 2);
 			ft_strlcat(bin, cmd[0], ft_strlen(path_tab[i]) + ft_strlen(cmd[0]) + 2);
@@ -57,6 +58,7 @@ void	get_path(t_list *env, char **cmd)
 		ft_free(path_tab);
 		free(path);
 		free(cmd[0]);
+		free(buf);
 		cmd[0] = bin;
 	}
 	else
@@ -126,13 +128,13 @@ t_data		*init_data(char **main_env)
 	return (data);
 }
 
-void	exec_line(t_data *data)
+void	exec_line(t_data *data, char **multi)
 {
 	char	*save;
 
 	data->cmd = split_spaces(data->line, " \n\t");
 	if (data->cmd[0] && is_builtin(data->cmd[0]))
-		exec_builtin(data);
+		exec_builtin(data, multi);
 	else if (data->cmd[0])
 	{
 		save = ft_strdup(data->cmd[0]);
@@ -159,6 +161,8 @@ int		main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	line = NULL;
+	multi = NULL;
 	ft_putstr("minishell>> ");
 	signal(SIGINT, &ctr_c);
 	data = init_data(env);
@@ -166,16 +170,19 @@ int		main(int ac, char **av, char **env)
 	{
 		i = -1;
 		multi = split_quotes(line);
+		free(line);
 		while (multi[++i])
 		{
 			data->line = multi[i];
-			exec_line(data);
+			exec_line(data, multi);
 		}
 		ft_free(multi);
+		multi = NULL;
 		ft_putstr("minishell>> ");
 	}
-	free(data);
+	if (line)
+		free(line);
 	ft_putendl_fd("Bye !", 1);
-	exit(EXIT_SUCCESS);
+	builtin_exit(data, multi);
 	return (0);
 }

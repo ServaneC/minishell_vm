@@ -6,26 +6,11 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/23 14:17:01 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/25 16:56:29 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static char	**free_mallocs(char **buffer, int *size)
-{
-	int i;
-
-	i = 0;
-	while (buffer[i])
-	{
-		free(buffer[i]);
-		i++;
-	}
-	free(buffer);
-	free(size);
-	return (NULL);
-}
 
 static int	is_sep(char c, const char *charset)
 {
@@ -46,7 +31,7 @@ static int	is_word(char c, char cbefore, const char *charset)
 	return (!(is_sep(c, charset)) && is_sep(cbefore, charset));
 }
 
-static int	ft_nbwords(const char *str, const char *charset)
+static int	word_count(char *str, const char *charset)
 {
 	int		i;
 	int		nbwords;
@@ -56,14 +41,14 @@ static int	ft_nbwords(const char *str, const char *charset)
 	nbwords = 0;
 	while (str[i])
 	{
-		if (is_word(str[i], str[i - 1], charset) ||
-				(!is_sep(str[i], charset) && i == 0))
+		if ((!is_sep(str[i], charset) && i == 0) ||
+			(is_word(str[i], str[i - 1], charset)))
 			nbwords++;
-		if (str[i] == '\'' || str[i] == '\"')
+		else if (str[i] == '\'' || str[i] == '\"')
 		{
 			c = str[i];
 			i++;
-			while (str[i] != c && str[i])
+			while (str[i] && str[i] != c)
 				i++;
 		}
 		i++;
@@ -71,68 +56,59 @@ static int	ft_nbwords(const char *str, const char *charset)
 	return (nbwords);
 }
 
-static int	*ft_size(const char *str, const char *charset)
+static int	w_len(char *s, int i, const char *charset)
 {
-	int		i;
-	int		j;
-	char	c;
-	int		nbwords;
-	int		*size;
+	int		len;
+	char	c2;
 
-	i = 0;
-	nbwords = ft_nbwords(str, charset);
-	if (!(size = malloc(sizeof(int) * nbwords)))
-		return (0);
-	while (i <= nbwords)
+	len = 0;
+	while (s[i])
 	{
-		size[i] = 0;
-		i++;
-	}
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] == '\'' || str[i] == '\"')
+		if (s[i] == '\'' || s[i] == '\"')
 		{
-			c = str[i];
-			while (str[++i] != c && str[i])
-				size[j]++;
-			size[j] += 2;
+			c2 = s[i];
+			while (s[++i] && s[i] != c2)
+				len++;
+			len += 2;
 		}
-		else if (!(is_sep(str[i], charset)))
-			size[j]++;
-		else if (i > 0 && !is_sep(str[i - 1], charset))
-			j++;
+		else if (!is_sep(s[i], charset))
+			len++;
+		else if (i > 0 && !is_sep(s[i-1], charset))
+			return (len);
 		i++;
 	}
-	return (size);
+	return (len);
 }
 
-char		**split_spaces(char *s, char *charset)
+char		**split_spaces(char *s, char const *charset)
 {
 	char	**tab;
-	int		i;
+	char	*tmp;
 	int		len;
-	int		nb_word;
-	int		*size;
+	int		i;
+	int		j;
+	int		k;
 
-	s = ft_strtrim(s, charset);
-	nb_word = ft_nbwords(s, charset);
-	if (!(tab = malloc(sizeof(char *) * (nb_word + 1))))
+	if (!s)
 		return (NULL);
-	size = ft_size(s, charset);
-	i = -1;
-	len = 0;
-	while (size[++i])
+	tmp = ft_strtrim(s, " \t\n");
+	if (!(tab = (char **)malloc(sizeof(char *) * (word_count(tmp, charset) + 1))))
+		return (NULL);
+	i = 0;
+	j = -1;
+	while (++j < word_count(tmp, charset) && tmp[i])
 	{
-		if (!(tab[i] = malloc(sizeof(char) * (size[i] + 1))))
-			return (free_mallocs(tab, size));
-		tab[i] = ft_substr(s, len, size[i]);
-		tab[i] = remove_quotes(tab[i]);
-		len += size[i] + 1;
-		tab[i + 1] = NULL;
+		len = w_len(tmp, i, charset);
+		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
+			return (NULL);
+		k = 0;
+		while (tmp[i] && k < len)
+			tab[j][k++] = tmp[i++];
+		tab[j][k] = 0;
+		if (s[i] && is_sep(s[i], charset))
+			i++;
 	}
-	free(size);
-	size = NULL;
+	tab[j] = 0;
+	free(tmp);
 	return (tab);
 }
