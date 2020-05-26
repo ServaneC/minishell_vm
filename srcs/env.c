@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 17:22:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 16:33:18 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,26 @@ t_list			*create_env(char **env)
 	return (my_env);
 }
 
+static char		*rm_quotes_env(char *str)
+{
+	char	*name;
+	char	*value;
+	char	*ret;
+	int		i;
+
+	i = 0;
+	while (str[i] != '=')
+		i++;
+	name = ft_substr(str, 0, ++i);
+	value = ft_strdup(&str[i]);
+	value = remove_quotes(value);
+	ret = ft_strjoin(name, value);
+	free(value);
+	free(name);
+	free(str);
+	return (ret);
+}
+
 int				replace_ifexist(t_list *env, char *str)
 {
 	int		i;
@@ -48,10 +68,11 @@ int				replace_ifexist(t_list *env, char *str)
 	i = 0;
 	while (str[i] != '=')
 		i++;
-	while (env->next)
+	while (env)
 	{
 		if (ft_strncmp(env->content, str, i) == 0)
 		{
+			free(env->content);
 			env->content = str;
 			return (1);
 		}
@@ -60,25 +81,26 @@ int				replace_ifexist(t_list *env, char *str)
 	return (0);
 }
 
-void			builtin_export(char **cmd, t_list *env)
+void			builtin_export(t_data *data)
 {
 	t_list	*new;
 	char	*str;
 	int		ret;
 	int		i;
 
-	if (cmd[1] == NULL)
-		print_env(env);
+	if (data->cmd[1] == NULL)
+		print_env(data->env);
 	i = 0;
-	while (cmd[++i])
+	while (data->cmd[++i])
 	{
-		str = ft_strdup(cmd[i]);
+		str = ft_strdup(data->cmd[i]);
+		str = rm_quotes_env(str);
 		if (ft_strchr(str, '=') != NULL)
 		{
-			if ((ret = replace_ifexist(env, str)) == 0)
+			if ((ret = replace_ifexist(data->env, str)) == 0)
 			{
 				new = ft_lstnew(str);
-				ft_lstadd_back(&env, new);
+				ft_lstadd_back(&data->env, new);
 			}
 			else if (ret == -1)
 				ft_putendl_fd(strerror(errno), 2);

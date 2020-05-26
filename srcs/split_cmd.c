@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 19:20:32 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 14:04:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ char		**split_quotes(char *s)
 		while (tmp[i] && k < len)
 			tab[j][k++] = tmp[i++];
 		tab[j][k] = 0;
-		if (s[i] && s[i] == ';')
+		if (tmp[i] && tmp[i] == ';')
 			i++;
 	}
 	tab[j] = 0;

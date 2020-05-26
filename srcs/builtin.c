@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 18:15:36 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 16:02:53 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	exec_builtin(t_data *data)
 	if (ft_strncmp(data->cmd[0], "env", ft_strlen(data->cmd[0])) == 0)
 		print_env(data->env);
 	if (ft_strncmp(data->cmd[0], "export", ft_strlen(data->cmd[0])) == 0)
-		builtin_export(data->cmd, data->env);
+		builtin_export(data);
 	if (ft_strncmp(data->cmd[0], "unset", ft_strlen(data->cmd[0])) == 0)
 		builtin_unset(data->cmd, data->env);
 	if (ft_strncmp(data->cmd[0], "exit", ft_strlen(data->cmd[0])) == 0)
@@ -112,7 +112,7 @@ void	builtin_exit(t_data *data)
 		ft_free(data->cmd);
 	if (data->multi)
 		ft_free(data->multi);
-	while (data->env != NULL)
+	while (data->env)
 	{
 		tmp = data->env;
 		data->env = data->env->next;

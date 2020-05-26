@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 19:09:35 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 15:06:20 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void		get_path(t_list *env, char **cmd)
 	}
 }
 
-int			exec_cmd(char **cmd)
+int			exec_cmd(char **cmd, char **env)
 {
 	pid_t	pid;
 	int		status;
@@ -85,7 +85,7 @@ int			exec_cmd(char **cmd)
 	}
 	else
 	{
-		if (execve(cmd[0], cmd, NULL) == -1)
+		if (execve(cmd[0], cmd, env) == -1)
 			ft_putendl_fd(strerror(errno), 2);
 		exit(EXIT_FAILURE);
 	}
@@ -129,7 +129,7 @@ t_data		*init_data(char **main_env)
 	return (data);
 }
 
-void		exec_line(t_data *data)
+void		exec_line(t_data *data, char **env)
 {
 	char	*save;
 
@@ -141,7 +141,7 @@ void		exec_line(t_data *data)
 		save = ft_strdup(data->cmd[0]);
 		get_path(data->env, data->cmd);
 		if (data->cmd[0] != NULL)
-			data->status = exec_cmd(data->cmd);
+			data->status = exec_cmd(data->cmd, env);
 		else
 		{
 			data->status = 127;
@@ -176,7 +176,7 @@ int			main(int ac, char **av, char **env)
 			while (data->multi[++i])
 			{
 				data->line = data->multi[i];
-				exec_line(data);
+				exec_line(data, env);
 			}
 			ft_free(data->multi);
 			data->multi = NULL;

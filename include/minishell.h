@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 19:07:40 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 15:50:20 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void			builtin_cd(char *path, t_list *env);
 void			builtin_pwd(void);
 t_list			*create_env(char	**env);
 void			print_env(t_list *env);
-void			builtin_export(char **cmd, t_list *env);
+void			builtin_export(t_data *data);
 void			builtin_unset(char	**cmd, t_list *env);
 void			builtin_exit(t_data *data);
 void			builtin_echo(t_data *data);

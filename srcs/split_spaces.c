@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/25 19:22:35 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 16:23:27 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static int	word_count(char *str, const char *charset)
 			i++;
 			while (str[i] && str[i] != c)
 				i++;
-			i--;
 		}
 		i++;
 	}
@@ -106,7 +105,7 @@ char		**split_spaces(char *s, char const *charset)
 		while (tmp[i] && k < len)
 			tab[j][k++] = tmp[i++];
 		tab[j][k] = 0;
-		if (s[i] && is_sep(s[i], charset))
+		if (tmp[i] && is_sep(tmp[i], charset))
 			i++;
 		tab[j] = remove_quotes(tab[j]);
 	}
