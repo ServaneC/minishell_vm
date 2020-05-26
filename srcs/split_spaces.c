@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/26 16:23:27 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 17:45:21 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static int	word_count(char *str, const char *charset)
 			i++;
 			while (str[i] && str[i] != c)
 				i++;
+			i--;
 		}
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/26 14:04:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 18:14:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,35 @@ static int	check_parse_error(char *s)
 	return (check_parse_error(&ptr[i + 1]));
 }
 
+static int	fill_cmd(char **tab, char *tmp)
+{
+	int i;
+	int j;
+	int k;
+	int len;
+
+	i = 0;
+	j = -1;
+	while (++j < word_count(tmp) && tmp[i])
+	{
+		len = w_len(tmp, i);
+		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
+			return (0);
+		k = 0;
+		while (tmp[i] && k < len)
+			tab[j][k++] = tmp[i++];
+		tab[j][k] = 0;
+		if (tmp[i] && tmp[i] == ';')
+			i++;
+	}
+	tab[j] = 0;
+	return (1);
+}
+
 char		**split_quotes(char *s)
 {
 	char	**tab;
 	char	*tmp;
-	int		len;
-	int		i;
-	int		j;
-	int		k;
 
 	if (!s)
 		return (NULL);
@@ -109,21 +130,8 @@ char		**split_quotes(char *s)
 	tmp = ft_strtrim(s, " ;");
 	if (!(tab = (char **)malloc(sizeof(char *) * (word_count(tmp) + 1))))
 		return (NULL);
-	i = 0;
-	j = -1;
-	while (++j < word_count(tmp) && tmp[i])
-	{
-		len = w_len(tmp, i);
-		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
-			return (NULL);
-		k = 0;
-		while (tmp[i] && k < len)
-			tab[j][k++] = tmp[i++];
-		tab[j][k] = 0;
-		if (tmp[i] && tmp[i] == ';')
-			i++;
-	}
-	tab[j] = 0;
+	if (fill_cmd(tab, tmp) == 0)
+		return (NULL);
 	free(tmp);
 	return (tab);
 }

@@ -6,11 +6,12 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/26 16:33:18 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/26 18:20:29 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 
 static void		print_elem(void *str)
 {
@@ -39,26 +40,6 @@ t_list			*create_env(char **env)
 		ft_lstadd_back(&my_env, next);
 	}
 	return (my_env);
-}
-
-static char		*rm_quotes_env(char *str)
-{
-	char	*name;
-	char	*value;
-	char	*ret;
-	int		i;
-
-	i = 0;
-	while (str[i] != '=')
-		i++;
-	name = ft_substr(str, 0, ++i);
-	value = ft_strdup(&str[i]);
-	value = remove_quotes(value);
-	ret = ft_strjoin(name, value);
-	free(value);
-	free(name);
-	free(str);
-	return (ret);
 }
 
 int				replace_ifexist(t_list *env, char *str)
@@ -94,7 +75,6 @@ void			builtin_export(t_data *data)
 	while (data->cmd[++i])
 	{
 		str = ft_strdup(data->cmd[i]);
-		str = rm_quotes_env(str);
 		if (ft_strchr(str, '=') != NULL)
 		{
 			if ((ret = replace_ifexist(data->env, str)) == 0)
