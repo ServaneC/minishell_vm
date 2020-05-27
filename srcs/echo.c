@@ -16,12 +16,15 @@ char			*variable_value(t_list *env, char *var)
 {
 	char	*name;
 	int		len;
+	int		len2;
 
 	name = &var[1];
-	while (env->next)
+	while (env)
 	{
 		len = (ft_strlen(env->content) -
 			ft_strlen(ft_strchr(env->content, '=')));
+		len2 = (ft_strlen(name) - ft_strlen(ft_strchr(name, ' ')));
+		len = len2 > len ? len2 : len;
 		if (ft_strncmp(env->content, name, len) == 0)
 			return (ft_strrchr(env->content, '=') + 1);
 		env = env->next;

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/05/26 15:50:20 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 13:20:41 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ char			**split_quotes(char *s);
 char			**split_spaces(char *s, char const *charset);
 char			*remove_quotes(char *cmd);
 void			ft_free(char **tab);
+char			*rm_sgl_quote(char  *str);
 
 #endif

@@ -41,18 +41,17 @@ static int	word_count(char *str, const char *charset)
 	nbwords = 0;
 	while (str[i])
 	{
-		if ((i == 0 && !is_sep(str[i], charset)) ||
-			(i > 0 && (is_word(str[i], str[i - 1], charset))))
+		if (i == 0 || (i > 0 && (is_word(str[i], str[i - 1], charset))))
 			nbwords++;
-		else if (str[i] == '\'' || str[i] == '\"')
+		if (str[i] == '\'' || str[i] == '\"')
 		{
 			c = str[i];
 			i++;
 			while (str[i] && str[i] != c)
 				i++;
-			i--;
 		}
-		i++;
+		//if (str[i + 1])
+			i++;
 	}
 	return (nbwords);
 }
@@ -97,9 +96,13 @@ char		**split_spaces(char *s, char const *charset)
 		return (NULL);
 	i = 0;
 	j = -1;
+	//printf("word_count = %d\n", word_count(tmp, charset));
 	while (++j < word_count(tmp, charset) && tmp[i])
 	{
+		while (is_sep(tmp[i], charset))
+			i++;
 		len = w_len(tmp, i, charset);
+		//printf("word_len[%d] = %d\n", j, len);
 		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
 			return (NULL);
 		k = 0;

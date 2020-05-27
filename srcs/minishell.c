@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/26 15:06:20 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 13:26:15 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,17 @@ int			exec_cmd(char **cmd, char **env)
 		status -= 255;
 	return (status);
 }
+/*
+static void		print_tab(char **tab)
+{
+	int	i;
+	
+	i = -1;
+	while (tab[++i])
+		printf("tab[%d] = [%s]\n", i, tab[i]);
+	printf("_________________\n");
+}
+*/
 
 void		ctr_c(int num)
 {
@@ -104,12 +115,13 @@ char		*remove_quotes(char *cmd)
 {
 	char *tmp;
 
+	
 	if (cmd[0] == '\'')
-		tmp = ft_strtrim(cmd, "\'");
+		tmp = ft_strtrim(cmd, "\' ");
 	else if (cmd[0] == '\"')
-		tmp = ft_strtrim(cmd, "\"");
+		tmp = ft_strtrim(cmd, "\" ");
 	else
-		tmp = ft_strdup(cmd);
+		tmp = ft_strtrim(cmd, " \t\n");
 	free(cmd);
 	return (tmp);
 }
@@ -134,6 +146,7 @@ void		exec_line(t_data *data, char **env)
 	char	*save;
 
 	data->cmd = split_spaces(data->line, " \n\t");
+	//print_tab(data->cmd);
 	if (data->cmd[0] && is_builtin(data->cmd[0]))
 		exec_builtin(data);
 	else if (data->cmd[0])
@@ -169,10 +182,14 @@ int			main(int ac, char **av, char **env)
 	while (get_next_line(0, &line) > 0)
 	{
 		i = -1;
+		//printf("[%s]\n", line);
+		line = rm_sgl_quote(line);
+		//printf("[%s]\n", line);
 		data->multi = split_quotes(line);
 		free(line);
 		if (data->multi)
 		{
+			//print_tab(data->multi);
 			while (data->multi[++i])
 			{
 				data->line = data->multi[i];
