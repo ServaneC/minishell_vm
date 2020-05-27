@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 16:09:18 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 17:53:41 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,9 @@ void			exec_line(t_data *data)
 		else
 		{
 			data->status = 127;
-			ft_printf("minishell: command not found: %s\n", save);
+			ft_putstr("minishell: command not found: ");
+			ft_putendl_fd(save, 2);
+			data->cmd[0] = ft_strdup("null");
 		}
 		free(save);
 		save = NULL;

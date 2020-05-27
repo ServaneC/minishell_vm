@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 15:32:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 17:04:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,10 @@ void			builtin_export(t_data *data)
 	i = 0;
 	while (data->cmd[++i])
 	{
-		str = ft_strdup(data->cmd[i]);
-		str = rm_quotes_env(str);
-		if (ft_strchr(str, '=') != NULL)
+		if (ft_strchr(data->cmd[i], '=') != NULL)
 		{
+			str = ft_strdup(data->cmd[i]);
+			str = rm_quotes_env(str);
 			if ((ret = replace_ifexist(data->env, str)) == 0)
 			{
 				new = ft_lstnew(str);
