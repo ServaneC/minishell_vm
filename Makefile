@@ -9,10 +9,12 @@ SRCS =	builtin.c \
 		env.c \
 		env_export.c \
 		minishell.c \
+		minishell_utils.c \
 		builtin_cd.c \
 		split_cmd.c \
 		split_spaces.c \
-		remove_single_quote.c
+		remove_single_quote.c \
+		exec_cmd.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 
