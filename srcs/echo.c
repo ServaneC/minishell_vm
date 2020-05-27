@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 02:26:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/26 14:15:48 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 16:35:24 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,28 +87,40 @@ static char		*echo_str(t_data *data, int i)
 	return (ret);
 }
 
+static void		fill_to_print(t_data *data, char **to_print, int i)
+{
+	char	*tmp;
+	char	*str;
+
+	str = echo_str(data, i);
+	tmp = ft_strjoin(*to_print, str);
+	free(str);
+	free(*to_print);
+	*to_print = tmp;
+	if (data->cmd[i + 1])
+	{
+		str = ft_strdup(" ");
+		tmp = ft_strjoin(*to_print, str);
+		free(str);
+		free(*to_print);
+		*to_print = tmp;
+	}
+}
+
 void			builtin_echo(t_data *data)
 {
 	int		i;
-	char	*tmp;
-	char	*str;
 	char	*to_print;
 
 	i = 0;
 	to_print = ft_strdup("\0");
+	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
+		i = 1;
 	while (data->cmd[++i])
-	{
-		str = echo_str(data, i);
-		tmp = ft_strjoin(to_print, str);
-		free(str);
-		free(to_print);
-		to_print = tmp;
-		str = ft_strdup(" \0");
-		tmp = ft_strjoin(to_print, str);
-		free(str);
-		free(to_print);
-		to_print = tmp;
-	}
-	ft_putendl_fd(to_print, 1);
+		fill_to_print(data, &to_print, i);
+	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
+		ft_putstr(to_print);
+	else
+		ft_putendl_fd(to_print, 1);
 	free(to_print);
 }
