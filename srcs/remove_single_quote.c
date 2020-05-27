@@ -6,26 +6,26 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 13:02:24 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 13:26:04 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 15:37:43 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int	count_quotes(char *str, char c)
+static int		count_quotes(char *str, char c)
 {
 	int		i;
 	int		nb;
 
 	i = -1;
 	nb = 0;
-	while(str[++i])
+	while (str[++i])
 		if (str[i] == c)
 			nb++;
 	return (nb);
 }
 
-static char	*new_strquote(char *str, char c)
+static char		*new_strquote(char *str, char c)
 {
 	char	*start;
 	int		len;
@@ -41,13 +41,13 @@ static char	*new_strquote(char *str, char c)
 	return (ret);
 }
 
-char	*rm_sgl_quote(char  *str)
+char			*rm_sgl_quote(char *str)
 {
 	char	q;
 
 	q = '\"';
-    if (ft_strchr(str, q))
-        if (count_quotes(str, q) % 2)
+	if (ft_strchr(str, q))
+		if (count_quotes(str, q) % 2)
 			str = new_strquote(str, q);
 	q = '\'';
 	if (ft_strchr(str, q))

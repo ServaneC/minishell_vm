@@ -7,7 +7,9 @@ OBJDIR = .obj
 SRCS =	builtin.c \
 		echo.c \
 		env.c \
+		env_export.c \
 		minishell.c \
+		builtin_cd.c \
 		split_cmd.c \
 		split_spaces.c \
 		remove_single_quote.c

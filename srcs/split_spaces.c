@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/26 17:45:21 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 15:17:23 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,6 @@ static int	is_sep(char c, const char *charset)
 	return (0);
 }
 
-static int	is_word(char c, char cbefore, const char *charset)
-{
-	return (!(is_sep(c, charset)) && is_sep(cbefore, charset));
-}
-
 static int	word_count(char *str, const char *charset)
 {
 	int		i;
@@ -41,7 +36,8 @@ static int	word_count(char *str, const char *charset)
 	nbwords = 0;
 	while (str[i])
 	{
-		if (i == 0 || (i > 0 && (is_word(str[i], str[i - 1], charset))))
+		if (i == 0 || (i > 0 &&
+			(!(is_sep(str[i], charset)) && is_sep(str[i - 1], charset))))
 			nbwords++;
 		if (str[i] == '\'' || str[i] == '\"')
 		{
@@ -50,8 +46,7 @@ static int	word_count(char *str, const char *charset)
 			while (str[i] && str[i] != c)
 				i++;
 		}
-		//if (str[i + 1])
-			i++;
+		i++;
 	}
 	return (nbwords);
 }
@@ -80,31 +75,22 @@ static int	w_len(char *s, int i, const char *charset)
 	return (len);
 }
 
-char		**split_spaces(char *s, char const *charset)
+static int	fill_sp_tab(char **tab, char *tmp, char const *charset)
 {
-	char	**tab;
-	char	*tmp;
 	int		len;
 	int		i;
 	int		j;
 	int		k;
 
-	if (!s)
-		return (NULL);
-	tmp = ft_strtrim(s, " \t\n");
-	if (!(tab = (char **)malloc(sizeof(char *) * (word_count(tmp, charset) + 1))))
-		return (NULL);
 	i = 0;
 	j = -1;
-	//printf("word_count = %d\n", word_count(tmp, charset));
 	while (++j < word_count(tmp, charset) && tmp[i])
 	{
 		while (is_sep(tmp[i], charset))
 			i++;
 		len = w_len(tmp, i, charset);
-		//printf("word_len[%d] = %d\n", j, len);
 		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
-			return (NULL);
+			return (0);
 		k = 0;
 		while (tmp[i] && k < len)
 			tab[j][k++] = tmp[i++];
@@ -114,6 +100,22 @@ char		**split_spaces(char *s, char const *charset)
 		tab[j] = remove_quotes(tab[j]);
 	}
 	tab[j] = 0;
+	return (1);
+}
+
+char		**split_spaces(char *s, char const *charset)
+{
+	char	**tab;
+	char	*tmp;
+
+	if (!s)
+		return (NULL);
+	tmp = ft_strtrim(s, " \t\n");
+	if (!(tab = (char **)malloc(sizeof(char *) *
+		(word_count(tmp, charset) + 1))))
+		return (NULL);
+	if (fill_sp_tab(tab, tmp, charset) == 0)
+		return (NULL);
 	free(tmp);
 	return (tab);
 }

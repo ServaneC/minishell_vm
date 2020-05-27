@@ -6,22 +6,11 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 13:43:21 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 15:38:26 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-
-static void		print_elem(void *str)
-{
-	ft_putendl_fd((char *)str, 1);
-}
-
-void			print_env(t_list *env)
-{
-	ft_lstiter(env, &print_elem);
-}
 
 t_list			*create_env(char **env)
 {
@@ -42,53 +31,7 @@ t_list			*create_env(char **env)
 	return (my_env);
 }
 
-int				replace_ifexist(t_list *env, char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i] != '=')
-		i++;
-	while (env)
-	{
-		if (ft_strncmp(env->content, str, i) == 0)
-		{
-			free(env->content);
-			env->content = str;
-			return (1);
-		}
-		env = env->next;
-	}
-	return (0);
-}
-
-void			builtin_export(t_data *data)
-{
-	t_list	*new;
-	char	*str;
-	int		ret;
-	int		i;
-
-	if (data->cmd[1] == NULL)
-		print_env(data->env);
-	i = 0;
-	while (data->cmd[++i])
-	{
-		str = ft_strdup(data->cmd[i]);
-		if (ft_strchr(str, '=') != NULL)
-		{
-			if ((ret = replace_ifexist(data->env, str)) == 0)
-			{
-				new = ft_lstnew(str);
-				ft_lstadd_back(&data->env, new);
-			}
-			else if (ret == -1)
-				ft_putendl_fd(strerror(errno), 2);
-		}
-	}
-}
-
-int				len_variable(void *str)
+static int		len_variable(void *str)
 {
 	int		len;
 	char	*s;
@@ -100,7 +43,7 @@ int				len_variable(void *str)
 	return (len);
 }
 
-t_list			*env_delete_elem(t_list *env, char *str)
+static t_list	*env_delete_elem(t_list *env, char *str)
 {
 	t_list	*tmp;
 	int		len;
@@ -133,4 +76,23 @@ void			builtin_unset(char **cmd, t_list *env)
 		env_delete_elem(env, tmp);
 		free(tmp);
 	}
+}
+
+char			**convert_env_to_tab(t_list *env)
+{
+	char	**tab;
+	int		i;
+	int		len;
+
+	len = ft_lstsize(env);
+	if (!(tab = malloc(sizeof(char *) * (len + 1))))
+		return (NULL);
+	i = -1;
+	while (++i < len && env)
+	{
+		tab[i] = env->content;
+		tab[i + 1] = NULL;
+		env = env->next;
+	}
+	return (tab);
 }

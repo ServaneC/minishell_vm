@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 13:26:15 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/27 15:47:38 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,10 @@ void		get_path(t_list *env, char **cmd)
 	}
 }
 
-int			exec_cmd(char **cmd, char **env)
+int			exec_cmd(char **cmd, t_list *env)
 {
 	pid_t	pid;
+	char	**tab_env;
 	int		status;
 
 	pid = 0;
@@ -85,25 +86,16 @@ int			exec_cmd(char **cmd, char **env)
 	}
 	else
 	{
-		if (execve(cmd[0], cmd, env) == -1)
+		tab_env = convert_env_to_tab(env);
+		if (execve(cmd[0], cmd, tab_env) == -1)
 			ft_putendl_fd(strerror(errno), 2);
+		free(tab_env);
 		exit(EXIT_FAILURE);
 	}
 	if (status > 255)
 		status -= 255;
 	return (status);
 }
-/*
-static void		print_tab(char **tab)
-{
-	int	i;
-	
-	i = -1;
-	while (tab[++i])
-		printf("tab[%d] = [%s]\n", i, tab[i]);
-	printf("_________________\n");
-}
-*/
 
 void		ctr_c(int num)
 {
@@ -141,12 +133,11 @@ t_data		*init_data(char **main_env)
 	return (data);
 }
 
-void		exec_line(t_data *data, char **env)
+void		exec_line(t_data *data)
 {
 	char	*save;
 
 	data->cmd = split_spaces(data->line, " \n\t");
-	//print_tab(data->cmd);
 	if (data->cmd[0] && is_builtin(data->cmd[0]))
 		exec_builtin(data);
 	else if (data->cmd[0])
@@ -154,7 +145,7 @@ void		exec_line(t_data *data, char **env)
 		save = ft_strdup(data->cmd[0]);
 		get_path(data->env, data->cmd);
 		if (data->cmd[0] != NULL)
-			data->status = exec_cmd(data->cmd, env);
+			data->status = exec_cmd(data->cmd, data->env);
 		else
 		{
 			data->status = 127;
@@ -182,18 +173,15 @@ int			main(int ac, char **av, char **env)
 	while (get_next_line(0, &line) > 0)
 	{
 		i = -1;
-		//printf("[%s]\n", line);
 		line = rm_sgl_quote(line);
-		//printf("[%s]\n", line);
 		data->multi = split_quotes(line);
 		free(line);
 		if (data->multi)
 		{
-			//print_tab(data->multi);
 			while (data->multi[++i])
 			{
 				data->line = data->multi[i];
-				exec_line(data, env);
+				exec_line(data);
 			}
 			ft_free(data->multi);
 			data->multi = NULL;
