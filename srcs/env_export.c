@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 17:04:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 18:06:25 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,23 @@ static char		*rm_quotes_env(char *var)
 	char	*ret;
 	int		len;
 
-	len = ft_strlen(var) - ft_strlen(ft_strchr(var, '='));
-	name = ft_substr(var, 0, ++len);
-	value = ft_strdup(&var[len]);
-	value = remove_quotes(value);
-	ret = ft_strjoin(name, value);
-	free(value);
-	free(var);
-	free(name);
-	return (ret);
+	ret = ft_strdup(var);
+	var = remove_quotes(var);
+	len = ft_strncmp(ret, var, ft_strlen(var));
+	free(ret);
+	if (len == 0)
+	{
+		len = ft_strlen(var) - ft_strlen(ft_strchr(var, '='));
+		name = ft_substr(var, 0, ++len);
+		value = ft_strdup(&var[len]);
+		value = remove_quotes(value);
+		ret = ft_strjoin(name, value);
+		free(value);
+		free(var);
+		free(name);
+		return (ret);
+	}
+	return (var);
 }
 
 void			builtin_export(t_data *data)

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 16:17:32 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 17:49:19 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,33 @@
 
 char		*remove_quotes(char *cmd)
 {
-	char *tmp;
+	int		i;
+	int		j;
+	char	c;
+	char	*tmp;
 
-	if (cmd[0] == '\'')
-		tmp = ft_strtrim(cmd, "\' ");
-	else if (cmd[0] == '\"')
-		tmp = ft_strtrim(cmd, "\" ");
-	else
-		tmp = ft_strtrim(cmd, " \t\n");
+	i = -1;
+	j = -1;
+	if (!(tmp = malloc(sizeof(char) * ft_strlen(cmd) + 1)))
+		return (NULL);
+	while (cmd[++i])
+	{
+		if (cmd[i] == '\'' || cmd[i] == '\"')
+		{
+			c = cmd[i];
+			while (cmd[++i])
+			{
+				if (cmd[i] == c)
+					break ;
+				tmp[++j] = cmd[i];
+			}
+		}
+		else
+			tmp[++j] = cmd[i];
+	}
+	tmp[++j] = '\0';
 	free(cmd);
+	printf("[%s]\n", tmp);
 	return (tmp);
 }
 

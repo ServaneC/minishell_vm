@@ -6,13 +6,14 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/29 14:41:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 15:15:44 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 int	g_ctrl_c;
+int	g_ctrl_q;
 
 static void		ctr_c(int num)
 {
@@ -28,6 +29,7 @@ static void		ctr_q(int num)
 	(void)num;
 	if (g_child_pid > 0)
 	{
+		g_ctrl_q = 1;
 		kill(g_child_pid, SIGQUIT);
 		ft_putstr_fd("quit (core dumped)\n", 1);
 	}
@@ -55,7 +57,10 @@ static void		exec_shell(t_data *data, char *line)
 	i = -1;
 	if (g_ctrl_c)
 		data->status = 130;
+	if (g_ctrl_q)
+		data->status = 131;
 	g_ctrl_c = 0;
+	g_ctrl_q = 0;
 	line = rm_sgl_quote(line);
 	data->multi = split_quotes(line);
 	free(line);

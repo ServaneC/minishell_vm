@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 15:17:23 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 17:23:01 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ static int	fill_sp_tab(char **tab, char *tmp, char const *charset)
 		tab[j][k] = 0;
 		if (tmp[i] && is_sep(tmp[i], charset))
 			i++;
-		tab[j] = remove_quotes(tab[j]);
 	}
 	tab[j] = 0;
 	return (1);
