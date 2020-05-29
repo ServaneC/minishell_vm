@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 02:26:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/29 11:08:57 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 16:42:05 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ char			*variable_value(t_list *env, char *var)
 	int		len2;
 
 	name = &var[1];
+	len2 = 0;
+	while (ft_isalnum(name[len2]))
+		len2++;
 	while (env)
 	{
 		len = (ft_strlen(env->content) -
 			ft_strlen(ft_strchr(env->content, '=')));
-		len2 = (ft_strlen(name) - ft_strlen(ft_strchr(name, ' ')));
 		len = len2 > len ? len2 : len;
 		if (ft_strncmp(env->content, name, len) == 0)
 			return (ft_strchr(env->content, '=') + 1);
@@ -48,12 +50,14 @@ static int		echo_variable(t_data *data, int i, char **ret, int j)
 	}
 	else
 	{
-		tmp = ft_strjoin(*ret, variable_value(data->env, &data->cmd[i][j]));
-		free(*ret);
-		*ret = tmp;
-		j++;
-		while (data->cmd[i][j] && ft_isalnum(data->cmd[i][j]))
-			j++;
+		if (variable_value(data->env, &data->cmd[i][j]) != NULL)
+		{
+			tmp = ft_strjoin(*ret, variable_value(data->env, &data->cmd[i][j]));
+			free(*ret);
+			*ret = tmp;
+		}
+		while (data->cmd[i][++j] && ft_isalnum(data->cmd[i][j]))
+			;
 		j--;
 	}
 	return (j);
@@ -89,15 +93,19 @@ static char		*echo_str(t_data *data, int i)
 
 static void		fill_to_print(t_data *data, char **to_print, int i)
 {
+	int		change;
 	char	*tmp;
 	char	*str;
 
+	change = 0;
 	str = echo_str(data, i);
+	if (str[0])
+		change = 1;
 	tmp = ft_strjoin(*to_print, str);
 	free(str);
 	free(*to_print);
 	*to_print = tmp;
-	if (data->cmd[i + 1])
+	if (data->cmd[i + 1] && change)
 	{
 		str = ft_strdup(" ");
 		tmp = ft_strjoin(*to_print, str);
