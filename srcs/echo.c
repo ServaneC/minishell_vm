@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 02:26:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 16:35:24 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 11:08:57 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char			*variable_value(t_list *env, char *var)
 		len2 = (ft_strlen(name) - ft_strlen(ft_strchr(name, ' ')));
 		len = len2 > len ? len2 : len;
 		if (ft_strncmp(env->content, name, len) == 0)
-			return (ft_strrchr(env->content, '=') + 1);
+			return (ft_strchr(env->content, '=') + 1);
 		env = env->next;
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 15:40:34 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 12:53:03 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	builtin_exit(t_data *data)
 {
 	t_list *tmp;
 
+	ft_putstr("exit\n");
 	if (data->cmd)
 		ft_free(data->cmd);
 	if (data->multi)

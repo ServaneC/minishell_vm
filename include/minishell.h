@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 16:43:24 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 14:11:12 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <signal.h>
 
 # define MAX_PATH 4096
+
+pid_t g_child_pid;
 
 typedef struct	s_data
 {

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 17:53:41 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/29 14:11:58 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,18 @@ void			get_path(t_list *env, char **cmd)
 
 static int		exec_cmd(char **cmd, t_list *env)
 {
-	pid_t	pid;
 	char	**tab_env;
 	int		status;
 
-	pid = 0;
+	g_child_pid = 0;
 	status = 0;
-	pid = fork();
-	if (pid == -1)
+	g_child_pid = fork();
+	if (g_child_pid == -1)
 		ft_putendl_fd(strerror(errno), 2);
-	else if (pid > 0)
+	else if (g_child_pid > 0)
 	{
-		waitpid(pid, &status, 0);
-		kill(pid, SIGTERM);
+		waitpid(g_child_pid, &status, 0);
+		kill(g_child_pid, SIGTERM);
 	}
 	else
 	{
