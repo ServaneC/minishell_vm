@@ -1,40 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo_.c                                            :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/05/30 15:16:56 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/30 16:19:10 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-char			*variable_value(t_list *env, char *var)
-{
-	char	*name;
-	int		len;
-	int		len2;
-
-	name = &var[1];
-	len2 = 0;
-	while (ft_isalnum(name[len2]))
-		len2++;
-	while (env)
-	{
-		len = (ft_strlen(env->content) -
-			ft_strlen(ft_strchr(env->content, '=')));
-		len = len2 > len ? len2 : len;
-		if (ft_strncmp(env->content, name, len) == 0)
-			return (ft_strchr(env->content, '=') + 1);
-		env = env->next;
-	}
-	if (ft_isdigit(name[0]) && name[1])
-		return (&name[1]);
-	return (NULL);
-}
 
 static int		echo_variable(char *s, t_data *data, char **ret, int i)
 {
@@ -90,12 +66,10 @@ static char		*echo_str_sgl(char *str, t_data *data)
 	return (ret);
 }
 
-
 static char		*echo_str(char *str, t_data *data)
 {
 	int		i;
 	char	*ret;
-	char	*tmp;
 	char	*s;
 
 	i = -1;
@@ -105,67 +79,56 @@ static char		*echo_str(char *str, t_data *data)
 		s = ft_strtrim(str, "\"");
 		while (s[++i])
 		{
-			if (s[i] == '$' && s[i +1] && (ft_isalnum(s[i + 1]) 
+			if (s[i] == '$' && s[i + 1] && (ft_isalnum(s[i + 1])
 				|| s[i + 1] == '?'))
 				i = echo_variable(s, data, &ret, i);
 			else
-			{
-				str = ft_substr(s, i, 1);
-				tmp = ft_strjoin(ret, str);
-				free(str);
-				free(ret);
-				ret = tmp;
-			}
+				ret = clean_ft_strjoin(ret, ft_substr(s, i, 1));
 			if (!s[i])
 				break ;
 		}
 		free(s);
 	}
 	else
-	{
-		s = echo_str_sgl(str, data);
-		tmp = ft_strjoin(ret, s);
-		free(s);
-		free(ret);
-		ret = tmp;
-	}
+		ret = clean_ft_strjoin(ret, echo_str_sgl(str, data));
 	return (ret);
 }
 
-void			builtin_echo(t_data *data)
+static void		fill_to_print(t_data *data, char **to_print, int i)
 {
-	int		i;
 	int		j;
-	char	*to_print;
-	char	*tmp;
+	int		change;
 	char	*str;
 	char	**tab;
 
-	i = 0;
-	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
-		i = 1;
-	to_print = ft_strdup("\0");
+	*to_print = ft_strdup("\0");
 	while (data->cmd[++i])
 	{
 		tab = tab_of_quotes(data->cmd[i]);
 		j = -1;
 		while (tab[++j])
 		{
-			//printf("tab[%d] = |%s|\n", j, tab[j]);
+			change = 1;
 			str = echo_str(tab[j], data);
-			//printf("str = |%s|\n", str);
-			tmp = ft_strjoin(to_print, str);
-			free(str);
-			free(to_print);
-			to_print = tmp;
+			if (!str[0])
+				change = 0;
+			*to_print = clean_ft_strjoin(*to_print, str);
 		}
-		str = ft_strdup(" ");
-		tmp = ft_strjoin(to_print, str);
-		free(str);
-		free(to_print);
-		to_print = tmp;
+		if (data->cmd[i + 1] && change)
+			*to_print = clean_ft_strjoin(*to_print, ft_strdup(" "));
 		ft_free(tab);
 	}
+}
+
+void			builtin_echo(t_data *data)
+{
+	int		i;
+	char	*to_print;
+
+	i = 0;
+	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
+		i = 1;
+	fill_to_print(data, &to_print, i);
 	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
 		ft_putstr(to_print);
 	else

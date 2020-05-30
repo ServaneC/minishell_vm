@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/05/30 12:11:27 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/30 16:18:55 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,6 @@ char			*rm_sgl_quote(char *str);
 char			**convert_env_to_tab(t_list *env);
 void			exec_line(t_data *data);
 char			**tab_of_quotes(char *str);
+char			*clean_ft_strjoin(char *s1, char *s2);
 
 #endif
