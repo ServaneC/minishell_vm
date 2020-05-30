@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/05/29 17:49:19 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/30 10:57:33 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char		*remove_quotes(char *cmd)
 	}
 	tmp[++j] = '\0';
 	free(cmd);
-	printf("[%s]\n", tmp);
+	//printf("[%s]\n", tmp);
 	return (tmp);
 }
 

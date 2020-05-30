@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/29 17:23:01 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/30 13:03:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static int	fill_sp_tab(char **tab, char *tmp, char const *charset)
 		k = 0;
 		while (tmp[i] && k < len)
 			tab[j][k++] = tmp[i++];
-		tab[j][k] = 0;
+		tab[j][k] = '\0';
 		if (tmp[i] && is_sep(tmp[i], charset))
 			i++;
 	}

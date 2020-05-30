@@ -13,6 +13,7 @@ SRCS =	builtin.c \
 		builtin_cd.c \
 		split_cmd.c \
 		split_spaces.c \
+		split_quotes.c \
 		remove_single_quote.c \
 		exec_cmd.c
 

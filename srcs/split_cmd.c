@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 15:06:17 by schene           ###   ########.fr       */
+/*   Updated: 2020/05/30 12:06:25 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static int	fill_cmd(char **tab, char *tmp)
 	while (++j < word_count(tmp) && tmp[i])
 	{
 		len = w_len(tmp, i);
-		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
+		if (!(tab[j] = (char *)malloc(sizeof(char) * (len + 1))))
 			return (0);
 		k = 0;
 		while (tmp[i] && k < len)
