@@ -5,6 +5,7 @@ SRCDIR = srcs
 OBJDIR = .obj
 
 SRCS =	builtin.c \
+		builtin_utils.c \
 		echo.c \
 		env.c \
 		env_export.c \
