@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/05/30 17:30:07 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/01 18:28:47 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <fcntl.h>
 # include <errno.h>
 # include <string.h>
 # include <signal.h>
@@ -34,7 +35,7 @@ typedef struct	s_data
 	char		*line;
 	char		**cmd;
 	int			status;
-	int			fd;
+	t_list		*fd;
 }				t_data;
 
 int				is_builtin(char *cmd);
@@ -52,11 +53,14 @@ char			**split_quotes(char *s);
 char			**split_spaces(char *s, char const *charset);
 char			*remove_quotes(char *cmd);
 void			ft_free(char **tab);
+void			free_lst(t_list *lst);
+void			close_fd(t_list *fd);
 char			*rm_sgl_quote(char *str);
 char			**convert_env_to_tab(t_list *env);
 void			exec_line(t_data *data);
 char			**tab_of_quotes(char *str);
 char			*clean_ft_strjoin(char *s1, char *s2);
 int				echo_variable(char *s, t_data *data, char **ret, int i);
+void			fill_name(t_data *data);
 
 #endif

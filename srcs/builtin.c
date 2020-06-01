@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/05/29 12:53:03 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/01 18:29:20 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,20 +72,15 @@ void	builtin_pwd(void)
 
 void	builtin_exit(t_data *data)
 {
-	t_list *tmp;
-
 	ft_putstr("exit\n");
 	if (data->cmd)
 		ft_free(data->cmd);
 	if (data->multi)
 		ft_free(data->multi);
-	while (data->env)
-	{
-		tmp = data->env;
-		data->env = data->env->next;
-		free(tmp->content);
-		free(tmp);
-	}
+	if (data->line)
+		free(data->line);
+	free_lst(data->env);
+	close_fd(data->fd);
 	free(data);
 	exit(EXIT_SUCCESS);
 }

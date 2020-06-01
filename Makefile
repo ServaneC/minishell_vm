@@ -16,6 +16,7 @@ SRCS =	builtin.c \
 		split_spaces.c \
 		split_quotes.c \
 		remove_single_quote.c \
+		redirection.c \
 		exec_cmd.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))

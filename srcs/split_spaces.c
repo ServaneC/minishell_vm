@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/05/30 13:03:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/01 15:45:36 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,16 +105,13 @@ static int	fill_sp_tab(char **tab, char *tmp, char const *charset)
 char		**split_spaces(char *s, char const *charset)
 {
 	char	**tab;
-	char	*tmp;
 
 	if (!s)
 		return (NULL);
-	tmp = ft_strtrim(s, " \t\n");
 	if (!(tab = (char **)malloc(sizeof(char *) *
-		(word_count(tmp, charset) + 1))))
+		(word_count(s, charset) + 1))))
 		return (NULL);
-	if (fill_sp_tab(tab, tmp, charset) == 0)
+	if (fill_sp_tab(tab, s, charset) == 0)
 		return (NULL);
-	free(tmp);
 	return (tab);
 }
