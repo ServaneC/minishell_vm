@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/01 18:32:11 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/01 19:57:15 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,15 @@ static int		exec_cmd(char **cmd, t_list *env)
 void			exec_line(t_data *data)
 {
 	char	*save;
+	int		saved_stdout;
 
 	fill_name(data);
+	saved_stdout = 0;
+	if (data->fd)
+	{
+		saved_stdout = dup(STDOUT_FILENO);
+		dup2(*(int *)data->fd->content, STDOUT_FILENO);
+	}
 	data->cmd = split_spaces(data->line, " \n\t");
 	data->cmd[0] = remove_quotes(data->cmd[0]);
 	if (data->cmd[0] && is_builtin(data->cmd[0]))
@@ -103,6 +110,11 @@ void			exec_line(t_data *data)
 		}
 		free(save);
 		save = NULL;
+	}
+	if (saved_stdout)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
 	}
 	ft_free(data->cmd);
 	data->cmd = NULL;

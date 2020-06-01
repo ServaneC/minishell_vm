@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/01 19:33:28 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/01 19:46:44 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void		fill_name(t_data *data)
 			new_fd = ft_lstnew(ptr);
 			ft_lstadd_back(&data->fd, new_fd);
 		}
-		printf("fd = %d\tname = [%s]\n", my_fd, tmp->content);
+		//printf("fd = %d\tname = [%s]\n", my_fd, tmp->content);
 		free(tmp->content);
 		free(tmp);
 	}
