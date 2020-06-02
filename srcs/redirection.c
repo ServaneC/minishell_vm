@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/01 19:46:44 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/02 18:53:13 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,48 @@
 static int		check_simple_rdrct(char *line, int k)
 {
 	if (k > 0)
+	{
 		return (line[k] == '>' && line[k - 1] != '>' && ((line[k + 1] &&
 			line[k + 1] != '>') || !(line[k + 1])));
+	}
 	return (line[k] == '>' && ((line[k + 1] && line[k + 1] != '>') ||
 		!(line[k + 1])));
 }
 
-t_list	*new_line(t_data *data)
+static int		fill_name(t_data *data, t_list **name, int i)
+{
+	int		start;
+	char	c;
+
+	i++;
+	while (ft_isspace(data->line[i]))
+		i++;
+	start = i;
+	if (data->line[i] == '\'' || data->line[i] == '\"')
+	{
+		c = data->line[i];
+		while (data->line[++i] != c)
+			;
+	}
+	while (data->line[i] && !(ft_isspace(data->line[i])))
+	{
+		if (check_simple_rdrct(data->line, i))
+		{
+			i--;
+			break ;
+		}
+		i++;
+	}
+	ft_lstadd_back(name, ft_lstnew(ft_substr(data->line, start, i - start)));
+	return (i);
+}
+
+static t_list	*new_line(t_data *data)
 {
 	t_list	*name;
-	t_list	*new;
 	char	*tmp;
 	int		i;
 	int		j;
-	int		start;
-	int		len;
 	char	c;
 
 	if (!(tmp = (char *)malloc(sizeof(char) * ft_strlen(data->line) + 1)))
@@ -49,25 +76,7 @@ t_list	*new_line(t_data *data)
 		}
 		else if (check_simple_rdrct(data->line, i))
 		{
-			i++;
-			len = 0;
-			while (ft_isspace(data->line[i]))
-				i++;
-			start = i;
-			if (data->line[i] == '\'' || data->line[i] == '\"')
-			{
-				c = data->line[i];
-				len++;
-				while (data->line[++i] != c)
-					len++;
-			}
-			while (data->line[i] && !(ft_isspace(data->line[i]) && !(check_simple_rdrct(data->line, i))))
-			{
-				len++;
-				i++;
-			}
-			new = ft_lstnew(ft_substr(data->line, start, len));
-			ft_lstadd_back(&name, new);
+			i = fill_name(data, &name, i);
 			tmp[++j] = ' ';
 		}
 		else
@@ -76,14 +85,13 @@ t_list	*new_line(t_data *data)
 			break ;
 	}
 	tmp[++j] = '\0';
-	//printf("tmp = (%s)\n", tmp);
 	free(data->line);
 	data->line = ft_strdup(tmp);
 	free(tmp);
-	return(name);
+	return (name);
 }
 
-void		fill_name(t_data *data)
+void			fill_fd(t_data *data)
 {
 	t_list	*tmp;
 	t_list	*name;
@@ -97,7 +105,8 @@ void		fill_name(t_data *data)
 		tmp = name;
 		name = name->next;
 		tmp->content = remove_quotes(tmp->content);
-		my_fd = open(tmp->content, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
+		my_fd = open(tmp->content,
+			O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
 		if (my_fd != -1)
 		{
 			ptr = malloc(sizeof(int *) * 4);
@@ -106,7 +115,6 @@ void		fill_name(t_data *data)
 			new_fd = ft_lstnew(ptr);
 			ft_lstadd_back(&data->fd, new_fd);
 		}
-		//printf("fd = %d\tname = [%s]\n", my_fd, tmp->content);
 		free(tmp->content);
 		free(tmp);
 	}

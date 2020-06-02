@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/01 19:57:15 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/02 18:26:47 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,20 @@ static int		exec_cmd(char **cmd, t_list *env)
 void			exec_line(t_data *data)
 {
 	char	*save;
+	t_list	*ptr_fd;
 	int		saved_stdout;
 
-	fill_name(data);
+	fill_fd(data);
 	saved_stdout = 0;
 	if (data->fd)
 	{
 		saved_stdout = dup(STDOUT_FILENO);
-		dup2(*(int *)data->fd->content, STDOUT_FILENO);
+		ptr_fd = data->fd;
+		while(ptr_fd)
+		{
+			dup2(*(int *)ptr_fd->content, STDOUT_FILENO);
+			ptr_fd = ptr_fd->next;
+		}
 	}
 	data->cmd = split_spaces(data->line, " \n\t");
 	data->cmd[0] = remove_quotes(data->cmd[0]);
@@ -104,8 +110,8 @@ void			exec_line(t_data *data)
 		else
 		{
 			data->status = 127;
-			ft_putstr("minishell: command not found: ");
-			ft_putendl_fd(save, 2);
+			ft_putstr_fd("minishell: command not found: ", saved_stdout);
+			ft_putendl_fd(save, saved_stdout);
 			data->cmd[0] = ft_strdup("null");
 		}
 		free(save);
