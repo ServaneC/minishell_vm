@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 15:52:11 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 18:08:28 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 static int		check_double_rdrct(char *line, int i)
 {
-	if (i>0)
+	if (i > 0)
 	{
-		return(line[i] == '>' && line[i - 1] != '>' && (line[i + 1] &&
-			line[i+1] == '>') && ((line[i + 2] && line[i + 2] != '>')));
+		return (line[i] == '>' && line[i - 1] != '>' && (line[i + 1] &&
+			line[i + 1] == '>') && ((line[i + 2] && line[i + 2] != '>')));
 	}
-	return (line[i] == '>' && (line[i + 1] && line[i+1] == '>') &&
+	return (line[i] == '>' && (line[i + 1] && line[i + 1] == '>') &&
 		((line[i + 2] && line[i + 2] != '>')));
 }
 
@@ -33,14 +33,18 @@ static int		check_simple_rdrct(char *line, int i)
 	return (line[i] == '>' && ((line[i + 1] && line[i + 1] != '>')));
 }
 
-static void		add_fd(t_data *data, char *name)
+static void		add_fd(t_data *data, char *name, int d)
 {
 	int		my_fd;
 	int		*ptr;
 	t_list	*new_fd;
 
-	my_fd = open(name,
-		O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
+	my_fd = -1;
+	if (d)
+		my_fd = open(name, O_WRONLY | O_APPEND);
+	if (my_fd == -1)
+		my_fd = open(name,
+			O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
 	if (my_fd != -1)
 	{
 		ptr = malloc(sizeof(int *) * 4);
@@ -56,11 +60,13 @@ static int		fill_name(t_data *data, int i)
 {
 	int		start;
 	char	c;
+	int		d;
 	int		len;
 
+	d = 0;
 	if (check_double_rdrct(data->line, i))
-		i++;
-	i++;
+		d = 1;
+	i += 1 + d;
 	len = 0;
 	while (ft_isspace(data->line[i]))
 		i++;
@@ -74,7 +80,7 @@ static int		fill_name(t_data *data, int i)
 	}
 	while (data->line[i] && !(ft_isspace(data->line[i])))
 	{
-		if (check_simple_rdrct(data->line, i))
+		if (check_simple_rdrct(data->line, i) || check_double_rdrct(data->line, i))
 		{
 			i--;
 			break ;
@@ -82,7 +88,7 @@ static int		fill_name(t_data *data, int i)
 		len++;
 		i++;
 	}
-	add_fd(data, ft_substr(data->line, start, len));
+	add_fd(data, ft_substr(data->line, start, len), d);
 	return (i);
 }
 
@@ -127,5 +133,10 @@ static int		new_line(t_data *data)
 
 void			fill_fd(t_data *data)
 {
+	char	*tmp;
+
 	new_line(data);
+	tmp = ft_strtrim(data->line, " \n\t");
+	free(data->line);
+	data->line = tmp;
 }

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 13:21:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 18:06:56 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,20 @@ void			change_dir(t_data *data)
 void			builtin_cd(t_data *data)
 {
 	data->status = 0;
+	if (!data->cmd[1])
+	{
+		ft_putendl_fd("minishell: cd: no arguments", 2);
+		return ;
+	}
 	if (data->cmd[2])
 	{
 		ft_putendl_fd("minishell: cd: too much arguments", 2);
 		data->status = 1;
 		return ;
 	}
-	if (data->cmd[1] == NULL || data->cmd[1][0] == '$')
+	if (data->cmd[1][0] == '$')
 	{
-		if (data->cmd[1] == NULL || var_value(data->env, data->cmd[1]) == NULL)
+		if (var_value(data->env, data->cmd[1]) == NULL)
 			data->cmd[1] = "$HOME";
 		data->cmd[1] = var_value(data->env, data->cmd[1]);
 	}
