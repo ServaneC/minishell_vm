@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 18:08:28 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 19:17:43 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ static int		fill_name(t_data *data, int i)
 	}
 	while (data->line[i] && !(ft_isspace(data->line[i])))
 	{
-		if (check_simple_rdrct(data->line, i) || check_double_rdrct(data->line, i))
+		if (check_simple_rdrct(data->line, i) ||
+			check_double_rdrct(data->line, i))
 		{
 			i--;
 			break ;
@@ -92,17 +93,13 @@ static int		fill_name(t_data *data, int i)
 	return (i);
 }
 
-static int		new_line(t_data *data)
+static char		*new_line(t_data *data, int i, int j)
 {
 	char	*tmp;
-	int		i;
-	int		j;
 	char	c;
 
 	if (!(tmp = (char *)malloc(sizeof(char) * ft_strlen(data->line) + 1)))
-		return (-1);
-	i = -1;
-	j = -1;
+		return (NULL);
 	while (data->line[++i])
 	{
 		if (data->line[i] == '\'' || data->line[i] == '\"')
@@ -125,18 +122,15 @@ static int		new_line(t_data *data)
 			break ;
 	}
 	tmp[++j] = '\0';
-	free(data->line);
-	data->line = ft_strdup(tmp);
-	free(tmp);
-	return (1);
+	return (tmp);
 }
 
 void			fill_fd(t_data *data)
 {
 	char	*tmp;
 
-	new_line(data);
-	tmp = ft_strtrim(data->line, " \n\t");
+	tmp = new_line(data, -1, -1);
 	free(data->line);
-	data->line = tmp;
+	data->line = ft_strtrim(tmp, " \n\t");
+	free(tmp);
 }

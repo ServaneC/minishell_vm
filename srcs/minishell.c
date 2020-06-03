@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 16:47:53 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 18:51:43 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static int	g_ctrl_c;
 static int	g_ctrl_q;
 
-static void		ctr_c(int num)
+static void			ctr_c(int num)
 {
 	(void)num;
 	g_ctrl_c = 1;
@@ -24,7 +24,7 @@ static void		ctr_c(int num)
 		ft_putstr("minishell>> ");
 }
 
-static void		ctr_q(int num)
+static void			ctr_q(int num)
 {
 	(void)num;
 	if (g_child_pid > 0)
@@ -35,7 +35,7 @@ static void		ctr_q(int num)
 	}
 }
 
-static t_data	*init_data(char **main_env)
+static t_data		*init_data(char **main_env)
 {
 	t_data	*data;
 
@@ -50,7 +50,7 @@ static t_data	*init_data(char **main_env)
 	return (data);
 }
 
-static int				check_parse_error(char *line)
+static int			check_parse_error(char *line)
 {
 	int	i;
 
@@ -76,17 +76,11 @@ static int				check_parse_error(char *line)
 	return (0);
 }
 
-static void				exec_shell(t_data *data, char *line)
+static void			exec_shell(t_data *data, char *line)
 {
 	int		i;
 
 	i = -1;
-	if (g_ctrl_c)
-		data->status = 130;
-	if (g_ctrl_q)
-		data->status = 131;
-	g_ctrl_c = 0;
-	g_ctrl_q = 0;
 	if (check_parse_error(line) == 0)
 	{
 		line = rm_sgl_quote(line);
@@ -105,15 +99,11 @@ static void				exec_shell(t_data *data, char *line)
 			data->multi = NULL;
 		}
 	}
-	if (line)
-	{
-		free(line);
-		line = NULL;
-	}
-	ft_putstr("minishell>> ");
+	free(line);
+	line = NULL;
 }
 
-int				main(int ac, char **av, char **env)
+int					main(int ac, char **av, char **env)
 {
 	char	*line;
 	t_data	*data;
@@ -126,7 +116,16 @@ int				main(int ac, char **av, char **env)
 	signal(SIGQUIT, &ctr_q);
 	data = init_data(env);
 	while (get_next_line(0, &line) > 0)
+	{
+		if (g_ctrl_c)
+			data->status = 130;
+		if (g_ctrl_q)
+			data->status = 131;
+		g_ctrl_c = 0;
+		g_ctrl_q = 0;
 		exec_shell(data, line);
+		ft_putstr("minishell>> ");
+	}
 	if (line)
 		free(line);
 	builtin_exit(data);
