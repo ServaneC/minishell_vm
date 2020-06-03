@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 13:15:17 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 16:47:53 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,33 @@ static t_data	*init_data(char **main_env)
 	return (data);
 }
 
-static void		exec_shell(t_data *data, char *line)
+static int				check_parse_error(char *line)
+{
+	int	i;
+
+	i = 1;
+	line = ft_strchr(line, '>');
+	if (line)
+	{
+		if (line[1] == '>')
+			i++;
+		while (ft_isspace(line[i]))
+			i++;
+		if (!line[i])
+			ft_putendl_fd("minishell: parse error near '\\n'", 2);
+		else if (line[i] == '>')
+			ft_putendl_fd("minishell: parse error near '>'", 2);
+		else if (line[i] == ';')
+			ft_putendl_fd("minishell: parse error near '>'", 2);
+		if (!line[i] || line[i] == '>' || line[i] == ';')
+			return (1);
+		else
+			return (check_parse_error(&line[i]));
+	}
+	return (0);
+}
+
+static void				exec_shell(t_data *data, char *line)
 {
 	int		i;
 
@@ -61,19 +87,28 @@ static void		exec_shell(t_data *data, char *line)
 		data->status = 131;
 	g_ctrl_c = 0;
 	g_ctrl_q = 0;
-	line = rm_sgl_quote(line);
-	data->multi = split_quotes(line);
-	free(line);
-	if (data->multi)
+	if (check_parse_error(line) == 0)
 	{
-		while (data->multi[++i])
+		line = rm_sgl_quote(line);
+		data->multi = split_quotes(line);
+		free(line);
+		line = NULL;
+		if (data->multi)
 		{
-			data->line = ft_strtrim(data->multi[i], " \n\t");
-			exec_line(data);
-			close_fd(data);
+			while (data->multi[++i])
+			{
+				data->line = ft_strtrim(data->multi[i], " \n\t");
+				exec_line(data);
+				close_fd(data);
+			}
+			ft_free(data->multi);
+			data->multi = NULL;
 		}
-		ft_free(data->multi);
-		data->multi = NULL;
+	}
+	if (line)
+	{
+		free(line);
+		line = NULL;
 	}
 	ft_putstr("minishell>> ");
 }
