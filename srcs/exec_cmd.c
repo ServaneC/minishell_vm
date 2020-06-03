@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 18:06:22 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 18:17:41 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,18 @@ void			exec_line(t_data *data)
 	int		saved_stdout;
 
 	saved_stdout = fd_handling(data, 1);
-	data->cmd = split_spaces(data->line, " \n\t");
-	data->cmd[0] = remove_quotes(data->cmd[0]);
-	if (data->cmd[0] && is_builtin(data->cmd[0]))
-		exec_builtin(data);
-	else if (data->cmd[0])
-		get_path(data, saved_stdout);
+	if (data->line[0])
+	{
+		data->cmd = split_spaces(data->line, " \n\t");
+		data->cmd[0] = remove_quotes(data->cmd[0]);
+		if (data->cmd[0] && is_builtin(data->cmd[0]))
+			exec_builtin(data);
+		else if (data->cmd[0])
+			get_path(data, saved_stdout);
+		ft_free(data->cmd);
+		data->cmd = NULL;
+	}
 	fd_handling(data, 0);
-	ft_free(data->cmd);
-	data->cmd = NULL;
 	free(data->line);
 	data->line = NULL;
 }
