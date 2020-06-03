@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/05/30 17:38:38 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 12:12:46 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void			builtin_echo(t_data *data)
 	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
 		i = 1;
 	fill_to_print(data, &to_print, i);
+	data->status = 0;
 	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
 		ft_putstr(to_print);
 	else

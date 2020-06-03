@@ -6,14 +6,14 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/02 17:21:42 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 13:15:17 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	g_ctrl_c;
-int	g_ctrl_q;
+static int	g_ctrl_c;
+static int	g_ctrl_q;
 
 static void		ctr_c(int num)
 {
@@ -38,7 +38,6 @@ static void		ctr_q(int num)
 static t_data	*init_data(char **main_env)
 {
 	t_data	*data;
-	//int		fd;
 
 	if (!(data = (t_data *)malloc(sizeof(t_data))))
 		return (NULL);
@@ -54,7 +53,6 @@ static t_data	*init_data(char **main_env)
 static void		exec_shell(t_data *data, char *line)
 {
 	int		i;
-	//int		fd;
 
 	i = -1;
 	if (g_ctrl_c)
@@ -72,11 +70,7 @@ static void		exec_shell(t_data *data, char *line)
 		{
 			data->line = ft_strtrim(data->multi[i], " \n\t");
 			exec_line(data);
-			g_child_pid = 0;
-			free(data->line);
-			data->line = NULL;
-			close_fd(data->fd);
-			data->fd = NULL;
+			close_fd(data);
 		}
 		ft_free(data->multi);
 		data->multi = NULL;

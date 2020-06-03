@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/05/29 18:06:25 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 13:23:05 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,16 @@ static void		print_elem(void *str)
 	ft_putendl_fd((char *)str, 1);
 }
 
-void			print_env(t_list *env)
+void			print_env(t_data *data)
 {
-	ft_lstiter(env, &print_elem);
+	data->status = 0;
+	if (data->cmd[1])
+	{
+		ft_putendl_fd("minishell: env: the env command accept no arguments", 2);
+		data->status = 1;
+	}
+	else
+		ft_lstiter(data->env, &print_elem);
 }
 
 static int		replace_ifexist(t_list *env, char *str)
@@ -76,7 +83,7 @@ void			builtin_export(t_data *data)
 	int		i;
 
 	if (data->cmd[1] == NULL)
-		print_env(data->env);
+		print_env(data);
 	i = 0;
 	while (data->cmd[++i])
 	{
@@ -93,4 +100,5 @@ void			builtin_export(t_data *data)
 				ft_putendl_fd(strerror(errno), 2);
 		}
 	}
+	data->status = 0;
 }

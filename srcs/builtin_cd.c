@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 15:44:42 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 13:21:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,43 @@ static int		change_value(t_list *env, char *name, char *newvalue)
 	return (0);
 }
 
-void			builtin_cd(char *path, t_list *env)
+void			change_dir(t_data *data)
 {
 	char	old_pwd[MAX_PATH];
 	char	pwd[MAX_PATH];
 
 	getcwd(old_pwd, MAX_PATH);
-	if (path == NULL || path[0] == '$')
-	{
-		if (path == NULL || variable_value(env, path) == NULL)
-			path = "$HOME";
-		path = variable_value(env, path);
-	}
-	if (path[0] == '~')
-		path = ft_strjoin(variable_value(env, "$HOME"), &path[1]);
-	if (chdir(path) == 0)
+	if (chdir(data->cmd[1]) == 0)
 	{
 		getcwd(pwd, MAX_PATH);
-		change_value(env, "PWD", pwd);
-		change_value(env, "OLDPWD", old_pwd);
+		change_value(data->env, "PWD", pwd);
+		change_value(data->env, "OLDPWD", old_pwd);
 	}
 	else
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
 		ft_putendl_fd(strerror(errno), 2);
+		data->status = 1;
+	}
+}
+
+void			builtin_cd(t_data *data)
+{
+	data->status = 0;
+	if (data->cmd[2])
+	{
+		ft_putendl_fd("minishell: cd: too much arguments", 2);
+		data->status = 1;
+		return ;
+	}
+	if (data->cmd[1] == NULL || data->cmd[1][0] == '$')
+	{
+		if (data->cmd[1] == NULL || var_value(data->env, data->cmd[1]) == NULL)
+			data->cmd[1] = "$HOME";
+		data->cmd[1] = var_value(data->env, data->cmd[1]);
+	}
+	if (data->cmd[1][0] == '~')
+		data->cmd[1] = ft_strjoin(var_value(data->env, "$HOME"),
+				&data->cmd[1][1]);
+	change_dir(data);
 }

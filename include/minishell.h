@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/02 18:26:59 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 13:16:22 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,20 @@ typedef struct	s_data
 
 int				is_builtin(char *cmd);
 void			exec_builtin(t_data *data);
-void			builtin_cd(char *path, t_list *env);
-void			builtin_pwd(void);
+void			builtin_cd(t_data *data);
 t_list			*create_env(char	**env);
-void			print_env(t_list *env);
+void			print_env(t_data *data);
 void			builtin_export(t_data *data);
-void			builtin_unset(char	**cmd, t_list *env);
+void			builtin_unset(t_data *data);
 void			builtin_exit(t_data *data);
 void			builtin_echo(t_data *data);
-char			*variable_value(t_list *env, char *var);
+char			*var_value(t_list *env, char *var);
 char			**split_quotes(char *s);
 char			**split_spaces(char *s, char const *charset);
 char			*remove_quotes(char *cmd);
 void			ft_free(char **tab);
 void			free_lst(t_list *lst);
-void			close_fd(t_list *fd);
+void			close_fd(t_data *data);
 char			*rm_sgl_quote(char *str);
 char			**convert_env_to_tab(t_list *env);
 void			exec_line(t_data *data);

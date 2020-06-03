@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/05/30 16:51:27 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 13:16:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char		*clean_ft_strjoin(char *s1, char *s2)
 	return (s1);
 }
 
-char		*variable_value(t_list *env, char *var)
+char		*var_value(t_list *env, char *var)
 {
 	char	*name;
 	int		len;

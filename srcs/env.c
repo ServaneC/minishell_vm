@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/05/27 15:38:26 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 12:18:45 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,21 @@ static t_list	*env_delete_elem(t_list *env, char *str)
 	return (env);
 }
 
-void			builtin_unset(char **cmd, t_list *env)
+void			builtin_unset(t_data *data)
 {
 	int		i;
 	char	*tmp;
 
 	i = 0;
-	if (cmd[1] == NULL)
+	if (data->cmd[1] == NULL)
 		ft_putendl_fd("unset: not enough arguments", 2);
-	while (cmd[++i])
+	while (data->cmd[++i])
 	{
-		tmp = ft_strdup(cmd[i]);
-		env_delete_elem(env, tmp);
+		tmp = ft_strdup(data->cmd[i]);
+		env_delete_elem(data->env, tmp);
 		free(tmp);
 	}
+	data->status = 0;
 }
 
 char			**convert_env_to_tab(t_list *env)

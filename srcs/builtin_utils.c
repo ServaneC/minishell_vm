@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 17:27:33 by schene            #+#    #+#             */
-/*   Updated: 2020/06/01 18:46:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/03 13:22:29 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int		echo_variable(char *s, t_data *data, char **ret, int i)
 	}
 	else
 	{
-		if (variable_value(data->env, &s[i]) != NULL)
+		if (var_value(data->env, &s[i]) != NULL)
 		{
-			tmp = ft_strjoin(*ret, variable_value(data->env, &s[i]));
+			tmp = ft_strjoin(*ret, var_value(data->env, &s[i]));
 			free(*ret);
 			*ret = tmp;
 		}
@@ -51,19 +51,19 @@ void	free_lst(t_list *lst)
 	}
 }
 
-void	close_fd(t_list *fd)
+void	close_fd(t_data *data)
 {
 	t_list *tmp;
 
-	while (fd)
+	while (data->fd)
 	{
-		tmp = fd;
-		fd = fd->next;
-		//printf("{fd = %d}\n", *(int *)tmp->content);
+		tmp = data->fd;
+		data->fd = data->fd->next;
 		close(*(int *)tmp->content);
 		free(tmp->content);
 		tmp->content = NULL;
 		free(tmp);
-		tmp = NULL;	
+		tmp = NULL;
 	}
+	data->fd = NULL;
 }
