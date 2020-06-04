@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/05/30 12:06:25 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 17:26:35 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	w_len(char *s, int i)
 	return (len);
 }
 
-static int	check_parse_error(char *s)
+static int	parse_error(char *s)
 {
 	char	c;
 	int		i;
@@ -87,7 +87,7 @@ static int	check_parse_error(char *s)
 	i = 1;
 	while (ptr[i] && ptr[i] != c)
 		i++;
-	return (check_parse_error(&ptr[i + 1]));
+	return (parse_error(&ptr[i + 1]));
 }
 
 static int	fill_cmd(char **tab, char *tmp)
@@ -122,7 +122,7 @@ char		**split_quotes(char *s)
 
 	if (!s)
 		return (NULL);
-	if (check_parse_error(s))
+	if (parse_error(s))
 	{
 		ft_putendl_fd("parse error near `;;'", 2);
 		return (NULL);
