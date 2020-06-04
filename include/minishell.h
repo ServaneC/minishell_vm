@@ -60,6 +60,6 @@ void			exec_line(t_data *data);
 char			**tab_of_quotes(char *str);
 char			*clean_ft_strjoin(char *s1, char *s2);
 int				echo_variable(char *s, t_data *data, char **ret, int i);
-void			fill_fd(t_data *data);
+int				fill_fd(t_data *data);
 
 #endif

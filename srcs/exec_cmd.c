@@ -95,8 +95,8 @@ static int		fd_handling(t_data *data, int start)
 	static int	saved_stdout;
 	t_list		*ptr_fd;
 
-	if (start)
-		fill_fd(data);
+	if (start && fill_fd(data) == -1)
+		return (-1);
 	if (data->fd && start)
 	{
 		saved_stdout = dup(STDOUT_FILENO);
@@ -121,8 +121,9 @@ void			exec_line(t_data *data)
 {
 	int		saved_stdout;
 
-	saved_stdout = fd_handling(data, 1);
-	if (data->line[0])
+	if ((saved_stdout = fd_handling(data, 1)) == -1)
+		;
+	else if (data->line[0])
 	{
 		data->cmd = split_spaces(data->line, " \n\t");
 		data->cmd[0] = remove_quotes(data->cmd[0]);

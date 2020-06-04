@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static int		check_double_rdrct(char *line, int i)
+static int		double_r(char *line, int i)
 {
 	if (i > 0)
 	{
@@ -23,7 +23,7 @@ static int		check_double_rdrct(char *line, int i)
 		((line[i + 2] && line[i + 2] != '>')));
 }
 
-static int		check_simple_rdrct(char *line, int i)
+static int		simple_r(char *line, int i)
 {
 	if (i > 0)
 	{
@@ -33,7 +33,17 @@ static int		check_simple_rdrct(char *line, int i)
 	return (line[i] == '>' && ((line[i + 1] && line[i + 1] != '>')));
 }
 
-static void		add_fd(t_data *data, char *name, int d)
+static int		ft_error(char **name)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(*name, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putendl_fd(strerror(errno), 2);
+	free(*name);
+	return (-1);
+}
+
+static int		add_fd(t_data *data, char *name, int d, int i)
 {
 	int		my_fd;
 	int		*ptr;
@@ -42,10 +52,12 @@ static void		add_fd(t_data *data, char *name, int d)
 	my_fd = -1;
 	if (d)
 		my_fd = open(name, O_WRONLY | O_APPEND);
-	if (my_fd == -1)
+	if (my_fd == -1 && errno != EACCES)
 		my_fd = open(name,
 			O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
-	if (my_fd != -1)
+	if (errno == EACCES)
+		return (ft_error(&name));
+	else if (my_fd != -1)
 	{
 		ptr = malloc(sizeof(int *) * 4);
 		ft_bzero(ptr, 16);
@@ -54,20 +66,15 @@ static void		add_fd(t_data *data, char *name, int d)
 		ft_lstadd_back(&data->fd, new_fd);
 	}
 	free(name);
+	return (i);
 }
 
-static int		fill_name(t_data *data, int i)
+static int		fill_name(t_data *data, int i, int d, int len)
 {
 	int		start;
 	char	c;
-	int		d;
-	int		len;
 
-	d = 0;
-	if (check_double_rdrct(data->line, i))
-		d = 1;
 	i += 1 + d;
-	len = 0;
 	while (ft_isspace(data->line[i]))
 		i++;
 	start = i;
@@ -80,8 +87,7 @@ static int		fill_name(t_data *data, int i)
 	}
 	while (data->line[i] && !(ft_isspace(data->line[i])))
 	{
-		if (check_simple_rdrct(data->line, i) ||
-			check_double_rdrct(data->line, i))
+		if (simple_r(data->line, i) || double_r(data->line, i))
 		{
 			i--;
 			break ;
@@ -89,31 +95,33 @@ static int		fill_name(t_data *data, int i)
 		len++;
 		i++;
 	}
-	add_fd(data, ft_substr(data->line, start, len), d);
-	return (i);
+	return (add_fd(data, ft_substr(data->line, start, len), d, i));
 }
 
-static char		*new_line(t_data *data, int i, int j)
+static char		*return_free(char **str)
 {
-	char	*tmp;
+	free(*str);
+	return (NULL);
+}
+
+static char		*new_line(t_data *data, int i, int j, char *tmp)
+{
 	char	c;
 
-	if (!(tmp = (char *)malloc(sizeof(char) * ft_strlen(data->line) + 1)))
-		return (NULL);
 	while (data->line[++i])
 	{
 		if (data->line[i] == '\'' || data->line[i] == '\"')
 		{
 			c = data->line[i];
-			tmp[++j] = data->line[i];
+			tmp[++j] = c;
 			while (data->line[++i] != c)
 				tmp[++j] = data->line[i];
 			tmp[++j] = data->line[i];
 		}
-		else if (check_simple_rdrct(data->line, i) ||
-			check_double_rdrct(data->line, i))
+		else if (simple_r(data->line, i) || double_r(data->line, i))
 		{
-			i = fill_name(data, i);
+			if ((i = fill_name(data, i, double_r(data->line, i), 0)) == -1)
+				return (return_free(&tmp));
 			tmp[++j] = ' ';
 		}
 		else
@@ -125,12 +133,16 @@ static char		*new_line(t_data *data, int i, int j)
 	return (tmp);
 }
 
-void			fill_fd(t_data *data)
+int				fill_fd(t_data *data)
 {
 	char	*tmp;
 
-	tmp = new_line(data, -1, -1);
+	if (!(tmp = (char *)malloc(sizeof(char) * ft_strlen(data->line) + 1)))
+		return (-1);
+	if ((tmp = new_line(data, -1, -1, tmp)) == NULL)
+		return (-1);
 	free(data->line);
 	data->line = ft_strtrim(tmp, " \n\t");
 	free(tmp);
+	return (1);
 }
