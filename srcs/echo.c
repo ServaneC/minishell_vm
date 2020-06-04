@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 12:12:46 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 17:09:06 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static char		*echo_str_sgl(char *str)
 	return (ret);
 }
 
-static char		*echo_str(char *str, t_data *data)
+char			*echo_str(char *str, t_data *data)
 {
 	int		i;
 	char	*ret;

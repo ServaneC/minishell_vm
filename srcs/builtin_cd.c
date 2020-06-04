@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 18:06:56 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 17:17:13 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void			change_dir(t_data *data)
 
 void			builtin_cd(t_data *data)
 {
+	char	*str;
+
 	data->status = 0;
 	if (!data->cmd[1])
 	{
@@ -67,12 +69,9 @@ void			builtin_cd(t_data *data)
 		data->status = 1;
 		return ;
 	}
-	if (data->cmd[1][0] == '$')
-	{
-		if (var_value(data->env, data->cmd[1]) == NULL)
-			data->cmd[1] = "$HOME";
-		data->cmd[1] = var_value(data->env, data->cmd[1]);
-	}
+	str = echo_str(data->cmd[1], data);
+	free(data->cmd[1]);
+	data->cmd[1] = str;
 	if (data->cmd[1][0] == '~')
 		data->cmd[1] = ft_strjoin(var_value(data->env, "$HOME"),
 				&data->cmd[1][1]);
