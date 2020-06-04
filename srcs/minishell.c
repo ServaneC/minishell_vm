@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 18:51:43 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 16:16:52 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,32 +49,6 @@ static t_data		*init_data(char **main_env)
 	data->status = 0;
 	data->input = 0;
 	return (data);
-}
-
-static int			check_parse_error(char *line)
-{
-	int	i;
-
-	i = 1;
-	line = ft_strchr(line, '>');
-	if (line)
-	{
-		if (line[1] == '>')
-			i++;
-		while (ft_isspace(line[i]))
-			i++;
-		if (!line[i])
-			ft_putendl_fd("minishell: parse error near '\\n'", 2);
-		else if (line[i] == '>')
-			ft_putendl_fd("minishell: parse error near '>'", 2);
-		else if (line[i] == ';')
-			ft_putendl_fd("minishell: parse error near '>'", 2);
-		if (!line[i] || line[i] == '>' || line[i] == ';')
-			return (1);
-		else
-			return (check_parse_error(&line[i]));
-	}
-	return (0);
 }
 
 static void			exec_shell(t_data *data, char *line)

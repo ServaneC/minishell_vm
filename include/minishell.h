@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 13:16:22 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 16:16:42 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct	s_data
 	char		**cmd;
 	int			status;
 	t_list		*fd;
+	int			input;
 }				t_data;
 
 int				is_builtin(char *cmd);
@@ -61,5 +62,11 @@ char			**tab_of_quotes(char *str);
 char			*clean_ft_strjoin(char *s1, char *s2);
 int				echo_variable(char *s, t_data *data, char **ret, int i);
 int				fill_fd(t_data *data);
+int				find_input(t_data *data);
+int				ft_error(char **name);
+int				simple_r(char *line, int i, char r);
+char			*return_free(char **str);
+int				fd_handling(t_data *data, int start);
+int				check_parse_error(char *line);
 
 #endif

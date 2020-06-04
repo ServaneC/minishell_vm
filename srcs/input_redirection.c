@@ -6,31 +6,11 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:50:13 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 15:39:19 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 15:53:13 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static int		input_r(char *line, int i)
-{
-	if (i > 0)
-	{
-		return (line[i] == '<' && line[i - 1] != '<' && ((line[i + 1] &&
-			line[i + 1] != '<')));
-	}
-	return (line[i] == '<' && ((line[i + 1] && line[i + 1] != '<')));
-}
-
-static int		ft_error(char **name)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(*name, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(strerror(errno), 2);
-	free(*name);
-	return (-1);
-}
 
 static int		open_fd(t_data *data, char *name, int i)
 {
@@ -44,7 +24,7 @@ static int		open_fd(t_data *data, char *name, int i)
 	return (i);
 }
 
-static int		fill_name(t_data *data, int i, int len)
+static int		input_name(t_data *data, int i, int len)
 {
 	int		start;
 	char	c;
@@ -62,7 +42,7 @@ static int		fill_name(t_data *data, int i, int len)
 	}
 	while (data->line[i] && !(ft_isspace(data->line[i])))
 	{
-		if (input_r(data->line, i))
+		if (simple_r(data->line, i, '<'))
 		{
 			i--;
 			break ;
@@ -71,12 +51,6 @@ static int		fill_name(t_data *data, int i, int len)
 		i++;
 	}
 	return (open_fd(data, ft_substr(data->line, start, len), i));
-}
-
-static char		*return_free(char **str)
-{
-	free(*str);
-	return (NULL);
 }
 
 static char		*new_line_input(t_data *data, int i, int j, char *tmp)
@@ -93,9 +67,9 @@ static char		*new_line_input(t_data *data, int i, int j, char *tmp)
 				tmp[++j] = data->line[i];
 			tmp[++j] = data->line[i];
 		}
-		else if (input_r(data->line, i))
+		else if (simple_r(data->line, i, '<'))
 		{
-			if ((i = fill_name(data, i, 0)) == -1)
+			if ((i = input_name(data, i, 0)) == -1)
 				return (return_free(&tmp));
 			tmp[++j] = ' ';
 		}

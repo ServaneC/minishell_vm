@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 19:17:43 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 15:52:08 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,6 @@ static int		double_r(char *line, int i)
 	}
 	return (line[i] == '>' && (line[i + 1] && line[i + 1] == '>') &&
 		((line[i + 2] && line[i + 2] != '>')));
-}
-
-static int		simple_r(char *line, int i)
-{
-	if (i > 0)
-	{
-		return (line[i] == '>' && line[i - 1] != '>' && ((line[i + 1] &&
-			line[i + 1] != '>')));
-	}
-	return (line[i] == '>' && ((line[i + 1] && line[i + 1] != '>')));
-}
-
-static int		ft_error(char **name)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(*name, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putendl_fd(strerror(errno), 2);
-	free(*name);
-	return (-1);
 }
 
 static int		add_fd(t_data *data, char *name, int d, int i)
@@ -84,7 +64,7 @@ static int		fill_name(t_data *data, int i, int d, int len)
 	}
 	while (data->line[i] && !(ft_isspace(data->line[i])))
 	{
-		if (simple_r(data->line, i) || double_r(data->line, i))
+		if (simple_r(data->line, i, '>') || double_r(data->line, i))
 		{
 			i--;
 			break ;
@@ -93,12 +73,6 @@ static int		fill_name(t_data *data, int i, int d, int len)
 		i++;
 	}
 	return (add_fd(data, ft_substr(data->line, start, len), d, i));
-}
-
-static char		*return_free(char **str)
-{
-	free(*str);
-	return (NULL);
 }
 
 static char		*new_line(t_data *data, int i, int j, char *tmp)
@@ -115,7 +89,7 @@ static char		*new_line(t_data *data, int i, int j, char *tmp)
 				tmp[++j] = data->line[i];
 			tmp[++j] = data->line[i];
 		}
-		else if (simple_r(data->line, i) || double_r(data->line, i))
+		else if (simple_r(data->line, i, '>') || double_r(data->line, i))
 		{
 			if ((i = fill_name(data, i, double_r(data->line, i), 0)) == -1)
 				return (return_free(&tmp));
