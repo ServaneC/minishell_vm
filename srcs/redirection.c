@@ -55,16 +55,13 @@ static int		add_fd(t_data *data, char *name, int d, int i)
 	if (my_fd == -1 && errno != EACCES)
 		my_fd = open(name,
 			O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
-	if (errno == EACCES)
+	if (my_fd == -1)
 		return (ft_error(&name));
-	else if (my_fd != -1)
-	{
-		ptr = malloc(sizeof(int *) * 4);
-		ft_bzero(ptr, 16);
-		ptr = ft_memcpy(ptr, &my_fd, 16);
-		new_fd = ft_lstnew(ptr);
-		ft_lstadd_back(&data->fd, new_fd);
-	}
+	ptr = malloc(sizeof(int *) * 4);
+	ft_bzero(ptr, 16);
+	ptr = ft_memcpy(ptr, &my_fd, 16);
+	new_fd = ft_lstnew(ptr);
+	ft_lstadd_back(&data->fd, new_fd);
 	free(name);
 	return (i);
 }
