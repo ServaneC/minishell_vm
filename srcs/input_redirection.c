@@ -6,15 +6,13 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:50:13 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 15:20:05 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 15:39:19 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-#include "../include/minishell.h"
-
-static int	       input_r(char *line, int i)
+static int		input_r(char *line, int i)
 {
 	if (i > 0)
 	{
@@ -38,9 +36,9 @@ static int		open_fd(t_data *data, char *name, int i)
 {
 	int		my_fd;
 
-    my_fd = open(name, O_RDONLY);
-    if (my_fd == -1)
-        return(ft_error(&name));
+	my_fd = open(name, O_RDONLY);
+	if (my_fd == -1)
+		return (ft_error(&name));
 	data->input = my_fd;
 	free(name);
 	return (i);
@@ -51,7 +49,7 @@ static int		fill_name(t_data *data, int i, int len)
 	int		start;
 	char	c;
 
-	i ++;
+	i++;
 	while (ft_isspace(data->line[i]))
 		i++;
 	start = i;
