@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 17:42:43 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 17:04:58 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,30 @@ void			print_env(t_data *data)
 		ft_lstiter(data->env, &print_elem);
 }
 
+int				check_var_name(char **str, t_data *data)
+{
+	int		i;
+	char	*name;
+
+	name = ft_substr(*str, 0,
+		(ft_strlen(*str) - ft_strlen(ft_strchr(*str, '='))));
+	i = -1;
+	while (name[++i])
+	{
+		if (!(ft_isalnum(name[i])) && !(name[i] == '_'))
+		{
+			data->status = 1;
+			ft_putstr_fd("minishell: export: invalid variable name: ", 2);
+			ft_putendl_fd(name, 2);
+			free(name);
+			free(*str);
+			return (-1);
+		}
+	}
+	free(name);
+	return (1);
+}
+
 static int		replace_ifexist(t_list *env, char *str)
 {
 	int		i;
@@ -49,32 +73,6 @@ static int		replace_ifexist(t_list *env, char *str)
 	return (0);
 }
 
-static char		*rm_quotes_env(char *var)
-{
-	char	*name;
-	char	*value;
-	char	*ret;
-	int		len;
-
-	ret = ft_strdup(var);
-	var = remove_quotes(var);
-	len = ft_strncmp(ret, var, ft_strlen(var));
-	free(ret);
-	if (len == 0)
-	{
-		len = ft_strlen(var) - ft_strlen(ft_strchr(var, '='));
-		name = ft_substr(var, 0, ++len);
-		value = ft_strdup(&var[len]);
-		value = remove_quotes(value);
-		ret = ft_strjoin(name, value);
-		free(value);
-		free(var);
-		free(name);
-		return (ret);
-	}
-	return (var);
-}
-
 void			builtin_export(t_data *data)
 {
 	t_list	*new;
@@ -82,6 +80,7 @@ void			builtin_export(t_data *data)
 	int		ret;
 	int		i;
 
+	data->status = 0;
 	if (data->cmd[1] == NULL)
 		print_env(data);
 	i = 0;
@@ -89,8 +88,9 @@ void			builtin_export(t_data *data)
 	{
 		if (ft_strchr(data->cmd[i], '=') != NULL)
 		{
-			str = ft_strdup(data->cmd[i]);
-			str = rm_quotes_env(str);
+			str = rm_quotes_env(ft_strdup(data->cmd[i]));
+			if (check_var_name(&str, data) == -1)
+				break ;
 			if ((ret = replace_ifexist(data->env, str)) == 0)
 			{
 				new = ft_lstnew(str);
@@ -100,5 +100,4 @@ void			builtin_export(t_data *data)
 				ft_putendl_fd(strerror(errno), 2);
 		}
 	}
-	data->status = 0;
 }

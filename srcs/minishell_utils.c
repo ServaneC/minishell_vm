@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 13:16:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 16:34:28 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char		*var_value(t_list *env, char *var)
 
 	name = &var[1];
 	len2 = 0;
-	while (ft_isalnum(name[len2]))
+	while (ft_isalnum(name[len2]) || name[len2] == '_')
 		len2++;
 	while (env)
 	{

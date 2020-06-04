@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 17:27:33 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 13:22:29 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 16:53:01 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int		echo_variable(char *s, t_data *data, char **ret, int i)
 			free(*ret);
 			*ret = tmp;
 		}
-		while (s[++i] && ft_isalnum(s[i]))
+		while (s[++i] && (ft_isalnum(s[i]) || s[i] == '_'))
 			;
 		i--;
 	}
