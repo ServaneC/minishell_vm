@@ -47,6 +47,7 @@ static t_data		*init_data(char **main_env)
 	data->line = NULL;
 	data->multi = NULL;
 	data->status = 0;
+	data->input = 0;
 	return (data);
 }
 

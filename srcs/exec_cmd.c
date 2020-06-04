@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 18:17:41 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/04 15:29:51 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,18 @@ static void		get_path(t_data *data, int saved_stdout)
 static int		fd_handling(t_data *data, int start)
 {
 	static int	saved_stdout;
+	static int	saved_input;
 	t_list		*ptr_fd;
 
 	if (start && fill_fd(data) == -1)
 		return (-1);
+	if (start && find_input(data) == -1)
+		return (-1);
+	if (data->input != 0 && start)
+	{
+		saved_input = dup(STDIN_FILENO);
+		dup2(data->input, STDIN_FILENO);
+	}
 	if (data->fd && start)
 	{
 		saved_stdout = dup(STDOUT_FILENO);
@@ -108,11 +116,17 @@ static int		fd_handling(t_data *data, int start)
 		}
 		return (saved_stdout);
 	}
-	else if (saved_stdout && !start)
+	if (saved_stdout && !start)
 	{
 		dup2(saved_stdout, STDOUT_FILENO);
 		close(saved_stdout);
 		saved_stdout = 0;
+	}
+	if (saved_input && !start)
+	{
+		dup2(saved_input, STDIN_FILENO);
+		close(saved_input);
+		saved_input = 0;
 	}
 	return (0);
 }
