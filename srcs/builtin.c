@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 16:54:10 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 17:52:30 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ void	builtin_exit(t_data *data, int end)
 			free(data->line);
 		free_lst(data->env);
 		close_fd(data);
+		free(data->dir);
 		free(data);
 		exit(status);
 	}

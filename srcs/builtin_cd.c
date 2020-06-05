@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 17:18:49 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 18:11:02 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,14 @@ void			change_dir(t_data *data, char *path)
 	struct stat		*buf;
 	char			*str;
 	
-	if (getcwd(old_pwd, MAX_PATH) == NULL)
+	if (getcwd(old_pwd, MAX_PATH) == NULL && data->cmd[1][0] == '.' && !data->cmd[1][1])
 	{
 		str = ft_strdup("cd");
 		ft_error(&str);
+		change_value(data->env, "OLDPWD", var_value(data->env, "$PWD"));
+		str = ft_strjoin(var_value(data->env, "$PWD"), "/.");
+		change_value(data->env, "PWD", str);
+		free(str);
 		return ;
 	}
 	buf = (struct stat *)malloc(sizeof(struct stat));
@@ -53,6 +57,8 @@ void			change_dir(t_data *data, char *path)
 		{
 			getcwd(pwd, MAX_PATH);
 			change_value(data->env, "PWD", pwd);
+			free(data->dir);
+			data->dir = ft_strdup(pwd);
 			change_value(data->env, "OLDPWD", old_pwd);
 		}
 	}

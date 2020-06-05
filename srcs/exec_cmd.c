@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 12:18:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 18:51:48 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void			exec_line(t_data *data)
 	else if (data->line[0])
 	{
 		data->cmd = split_spaces(data->line, " \n\t");
-		data->cmd[0] = remove_quotes(data->cmd[0]);
+		//data->cmd[0] = remove_quotes(data->cmd[0]);
 		if (data->cmd[0] && is_builtin(data->cmd[0]))
 			exec_builtin(data);
 		else if (data->cmd[0])
