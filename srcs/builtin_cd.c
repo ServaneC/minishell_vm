@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 12:39:03 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 17:18:49 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,23 @@ static int		change_value(t_list *env, char *name, char *newvalue)
 	return (0);
 }
 
-void			change_dir(t_data *data)
+void			change_dir(t_data *data, char *path)
 {
 	char			old_pwd[MAX_PATH];
 	char			pwd[MAX_PATH];
-	struct  stat	*buf;
+	struct stat		*buf;
 	char			*str;
 	
-
 	if (getcwd(old_pwd, MAX_PATH) == NULL)
 	{
-		str = ft_strdup("getcwd");
+		str = ft_strdup("cd");
 		ft_error(&str);
+		return ;
 	}
 	buf = (struct stat *)malloc(sizeof(struct stat));
-	if (lstat(data->cmd[1], buf) == 0)
+	if (lstat(path, buf) == 0)
 	{
-		if (chdir(data->cmd[1]) == 0)
+		if (chdir(path) == 0)
 		{
 			getcwd(pwd, MAX_PATH);
 			change_value(data->env, "PWD", pwd);
@@ -62,27 +62,34 @@ void			change_dir(t_data *data)
 		ft_error(&str);
 		data->status = 1;
 	}
-	free (buf);
+	free(buf);
 }
 
 void			builtin_cd(t_data *data)
 {
 	char	*str;
+	char	*tmp;
 
 	data->status = 0;
+	tmp = NULL;
 	if (!data->cmd[1])
-		data->cmd[1] = ft_strdup(var_value(data->env, "$HOME"));
-	if (data->cmd[2])
+		str = ft_strdup(var_value(data->env, "$HOME"));
+	else if (data->cmd[2])
 	{
 		ft_putendl_fd("minishell: cd: too much arguments", 2);
 		data->status = 1;
 		return ;
 	}
-	str = echo_str(data->cmd[1], data);
-	free(data->cmd[1]);
-	data->cmd[1] = str;
-	if (data->cmd[1][0] == '~')
-		data->cmd[1] = ft_strjoin(var_value(data->env, "$HOME"),
-				&data->cmd[1][1]);
-	change_dir(data);
+	else
+	{
+		str = echo_str(data->cmd[1], data);
+		if (str[0] == '~')
+		{
+			tmp = ft_strjoin(var_value(data->env, "$HOME"), &str[1]);
+			free(str);
+			str = tmp;
+		}
+	}
+	change_dir(data, str);
+	free(str);
 }

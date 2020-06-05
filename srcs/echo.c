@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 12:07:42 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 16:26:08 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ void			builtin_echo(t_data *data)
 	{
 		n = 1;
 		i = 1;
-		//printf("{%s}\n", data->cmd[i]);
 		while (ft_strncmp(data->cmd[i], "-n", 3) == 0)
 			i++;
 		i--;

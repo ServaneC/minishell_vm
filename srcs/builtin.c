@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 14:40:07 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 16:54:10 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	builtin_pwd(t_data *data)
 		ft_putendl_fd(cwd, 1);
 	else
 	{
-		str = ft_strdup("pwd");
-		ft_error(&str);
+		str = var_value(data->env, "$PWD");
+		ft_putendl_fd(str, 1);
 	}
 	data->status = 0;
 }
@@ -82,7 +82,7 @@ int		get_status(t_data *data)
 	if (ft_strncmp(data->cmd[0], "exit", 5) != 0)
 		return (data->status);
 	if (!data->cmd[1])
-		return(data->status);
+		return (data->status);
 	if (data->cmd[1])
 	{
 		i = -1;
@@ -95,15 +95,11 @@ int		get_status(t_data *data)
 			}
 		}
 		if (!data->cmd[2])
-			return((unsigned char)ft_atoi(data->cmd[1]));
+			return ((unsigned char)ft_atoi(data->cmd[1]));
 	}
-	if (data->cmd[2])
-	{
-		data->status = 1;
-		ft_putendl_fd("minishell: exit: too much arguments", 2);
-		return(-1);
-	}
-	return(0);
+	data->status = 1;
+	ft_putendl_fd("minishell: exit: too much arguments", 2);
+	return (-1);
 }
 
 void	builtin_exit(t_data *data, int end)
