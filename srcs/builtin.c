@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/03 17:42:48 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 14:40:07 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,15 @@ int		is_builtin(char *cmd)
 void	builtin_pwd(t_data *data)
 {
 	char	cwd[MAX_PATH];
+	char	*str;
 
 	if (getcwd(cwd, MAX_PATH) != NULL)
 		ft_putendl_fd(cwd, 1);
 	else
-		ft_putendl_fd(strerror(errno), 2);
+	{
+		str = ft_strdup("pwd");
+		ft_error(&str);
+	}
 	data->status = 0;
 }
 
@@ -66,22 +70,61 @@ void	exec_builtin(t_data *data)
 	if (ft_strncmp(data->cmd[0], "unset", len) == 0)
 		builtin_unset(data);
 	if (ft_strncmp(data->cmd[0], "exit", len) == 0)
-		builtin_exit(data);
+		builtin_exit(data, 0);
 	if (ft_strncmp(data->cmd[0], "echo", len) == 0)
 		builtin_echo(data);
 }
 
-void	builtin_exit(t_data *data)
+int		get_status(t_data *data)
 {
-	ft_putstr("exit\n");
-	if (data->cmd)
-		ft_free(data->cmd);
-	if (data->multi)
-		ft_free(data->multi);
-	if (data->line)
-		free(data->line);
-	free_lst(data->env);
-	close_fd(data);
-	free(data);
-	exit(EXIT_SUCCESS);
+	int		i;
+
+	if (ft_strncmp(data->cmd[0], "exit", 5) != 0)
+		return (data->status);
+	if (!data->cmd[1])
+		return(data->status);
+	if (data->cmd[1])
+	{
+		i = -1;
+		while (data->cmd[1][++i])
+		{
+			if (!ft_isdigit(data->cmd[1][i]) && data->cmd[1][i] != '-')
+			{
+				ft_putendl_fd("minishell: exit: numeric argument necessary", 2);
+				return (2);
+			}
+		}
+		if (!data->cmd[2])
+			return((unsigned char)ft_atoi(data->cmd[1]));
+	}
+	if (data->cmd[2])
+	{
+		data->status = 1;
+		ft_putendl_fd("minishell: exit: too much arguments", 2);
+		return(-1);
+	}
+	return(0);
+}
+
+void	builtin_exit(t_data *data, int end)
+{
+	int status;
+
+	ft_putstr_fd("exit\n", 2);
+	status = data->status;
+	if (end == 0)
+		status = get_status(data);
+	if (end || status != -1)
+	{
+		if (data->cmd)
+			ft_free(data->cmd);
+		if (data->multi)
+			ft_free(data->multi);
+		if (data->line)
+			free(data->line);
+		free_lst(data->env);
+		close_fd(data);
+		free(data);
+		exit(status);
+	}
 }

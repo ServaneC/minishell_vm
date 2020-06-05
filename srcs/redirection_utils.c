@@ -6,32 +6,45 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 15:52:23 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 17:00:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 14:44:00 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+int			print_parse_error(char c)
+{
+	ft_putstr_fd("minishell: parse error near ' ", 2);
+	if (c == 'n')
+		ft_putchar_fd('\\', 2);
+	ft_putchar_fd(c, 2);
+	ft_putendl_fd("\'", 2);
+	return (1);
+}
+
 int				check_parse_error(char *line)
 {
-	int	i;
+	char	*ptr;
+	int		i;
 
 	i = 1;
-	line = ft_strchr(line, '>');
-	if (line)
+	if (line[0] == '|')
+		return (print_parse_error('|'));
+	ptr = ft_strchr(line, '>');
+	if (ptr && ptr[1] == '>')
+		return (check_parse_error(&ptr[2]));
+	if (!ptr)
+		ptr = ft_strrchr(line, '<');
+	if (!ptr)
+		ptr = ft_strrchr(line, '|');
+	if (ptr)
 	{
-		if (line[1] == '>')
+		while (ft_isspace(ptr[i]))
 			i++;
-		while (ft_isspace(line[i]))
-			i++;
-		if (!line[i])
-			ft_putendl_fd("minishell: parse error near '\\n'", 2);
-		else if (line[i] == '>')
-			ft_putendl_fd("minishell: parse error near '>'", 2);
-		else if (line[i] == ';')
-			ft_putendl_fd("minishell: parse error near '>'", 2);
-		if (!line[i] || line[i] == '>' || line[i] == ';')
-			return (1);
+		if (ptr[i] == '<' || ptr[i] == '>' || line[i] == ';' || line[i] == '|')
+			return (print_parse_error(ptr[i]));
+		if (!ptr[i])
+			return (print_parse_error('n'));
 		else
 			return (check_parse_error(&line[i]));
 	}

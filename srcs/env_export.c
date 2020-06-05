@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 17:04:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 15:27:59 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,18 @@ int				check_var_name(char **str, t_data *data)
 
 	name = ft_substr(*str, 0,
 		(ft_strlen(*str) - ft_strlen(ft_strchr(*str, '='))));
+	if (!name[0])
+		return(-1);
 	i = -1;
 	while (name[++i])
 	{
 		if (!(ft_isalnum(name[i])) && !(name[i] == '_'))
 		{
+			if (name[i] == '+' && !name[i + 1])
+			{
+				free(name);
+				return(1);
+			}
 			data->status = 1;
 			ft_putstr_fd("minishell: export: invalid variable name: ", 2);
 			ft_putendl_fd(name, 2);
@@ -53,17 +60,46 @@ int				check_var_name(char **str, t_data *data)
 	return (1);
 }
 
+char			*removeplus(char *str)
+{
+	char	*start;
+	char	*end;
+
+	end = ft_strchr(str, '+');
+	if (end == NULL)
+		return (str);
+	end = ft_substr(end, 1,ft_strlen(end - 1));
+	start = ft_substr(str, 0, ft_strlen(str) - ft_strlen(end) - 1);
+	free(str);
+	str = ft_strjoin(start, end);
+	free(start);
+	free(end);
+	return (str);
+}
+
 static int		replace_ifexist(t_list *env, char *str)
 {
 	int		i;
+	int		a;
+	char	*tmp;
 
 	i = 0;
+	a = 0;
 	while (str[i] != '=')
 		i++;
+	if (str[i - 1] == '+')
+		a = 1;
+	i -= a;
 	while (env)
 	{
 		if (ft_strncmp(env->content, str, i) == 0)
 		{
+			if (a)
+			{
+				tmp = ft_strjoin(env->content, &str[i + 2]);
+				free(str);
+				str = tmp;
+			}
 			free(env->content);
 			env->content = str;
 			return (1);
@@ -90,9 +126,13 @@ void			builtin_export(t_data *data)
 		{
 			str = rm_quotes_env(ft_strdup(data->cmd[i]));
 			if (check_var_name(&str, data) == -1)
+			{
+				data->status = 1;
 				break ;
+			}
 			if ((ret = replace_ifexist(data->env, str)) == 0)
 			{
+				str = removeplus(str);
 				new = ft_lstnew(str);
 				ft_lstadd_back(&data->env, new);
 			}

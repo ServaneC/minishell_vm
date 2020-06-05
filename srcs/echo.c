@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 17:09:06 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 12:07:42 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,16 +109,24 @@ static void		fill_to_print(t_data *data, char **to_p, int i)
 void			builtin_echo(t_data *data)
 {
 	int		i;
+	int		n;
 	char	*to_print;
 
 	i = 0;
+	n = 0;
 	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
+	{
+		n = 1;
 		i = 1;
+		//printf("{%s}\n", data->cmd[i]);
+		while (ft_strncmp(data->cmd[i], "-n", 3) == 0)
+			i++;
+		i--;
+	}
 	fill_to_print(data, &to_print, i);
 	data->status = 0;
-	if (data->cmd[1] && (ft_strncmp(data->cmd[1], "-n", 3) == 0))
-		ft_putstr(to_print);
-	else
-		ft_putendl_fd(to_print, 1);
+	ft_putstr(to_print);
+	if (n == 0)
+		ft_putchar_fd('\n', 1);
 	free(to_print);
 }

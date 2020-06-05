@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 17:26:35 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 14:46:01 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ static int	fill_cmd(char **tab, char *tmp)
 	return (1);
 }
 
-char		**split_quotes(char *s)
+char		**split_quotes(char *s, t_data *data)
 {
 	char	**tab;
 	char	*tmp;
@@ -124,6 +124,7 @@ char		**split_quotes(char *s)
 		return (NULL);
 	if (parse_error(s))
 	{
+		data->status = 2;
 		ft_putendl_fd("parse error near `;;'", 2);
 		return (NULL);
 	}

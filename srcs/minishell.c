@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 16:16:52 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 14:45:32 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void			ctr_c(int num)
 	g_ctrl_c = 1;
 	ft_putchar_fd('\n', 1);
 	if (g_child_pid == 0)
-		ft_putstr("minishell>> ");
+		ft_putstr_fd("minishell>> ", 2);
 }
 
 static void			ctr_q(int num)
@@ -56,13 +56,22 @@ static void			exec_shell(t_data *data, char *line)
 	int		i;
 
 	i = -1;
-	if (check_parse_error(line) == 0)
+	line = rm_sgl_quote(line);
+	data->multi = split_quotes(line, data);
+	free(line);
+	line = NULL;
+	if (data->multi)
 	{
-		line = rm_sgl_quote(line);
-		data->multi = split_quotes(line);
-		free(line);
-		line = NULL;
-		if (data->multi)
+		while (data->multi[++i])
+		{
+			if (check_parse_error(data->multi[i]))
+			{
+				data->status = 2;
+				break ;
+			}	
+		}
+		i = -1;
+		if (data->status != 2)
 		{
 			while (data->multi[++i])
 			{
@@ -70,9 +79,9 @@ static void			exec_shell(t_data *data, char *line)
 				exec_line(data);
 				close_fd(data);
 			}
-			ft_free(data->multi);
-			data->multi = NULL;
 		}
+		ft_free(data->multi);
+		data->multi = NULL;
 	}
 	free(line);
 	line = NULL;
@@ -86,7 +95,7 @@ int					main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	g_ctrl_c = 0;
-	ft_putstr("minishell>> ");
+	ft_putstr_fd("minishell>> ", 2);
 	signal(SIGINT, &ctr_c);
 	signal(SIGQUIT, &ctr_q);
 	data = init_data(env);
@@ -99,10 +108,10 @@ int					main(int ac, char **av, char **env)
 		g_ctrl_c = 0;
 		g_ctrl_q = 0;
 		exec_shell(data, line);
-		ft_putstr("minishell>> ");
+		ft_putstr_fd("minishell>> ", 2);
 	}
 	if (line)
 		free(line);
-	builtin_exit(data);
+	builtin_exit(data, 1);
 	return (0);
 }

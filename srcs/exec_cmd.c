@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 15:57:02 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/05 12:18:45 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void		create_path(char **cmd, char *path)
 		tmp = ft_strjoin(bin, cmd[0]);
 		free(bin);
 		bin = tmp;
-		if (stat(bin, buf) == 0)
+		if (lstat(bin, buf) == 0)
 			break ;
 		free(bin);
 		bin = NULL;
