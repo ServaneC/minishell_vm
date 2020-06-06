@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 13:53:12 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 16:03:06 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	w_len(char *s, int i)
 			while (s[++i] && s[i] != c2)
 				len++;
 			if (!s[i])
-				return(len + 1);
+				return (len + 1);
 			len += 2;
 		}
 		else if (s[i] != ';')
@@ -71,7 +71,7 @@ static int	parse_error(char *s)
 
 	i = -1;
 	if (s[0] == '|')
-		return(print_parse_error(s[0]));
+		return (print_parse_error(s[0]));
 	while (s[++i])
 	{
 		if (s[i] == '\'' || s[i] == '\"')
@@ -89,13 +89,10 @@ static int	parse_error(char *s)
 				i += 3;
 			else if (simple_r(s, i, '>') || simple_r(s, i, '<'))
 				i += 1;
-		//	else 
-		//	{
-				while(s[++i] && ft_isspace(s[i]) )
-					;
-				if (s[i] && (s[i] == ';' || s[i] == '>' || s[i] == '<' || s[i] == '|'))
-					return (print_parse_error(s[i]));
-		//	}
+			while (s[++i] && ft_isspace(s[i]))
+				;
+			if (s[i] && (s[i] == ';' || s[i] == '>' || s[i] == '<' || s[i] == '|'))
+				return (print_parse_error(s[i]));
 		}
 		if (!s[i])
 			break ;

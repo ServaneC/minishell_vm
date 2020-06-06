@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 15:51:59 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 16:03:46 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	w_len(char *s, int i, const char *charset)
 			while (s[++i] && s[i] != c2)
 				len++;
 			if (!s[i])
-				return(len + 1);
+				return (len + 1);
 			len += 2;
 		}
 		else if (!is_sep(s[i], charset))

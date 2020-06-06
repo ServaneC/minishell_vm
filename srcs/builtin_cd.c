@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 18:11:02 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 16:07:51 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void			change_dir(t_data *data, char *path)
 	char			pwd[MAX_PATH];
 	struct stat		*buf;
 	char			*str;
-	
+
 	if (getcwd(old_pwd, MAX_PATH) == NULL && data->cmd[1][0] == '.' && !data->cmd[1][1])
 	{
 		str = ft_strdup("cd");

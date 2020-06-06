@@ -6,13 +6,13 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 15:52:23 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 13:17:46 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 16:04:08 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int			print_parse_error(char c)
+int				print_parse_error(char c)
 {
 	ft_putstr_fd("minishell: parse error near ' ", 2);
 	if (c == 'n')
