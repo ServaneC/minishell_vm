@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 18:48:13 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 13:53:12 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,11 @@ static int	word_count(char *s)
 		if (s[i] == '\'' || s[i] == '\"')
 		{
 			c2 = s[i];
-			i++;
-			while (s[i] != c2 && s[i])
-				i++;
+			while (s[++i] && s[i] != c2)
+				;
 		}
+		if (!s[i])
+			break ;
 	}
 	return (count);
 }
@@ -48,8 +49,10 @@ static int	w_len(char *s, int i)
 		if (s[i] == '\'' || s[i] == '\"')
 		{
 			c2 = s[i];
-			while (s[++i] != c2 && s[i])
+			while (s[++i] && s[i] != c2)
 				len++;
+			if (!s[i])
+				return(len + 1);
 			len += 2;
 		}
 		else if (s[i] != ';')
@@ -63,31 +66,41 @@ static int	w_len(char *s, int i)
 
 static int	parse_error(char *s)
 {
-	char	c;
 	int		i;
-	char	*ptr;
-	char	*ptr2;
+	char	c;
 
-	ptr = ft_strchr(s, '\"');
-	ptr2 = ft_strchr(s, '\'');
-	c = '\'';
-	if ((ptr == NULL && ptr2) || ft_strlen(ptr2) > ft_strlen(ptr))
-		ptr = ptr2;
-	else if ((ptr && ptr2 == NULL) || ft_strlen(ptr2) < ft_strlen(ptr))
-		c = '\"';
-	if (ptr == NULL)
+	i = -1;
+	if (s[0] == '|')
+		return(print_parse_error(s[0]));
+	while (s[++i])
 	{
-		if (ft_strnstr(s, ";;", ft_strlen(s)))
-			return (1);
-		else
-			return (0);
+		if (s[i] == '\'' || s[i] == '\"')
+		{
+			c = s[i];
+			while (s[++i] && s[i] != c)
+				;
+		}
+		else if (s[i] == ';' || s[i] == '>' || s[i] == '<' || s[i] == '|')
+		{
+			c = s[i];
+			if ((c == ';' && (simple_r(s, i + 1, '>') || simple_r(s, i + 1, '<'))) || double_r(s, i))
+				i += 2;
+			else if (c == ';' && double_r(s, i + 1))
+				i += 3;
+			else if (simple_r(s, i, '>') || simple_r(s, i, '<'))
+				i += 1;
+		//	else 
+		//	{
+				while(s[++i] && ft_isspace(s[i]) )
+					;
+				if (s[i] && (s[i] == ';' || s[i] == '>' || s[i] == '<' || s[i] == '|'))
+					return (print_parse_error(s[i]));
+		//	}
+		}
+		if (!s[i])
+			break ;
 	}
-	if (ft_strnstr(s, ";;", ft_strlen(s) - ft_strlen(ptr)))
-		return (1);
-	i = 1;
-	while (ptr[i] && ptr[i] != c)
-		i++;
-	return (parse_error(&ptr[i + 1]));
+	return (0);
 }
 
 static int	fill_cmd(char **tab, char *tmp)
@@ -125,7 +138,6 @@ char		**split_quotes(char *s, t_data *data)
 	if (parse_error(s))
 	{
 		data->status = 2;
-		ft_putendl_fd("parse error near `;;'", 2);
 		return (NULL);
 	}
 	tmp = ft_strtrim(s, " ;");

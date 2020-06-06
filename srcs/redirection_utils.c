@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 15:52:23 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 14:44:00 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 13:17:46 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,35 +20,6 @@ int			print_parse_error(char c)
 	ft_putchar_fd(c, 2);
 	ft_putendl_fd("\'", 2);
 	return (1);
-}
-
-int				check_parse_error(char *line)
-{
-	char	*ptr;
-	int		i;
-
-	i = 1;
-	if (line[0] == '|')
-		return (print_parse_error('|'));
-	ptr = ft_strchr(line, '>');
-	if (ptr && ptr[1] == '>')
-		return (check_parse_error(&ptr[2]));
-	if (!ptr)
-		ptr = ft_strrchr(line, '<');
-	if (!ptr)
-		ptr = ft_strrchr(line, '|');
-	if (ptr)
-	{
-		while (ft_isspace(ptr[i]))
-			i++;
-		if (ptr[i] == '<' || ptr[i] == '>' || line[i] == ';' || line[i] == '|')
-			return (print_parse_error(ptr[i]));
-		if (!ptr[i])
-			return (print_parse_error('n'));
-		else
-			return (check_parse_error(&line[i]));
-	}
-	return (0);
 }
 
 char			*return_free(char **str)

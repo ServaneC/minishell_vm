@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 15:27:59 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 15:28:50 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char			*removeplus(char *str)
 static int		replace_ifexist(t_list *env, char *str)
 {
 	int		i;
+	int		len;
 	int		a;
 	char	*tmp;
 
@@ -92,7 +93,9 @@ static int		replace_ifexist(t_list *env, char *str)
 	i -= a;
 	while (env)
 	{
-		if (ft_strncmp(env->content, str, i) == 0)
+		len = len_variable(env->content);
+		len = i > len ? i : len;
+		if (ft_strncmp(env->content, str, len) == 0)
 		{
 			if (a)
 			{

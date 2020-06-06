@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 17:10:46 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 15:27:18 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ char		*remove_quotes(char *cmd)
 		return (NULL);
 	get_tmp(cmd, tmp);
 	free(cmd);
-	return (tmp);
+	cmd = ft_strdup(tmp);
+	free(tmp);
+	tmp = NULL;
+	return (cmd);
 }
 
 void		ft_free(char **tab)

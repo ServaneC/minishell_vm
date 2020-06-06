@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 18:51:48 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 15:56:56 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,22 @@ static void		get_path(t_data *data, int saved_stdout)
 void			exec_line(t_data *data)
 {
 	int		saved_stdout;
+	int		i;
+	char	*tmp;
 
+	i = -1;
 	if ((saved_stdout = fd_handling(data, 1)) == -1)
 		;
 	else if (data->line[0])
 	{
 		data->cmd = split_spaces(data->line, " \n\t");
-		//data->cmd[0] = remove_quotes(data->cmd[0]);
+		while(data->cmd[++i])
+		{
+			tmp = echo_str(data->cmd[i], data);
+			free(data->cmd[i]);
+			data->cmd[i] = ft_strdup(tmp);
+			free(tmp);
+		}
 		if (data->cmd[0] && is_builtin(data->cmd[0]))
 			exec_builtin(data);
 		else if (data->cmd[0])

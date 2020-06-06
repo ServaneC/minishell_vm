@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 14:46:16 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 15:35:20 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct	s_data
 	int			status;
 	t_list		*fd;
 	int			input;
+	char		*dir;
 }				t_data;
 
 int				is_builtin(char *cmd);
@@ -55,7 +56,6 @@ char			*remove_quotes(char *cmd);
 void			ft_free(char **tab);
 void			free_lst(t_list *lst);
 void			close_fd(t_data *data);
-char			*rm_sgl_quote(char *str);
 char			**convert_env_to_tab(t_list *env);
 void			exec_line(t_data *data);
 char			**tab_of_quotes(char *str);
@@ -65,10 +65,12 @@ int				fill_fd(t_data *data);
 int				find_input(t_data *data);
 int				ft_error(char **name);
 int				simple_r(char *line, int i, char r);
+int				double_r(char *line, int i);
 char			*return_free(char **str);
 int				fd_handling(t_data *data, int start);
-int				check_parse_error(char *line);
+int				print_parse_error(char c);
 char			*rm_quotes_env(char *var);
 char			*echo_str(char *str, t_data *data);
+int				len_variable(void *str);
 
 #endif

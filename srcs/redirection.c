@@ -6,17 +6,17 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/04 15:52:08 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/06 15:45:45 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int		double_r(char *line, int i)
+int				double_r(char *line, int i)
 {
 	if (i > 0)
 	{
-		return (line[i] == '>' && line[i - 1] != '>' && (line[i + 1] &&
+		return ((line[i] == '>' && line[i - 1] != '>') && (line[i + 1] &&
 			line[i + 1] == '>') && ((line[i + 2] && line[i + 2] != '>')));
 	}
 	return (line[i] == '>' && (line[i + 1] && line[i + 1] == '>') &&
@@ -85,9 +85,10 @@ static char		*new_line(t_data *data, int i, int j, char *tmp)
 		{
 			c = data->line[i];
 			tmp[++j] = c;
-			while (data->line[++i] != c)
+			while (data->line[++i] && data->line[i] != c)
 				tmp[++j] = data->line[i];
-			tmp[++j] = data->line[i];
+			if (data->line[i])
+				tmp[++j] = data->line[i];
 		}
 		else if (simple_r(data->line, i, '>') || double_r(data->line, i))
 		{
@@ -95,7 +96,7 @@ static char		*new_line(t_data *data, int i, int j, char *tmp)
 				return (return_free(&tmp));
 			tmp[++j] = ' ';
 		}
-		else
+		else if (data->line[i])
 			tmp[++j] = data->line[i];
 		if (!data->line[i])
 			break ;
@@ -113,7 +114,7 @@ int				fill_fd(t_data *data)
 	if ((tmp = new_line(data, -1, -1, tmp)) == NULL)
 		return (-1);
 	free(data->line);
-	data->line = ft_strtrim(tmp, " \n\t");
+	data->line = ft_strdup(tmp);
 	free(tmp);
 	return (1);
 }
