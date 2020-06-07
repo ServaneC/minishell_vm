@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 13:40:50 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 16:05:15 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,8 @@ static int		add_fd(t_data *data, char *name, int d, int i)
 	my_fd = -1;
 	if (d)
 		my_fd = open(name, O_WRONLY | O_APPEND);
-	if (my_fd == -1 && ((d && errno != EACCES) || !d))
-		my_fd = open(name,
-			O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
+	if (my_fd == -1 && errno != EACCES)
+		my_fd = open(name, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
 	if (my_fd == -1)
 		return (ft_error(&name));
 	ptr = malloc(sizeof(int *) * 4);
@@ -83,8 +82,7 @@ static char		*new_line(t_data *data, int i, int j, char *tmp)
 	{
 		if (data->line[i] == '\'' || data->line[i] == '\"')
 		{
-			c = data->line[i];
-			tmp[++j] = c;
+			tmp[++j] = get_c_input(&c, data->line[i]);
 			while (data->line[++i] && data->line[i] != c)
 				tmp[++j] = data->line[i];
 			if (data->line[i])

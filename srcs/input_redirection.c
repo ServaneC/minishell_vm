@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:50:13 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 16:05:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 15:40:02 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,7 @@ static char		*new_line_input(t_data *data, int i, int j, char *tmp)
 	{
 		if (data->line[i] == '\'' || data->line[i] == '\"')
 		{
-			c = data->line[i];
-			tmp[++j] = c;
+			tmp[++j] = get_c_input(&c, data->line[i]);
 			while (data->line[++i] && data->line[i] != c)
 				tmp[++j] = data->line[i];
 			if (data->line[i])
