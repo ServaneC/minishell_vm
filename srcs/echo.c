@@ -6,68 +6,13 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 14:02:28 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 14:38:10 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char		*echo_str_sgl(char *str)
-{
-	int		i;
-	char	*ret;
-	char	*s;
-
-	i = -1;
-	ret = ft_strdup("\0");
-	s = ft_strtrim(str, "\'");
-	while (s[++i])
-	{
-		ret = clean_ft_strjoin(ret, ft_substr(s, i, 1));
-		if (!s[i])
-			break ;
-	}
-	free(s);
-	return (ret);
-}
-
-char			*echo_str(char *str, t_data *data, int m)
-{
-	int		i;
-	char	*ret;
-	char	*s;
-
-	i = -1;
-	ret = ft_strdup("\0");
-	if (!str[0])
-		return(ret);
-	if (str[0] != '\'')
-	{
-		s = ft_strtrim(str, "\"");
-		if (m && s[0] == '\0')
-		{
-			free(ret);
-			free(s);
-			return (ft_strdup(" "));
-		}
-		while (s[++i])
-		{
-			if (s[i] == '$' && s[i + 1] && (ft_isalnum(s[i + 1])
-				|| s[i + 1] == '?'))
-				i = echo_variable(s, data, &ret, i);
-			else
-				ret = clean_ft_strjoin(ret, ft_substr(s, i, 1));
-			if (!s[i])
-				break ;
-		}
-		free(s);
-	}
-	else
-		ret = clean_ft_strjoin(ret, echo_str_sgl(str));
-	return (ret);
-}
-
-static int		echo_next(t_data *data, char *cmd, int m)
+static int		next_s(t_data *data, char *cmd, int m)
 {
 	int		ret;
 	char	*str;
@@ -96,7 +41,7 @@ static void		fill_to_print(t_data *data, char **to_p, int i)
 			str = echo_str(tab[j], data, 0);
 			*to_p = clean_ft_strjoin(*to_p, str);
 		}
-		if (data->cmd[i + 1] && echo_next(data, data->cmd[i + 1], 0) && *to_p[0])
+		if (data->cmd[i + 1] && next_s(data, data->cmd[i + 1], 0) && *to_p[0])
 			*to_p = clean_ft_strjoin(*to_p, ft_strdup(" "));
 		ft_free(tab);
 	}
