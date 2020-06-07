@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 16:06:12 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 14:08:18 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,61 +43,6 @@ int					len_variable(void *str)
 	return (len);
 }
 
-static t_list		*env_delete_elem(t_list *env, char *str)
-{
-	t_list	*tmp;
-	t_list	*previous;
-	int		len;
-
-	if (env == NULL)
-		return (NULL);
-	previous = env;
-	len = len_variable(env->content);
-	if (ft_strncmp(str, env->content, len) == 0)
-	{
-		env = env->next;
-		free(previous->content);
-		previous->content = NULL;
-		free(previous);
-		previous = NULL;
-		return (env);
-	}
-	tmp = previous->next;
-	while (tmp)
-	{
-		len = len_variable(tmp->content);
-		if (ft_strncmp(str, tmp->content, len) == 0)
-		{
-			previous->next = tmp->next;
-			free(tmp->content);
-			tmp->content = NULL;
-			free(tmp);
-			tmp = NULL;
-			return (env);
-		}
-		previous = tmp;
-		tmp = tmp->next;
-	}
-	return (env);
-}
-
-void			builtin_unset(t_data *data)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	if (data->cmd[1] == NULL)
-		ft_putendl_fd("unset: not enough arguments", 2);
-	while (data->cmd[++i])
-	{
-		tmp = ft_strdup(data->cmd[i]);
-		env_delete_elem(data->env, tmp);
-		free(tmp);
-	}
-	data->status = 0;
-}
-
 char			**convert_env_to_tab(t_list *env)
 {
 	char	**tab;
@@ -115,4 +60,21 @@ char			**convert_env_to_tab(t_list *env)
 		env = env->next;
 	}
 	return (tab);
+}
+
+static void		print_elem(void *str)
+{
+	ft_putendl_fd((char *)str, 1);
+}
+
+void			print_env(t_data *data)
+{
+	data->status = 0;
+	if (data->cmd[1])
+	{
+		ft_putendl_fd("minishell: env: the env command accept no arguments", 2);
+		data->status = 1;
+	}
+	else
+		ft_lstiter(data->env, &print_elem);
 }
