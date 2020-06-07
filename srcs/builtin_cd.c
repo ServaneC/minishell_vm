@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 16:07:51 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 13:41:08 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ void			change_dir(t_data *data, char *path)
 	char			pwd[MAX_PATH];
 	struct stat		*buf;
 	char			*str;
+	
 
 	if (getcwd(old_pwd, MAX_PATH) == NULL && data->cmd[1][0] == '.' && !data->cmd[1][1])
 	{
 		str = ft_strdup("cd");
 		ft_error(&str);
+		str = NULL;
 		change_value(data->env, "OLDPWD", var_value(data->env, "$PWD"));
 		str = ft_strjoin(var_value(data->env, "$PWD"), "/.");
 		change_value(data->env, "PWD", str);
@@ -56,6 +58,7 @@ void			change_dir(t_data *data, char *path)
 		if (chdir(path) == 0)
 		{
 			getcwd(pwd, MAX_PATH);
+			getcwd(old_pwd, MAX_PATH);
 			change_value(data->env, "PWD", pwd);
 			free(data->dir);
 			data->dir = ft_strdup(pwd);
@@ -88,7 +91,7 @@ void			builtin_cd(t_data *data)
 	}
 	else
 	{
-		str = echo_str(data->cmd[1], data);
+		str = echo_str(data->cmd[1], data, 0);
 		if (str[0] == '~')
 		{
 			tmp = ft_strjoin(var_value(data->env, "$HOME"), &str[1]);
