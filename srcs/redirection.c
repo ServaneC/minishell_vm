@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 16:56:36 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 17:40:08 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,14 @@ int				double_r(char *line, int i)
 static int		add_fd(t_data *data, char *name, int d, int i)
 {
 	int		my_fd;
+	char	*tmp;
 	int		*ptr;
 	t_list	*new_fd;
 
 	my_fd = -1;
+	tmp = echo_str(name, data, 0);
+	free(name);
+	name = tmp;
 	if (d)
 		my_fd = open(name, O_WRONLY | O_APPEND);
 	if (my_fd == -1 && errno != EACCES)
