@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 16:05:15 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 16:56:36 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,10 @@ int				fill_fd(t_data *data)
 	if ((tmp = new_line(data, -1, -1, tmp)) == NULL)
 		return (-1);
 	free(data->line);
-	data->line = ft_strdup(tmp);
+	if (tmp[0] && ft_isspace(tmp[0]) && !tmp[1])
+		data->line = ft_strdup("\0");
+	else
+		data->line = ft_strdup(tmp);
 	free(tmp);
 	return (1);
 }

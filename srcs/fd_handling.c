@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 15:56:33 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 11:49:20 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 16:57:10 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int			fd_handling(t_data *data, int start)
 
 	if (start && handling_stdin(data, 1) == -1)
 		return (-1);
-	if (data->fd && start)
+	if (data->fd && start && data->line[0])
 	{
 		saved_stdout = dup(STDOUT_FILENO);
 		ptr_fd = data->fd;
