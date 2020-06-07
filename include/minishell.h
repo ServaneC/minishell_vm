@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 15:24:06 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 15:55:11 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ char			**convert_env_to_tab(t_list *env);
 void			exec_line(t_data *data);
 char			**tab_of_quotes(char *str);
 char			*clean_ft_strjoin(char *s1, char *s2);
-int				echo_variable(char *s, t_data *data, char **ret, int i);
 int				fill_fd(t_data *data);
 int				find_input(t_data *data);
 int				ft_error(char **name);
@@ -68,10 +67,11 @@ int				simple_r(char *line, int i, char r);
 int				double_r(char *line, int i);
 char			*return_free(char **str);
 int				fd_handling(t_data *data, int start);
-int				print_parse_error(char c);
 char			*rm_quotes_env(char *var);
 char			*echo_str(char *str, t_data *data, int m);
 int				len_variable(void *str);
 char			*removeplus(char *str);
+char			get_c_input(char *c, char str_i);
+int				parse_error(char *s);
 
 #endif
