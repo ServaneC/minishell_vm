@@ -6,42 +6,41 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:04:32 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 14:05:39 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 15:20:01 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+static void			free_block(t_list *to_free)
+{
+	free(to_free->content);
+	to_free->content = NULL;
+	free(to_free);
+	to_free = NULL;
+}
+
 static t_list		*env_delete_elem(t_list *env, char *str)
 {
 	t_list	*tmp;
 	t_list	*previous;
-	int		len;
 
 	if (env == NULL)
 		return (NULL);
 	previous = env;
-	len = len_variable(env->content);
-	if (ft_strncmp(str, env->content, len) == 0)
+	if (ft_strncmp(str, env->content, len_variable(env->content)) == 0)
 	{
 		env = env->next;
-		free(previous->content);
-		previous->content = NULL;
-		free(previous);
-		previous = NULL;
+		free_block(previous);
 		return (env);
 	}
 	tmp = previous->next;
 	while (tmp)
 	{
-		len = len_variable(tmp->content);
-		if (ft_strncmp(str, tmp->content, len) == 0)
+		if (ft_strncmp(str, tmp->content, len_variable(tmp->content)) == 0)
 		{
 			previous->next = tmp->next;
-			free(tmp->content);
-			tmp->content = NULL;
-			free(tmp);
-			tmp = NULL;
+			free_block(tmp);
 			return (env);
 		}
 		previous = tmp;
@@ -50,7 +49,7 @@ static t_list		*env_delete_elem(t_list *env, char *str)
 	return (env);
 }
 
-void			builtin_unset(t_data *data)
+void				builtin_unset(t_data *data)
 {
 	int		i;
 	char	*tmp;

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 13:17:01 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 15:24:06 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ int				print_parse_error(char c);
 char			*rm_quotes_env(char *var);
 char			*echo_str(char *str, t_data *data, int m);
 int				len_variable(void *str);
+char			*removeplus(char *str);
 
 #endif

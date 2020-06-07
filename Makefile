@@ -20,7 +20,9 @@ SRCS =	builtin.c \
 		input_redirection.c \
 		redirection_utils.c \
 		fd_handling.c \
-		env_unset.c
+		env_unset.c \
+		echo_str.c \
+		env_utils.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 

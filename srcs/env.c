@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 14:08:18 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 14:41:48 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_list			*create_env(char **env)
 	return (my_env);
 }
 
-int					len_variable(void *str)
+int				len_variable(void *str)
 {
 	int		len;
 	char	*s;
