@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 16:07:09 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 17:22:56 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*get_tmp(char *cmd, char *tmp)
 	while (cmd[++i])
 	{
 		//printf("(%s)\n", &cmd[i]);
-		if (cmd[i] == '\'' || cmd[i] == '\"')
+		if ((cmd[i] == '\'' || cmd[i] == '\"'))
 		{
 			if (cmd[i+1] && cmd[i + 1] == cmd[i])
 			{
@@ -34,15 +34,21 @@ static char	*get_tmp(char *cmd, char *tmp)
 			c = cmd[i];
 			while (cmd[++i])
 			{
-				if (cmd[i] == c)
+				if (cmd[i] == c /*&& cmd[i - 1] != '\\'*/)
 					break ;
 				if (cmd[i] == '\\' && cmd[i + 1] && cmd[i + 1] == '$')
 					tmp[++j] = cmd[i];
 				else if (cmd[i])
 				{
 					if (cmd[i] == '\\')
-						tmp[++j] = '\\';
-					tmp[++j] = cmd[i];
+					{
+						if (cmd[i + 1] && cmd[i + 1] == '\"')
+							i++;
+						else
+							tmp[++j] = '\\';
+					}
+					if (cmd[i])
+						tmp[++j] = cmd[i];
 				}
 				else if (cmd[++i])
 					tmp[++j] = cmd[i];
@@ -74,7 +80,7 @@ char		*remove_quotes(char *cmd)
 {
 	char *tmp;
 
-	if (!(tmp = malloc(sizeof(char) * ft_strlen(cmd) + 1)))
+	if (!(tmp = malloc(sizeof(char) * ft_strlen(cmd) + 10)))
 		return (NULL);
 	get_tmp(cmd, tmp);
 	free(cmd);

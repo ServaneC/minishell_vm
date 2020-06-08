@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 16:04:28 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 16:32:18 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,13 @@ static t_data		*init_data(char **main_env)
 static void			exec_shell(t_data *data, char *line)
 {
 	int		i;
+	//char	*tmp;
 
 	i = -1;
+	//tmp = echo_str(line, data);
 	data->multi = split_quotes(line, data);
+	//free(tmp);
+	//tmp = NULL;
 	free(line);
 	line = NULL;
 	if (data->multi)
