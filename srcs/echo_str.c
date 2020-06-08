@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:37:25 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 15:45:07 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:05:58 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,10 @@ static char		*get_s(char *str, int m)
 {
 	char	*s;
 
+	(void)m;
 	if (str[0] != '\'')
 	{
-		s = ft_strtrim(str, "\"");
-		if (m && s[0] == '\0')
-		{
-			free(s);
-			s = ft_strdup(" ");
-		}
+		s = remove_quotes(ft_strdup(str));
 		return (s);
 	}
 	return (NULL);
@@ -86,8 +82,8 @@ char			*echo_str(char *str, t_data *data, int m)
 	{
 		while (s[++i])
 		{
-			if (s[i] == '$' && s[i + 1] && (ft_isalnum(s[i + 1])
-				|| s[i + 1] == '?'))
+			if (s[i] == '$' && is_meta(s, i) && s[i + 1] && 
+				(ft_isalnum(s[i + 1]) || s[i + 1] == '?'))
 				i = echo_variable(s, data, &ret, i);
 			else
 				ret = clean_ft_strjoin(ret, ft_substr(s, i, 1));

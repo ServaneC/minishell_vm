@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:43:41 by schene            #+#    #+#             */
-/*   Updated: 2020/06/05 18:47:43 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/07 18:05:40 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static int		nb_word(char *str)
 			while (str[++i])
 				if (str[i] == c)
 					break ;
+			if (!str[i] && count > 1)
+				return(count -1);
 		}
 		else
 			i = else_nb_w(str, i);
@@ -58,17 +60,22 @@ static int		w_len(char *str, int i)
 	char	c;
 
 	len = 0;
-	if (str[i] == '\'' || str[i] == '\"')
+	i--;
+	while (str[++i])
 	{
-		c = str[i];
-		while (str[++i] != c && str[i])
+		if (str[i] == '\'' || str[i] == '\"')
+		{
+			c = str[i];
+			while (str[++i] != c && str[i])
+				len++;
+			if (!str[i])
+				return(len + 1);
+			return (len + 2);
+		}
+		else if (str[i])
 			len++;
-		return (len + 2);
-	}
-	while (str[i] && (str[i] != '\'' && str[i] != '\"'))
-	{
-		i++;
-		len++;
+		if (!str[i])
+			return(len);
 	}
 	return (len);
 }

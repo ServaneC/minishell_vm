@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 15:55:11 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:02:22 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ int				len_variable(void *str);
 char			*removeplus(char *str);
 char			get_c_input(char *c, char str_i);
 int				parse_error(char *s);
+int				is_meta(char *str, int i);
 
 #endif

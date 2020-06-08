@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/06 15:27:18 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 12:54:06 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static char	*get_tmp(char *cmd, char *tmp)
 	{
 		if (cmd[i] == '\'' || cmd[i] == '\"')
 		{
+			if (cmd[i+1] && cmd[i + 1] == cmd[i])
+			{
+				tmp[++j] = '\"';
+				tmp[++j] = '\"';
+			}
 			c = cmd[i];
 			while (cmd[++i])
 			{
@@ -32,8 +37,10 @@ static char	*get_tmp(char *cmd, char *tmp)
 				tmp[++j] = cmd[i];
 			}
 		}
-		else
+		else if (cmd[i])
 			tmp[++j] = cmd[i];
+		if (!cmd[i])
+			break ;
 	}
 	tmp[++j] = '\0';
 	return (tmp);
@@ -63,7 +70,8 @@ void		ft_free(char **tab)
 		free(tab[i]);
 		tab[i] = NULL;
 	}
-	free(tab);
+	if (tab)
+		free(tab);
 	tab = NULL;
 }
 

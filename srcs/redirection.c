@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 17:40:08 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:04:50 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int				double_r(char *line, int i)
 {
+	if (!is_meta(line, i))
+		return (0);
 	if (i > 0)
 	{
 		return ((line[i] == '>' && line[i - 1] != '>') && (line[i + 1] &&

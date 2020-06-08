@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 17:27:33 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 15:44:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:04:25 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,9 @@ void	close_fd(t_data *data)
 		tmp = NULL;
 	}
 	data->fd = NULL;
+}
+
+int			is_meta(char *str, int i)
+{
+	return (i == 0 || (str[i - 1] && str[i - 1] != '\\'));
 }
