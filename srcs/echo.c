@@ -6,19 +6,19 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 12:57:50 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:29:31 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int		next_s(t_data *data, char *cmd, int m)
+static int		next_s(t_data *data, char *cmd)
 {
 	int		ret;
 	char	*str;
 
 	ret = 0;
-	str = echo_str(cmd, data, m);
+	str = echo_str(cmd, data);
 	if (str[0] && ft_strncmp(str, " ", ft_strlen(str) != 0))
 		ret++;
 	free(str);
@@ -64,7 +64,7 @@ static void		fill_to_print(t_data *data, char **to_p, int i)
 		j = -1;
 		while (tab[++j])
 			*to_p = clean_ft_strjoin(*to_p, remove_dq_in_echo(tab[j]));
-		if (data->cmd[i + 1] && next_s(data, data->cmd[i + 1], 0) && *to_p[0])
+		if (data->cmd[i + 1] && next_s(data, data->cmd[i + 1]) && *to_p[0])
 			*to_p = clean_ft_strjoin(*to_p, ft_strdup(" "));
 		ft_free(tab);
 	}

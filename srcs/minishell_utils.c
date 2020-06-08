@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 12:54:06 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 16:07:09 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,10 @@ static char	*get_tmp(char *cmd, char *tmp)
 
 	i = -1;
 	j = -1;
+	//printf("-[%s]\n", cmd);
 	while (cmd[++i])
 	{
+		//printf("(%s)\n", &cmd[i]);
 		if (cmd[i] == '\'' || cmd[i] == '\"')
 		{
 			if (cmd[i+1] && cmd[i + 1] == cmd[i])
@@ -34,15 +36,37 @@ static char	*get_tmp(char *cmd, char *tmp)
 			{
 				if (cmd[i] == c)
 					break ;
-				tmp[++j] = cmd[i];
+				if (cmd[i] == '\\' && cmd[i + 1] && cmd[i + 1] == '$')
+					tmp[++j] = cmd[i];
+				else if (cmd[i])
+				{
+					if (cmd[i] == '\\')
+						tmp[++j] = '\\';
+					tmp[++j] = cmd[i];
+				}
+				else if (cmd[++i])
+					tmp[++j] = cmd[i];
 			}
 		}
 		else if (cmd[i])
-			tmp[++j] = cmd[i];
+		{
+			if (cmd[i] != '\\')
+				tmp[++j] = cmd[i];
+			else if (cmd[i + 1] && (cmd[i + 1] == '\\' || cmd[i + 1] == '$'))
+			{
+				tmp[++j] = cmd[i];
+				tmp[++j] = cmd[++i];
+			}
+			else if (cmd[++i])
+				tmp[++j] = cmd[i];
+			else
+				tmp[++j] = ' ';
+		}
 		if (!cmd[i])
 			break ;
 	}
 	tmp[++j] = '\0';
+	//printf("->[%s]\n", tmp);
 	return (tmp);
 }
 

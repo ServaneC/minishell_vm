@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 11:21:22 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:28:51 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void			exec_line(t_data *data)
 		data->cmd = split_spaces(data->line, " \n\t");
 		while (data->cmd[++i])
 		{
-			tmp = echo_str(data->cmd[i], data, 1);
+			tmp = echo_str(data->cmd[i], data);
 			free(data->cmd[i]);
 			data->cmd[i] = ft_strdup(tmp);
 			free(tmp);

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 14:22:10 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:28:58 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void			builtin_cd(t_data *data)
 	}
 	else
 	{
-		str = echo_str(data->cmd[1], data, 0);
+		str = echo_str(data->cmd[1], data);
 		if (str[0] == '~')
 		{
 			tmp = ft_strjoin(var_value(data->env, "$HOME"), &str[1]);

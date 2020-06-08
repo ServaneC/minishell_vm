@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:37:25 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 13:05:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 15:39:54 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,10 @@ static char		*echo_str_sgl(char *str)
 	return (ret);
 }
 
-static char		*get_s(char *str, int m)
+static char		*get_s(char *str)
 {
 	char	*s;
 
-	(void)m;
 	if (str[0] != '\'')
 	{
 		s = remove_quotes(ft_strdup(str));
@@ -68,24 +67,32 @@ static char		*get_s(char *str, int m)
 	return (NULL);
 }
 
-char			*echo_str(char *str, t_data *data, int m)
+char			*echo_str(char *str, t_data *data)
 {
 	int		i;
-	char	*ret;
 	char	*s;
+	char	*ret;
 
 	i = -1;
 	ret = ft_strdup("\0");
 	if (!str[0])
 		return (ret);
-	if ((s = get_s(str, m)) != NULL)
+	if ((s = get_s(str)) != NULL)
 	{
 		while (s[++i])
 		{
-			if (s[i] == '$' && is_meta(s, i) && s[i + 1] && 
+			if (s[i] == '\\')
+			{
+				if (!s[i + 1])
+					ret = clean_ft_strjoin(ret, ft_strdup(" "));
+				else
+					ret = clean_ft_strjoin(ret, ft_substr(s, i + 1, 1));
+				i++;
+			}
+			else if (s[i] == '$' && s[i + 1] && 
 				(ft_isalnum(s[i + 1]) || s[i + 1] == '?'))
 				i = echo_variable(s, data, &ret, i);
-			else
+			else if (s[i])
 				ret = clean_ft_strjoin(ret, ft_substr(s, i, 1));
 			if (!s[i])
 				break ;

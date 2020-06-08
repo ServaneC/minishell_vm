@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 13:04:50 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/08 13:28:58 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int		add_fd(t_data *data, char *name, int d, int i)
 	t_list	*new_fd;
 
 	my_fd = -1;
-	tmp = echo_str(name, data, 0);
+	tmp = echo_str(name, data);
 	free(name);
 	name = tmp;
 	if (d)
