@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 13:28:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 11:25:19 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,10 @@ char			*removeplus(char *str);
 char			get_c_input(char *c, char str_i);
 int				parse_error(char *s);
 int				is_meta(char *str, int i);
+int				contains_comment(char *str);
+int				contains_comment(char *str);
+int				count_occur_before(char *str, int i, int c);
+int				count_occur_after(char *str, int i, int c);
+int				between_quotes(char *str, int i);
 
 #endif

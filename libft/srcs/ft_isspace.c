@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lemarabe <lemarabe@student.42.fr>          +#+  +:+       +#+        */
+/*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/23 15:11:02 by lemarabe          #+#    #+#             */
-/*   Updated: 2020/02/23 21:26:01 by lemarabe         ###   ########.fr       */
+/*   Updated: 2020/06/09 11:37:37 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 int	ft_isspace(int i)
 {
-	if (i == ' ')
+	if (i == ' ' || i == '\t' || i == '\n')
 		return (1);
 	return (0);
 }

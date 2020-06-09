@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 17:22:56 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 11:16:14 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ static char	*get_tmp(char *cmd, char *tmp)
 						else
 							tmp[++j] = '\\';
 					}
-					if (cmd[i])
-						tmp[++j] = cmd[i];
+					tmp[++j] = cmd[i];
 				}
 				else if (cmd[++i])
 					tmp[++j] = cmd[i];
@@ -80,7 +79,7 @@ char		*remove_quotes(char *cmd)
 {
 	char *tmp;
 
-	if (!(tmp = malloc(sizeof(char) * ft_strlen(cmd) + 10)))
+	if (!(tmp = malloc(sizeof(char) * ft_strlen(cmd) + 1)))
 		return (NULL);
 	get_tmp(cmd, tmp);
 	free(cmd);

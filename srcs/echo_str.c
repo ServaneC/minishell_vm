@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:37:25 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 17:13:04 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 12:41:32 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ char			*echo_str(char *str, t_data *data)
 	ret = ft_strdup("\0");
 	if (!str[0])
 		return (ret);
-	//printf("str = {%s}\n", str);
 	if ((s = get_s(str)) != NULL)
 	{
 		while (s[++i])
