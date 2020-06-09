@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 12:38:19 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 15:59:45 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int				double_r(char *line, int i)
 		return (0);
 	if (i > 0)
 	{
-		return ((line[i] == '>' && (line[i - 1] != '>' || !is_meta(line, i - 1)) && (line[i + 1] &&
-			line[i + 1] == '>') && ((line[i + 2] && line[i + 2] != '>'))));
+		return ((line[i] == '>' && (line[i - 1] != '>' ||
+			!is_meta(line, i - 1)) && (line[i + 1] && line[i + 1] == '>')
+				&& ((line[i + 2] && line[i + 2] != '>'))));
 	}
 	return (line[i] == '>' && (line[i + 1] && line[i + 1] == '>') &&
 		((line[i + 2] && line[i + 2] != '>')));
@@ -60,7 +61,7 @@ static int		fill_name(t_data *data, int i, int d, int len)
 	while (ft_isspace(data->line[i]))
 		i++;
 	start = i;
-	if ((data->line[i] == '\'' || data->line[i] == '\"') && is_meta(data->line, i))
+	if (is_quotes(data->line, i))
 	{
 		c = data->line[i];
 		len++;
@@ -90,7 +91,7 @@ static char		*new_line(t_data *data, int i, int j, char *tmp)
 
 	while (data->line[++i])
 	{
-		if ((data->line[i] == '\'' || data->line[i] == '\"') && is_meta(data->line, i))
+		if (is_quotes(data->line, i))
 		{
 			tmp[++j] = get_c_input(&c, data->line[i]);
 			while (data->line[++i])

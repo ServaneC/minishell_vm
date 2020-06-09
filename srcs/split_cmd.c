@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 14:11:34 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 15:54:09 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,10 @@ static int	word_count(char *s)
 	return (count);
 }
 
-static int	w_len(char *s, int i)
+static int	w_len(char *s, int i, int len)
 {
-	int		len;
 	char	c2;
 
-	len = 0;
 	while (s[i])
 	{
 		if ((s[i] == '\'' || s[i] == '\"') && is_meta(s, i))
@@ -82,7 +80,7 @@ static int	fill_cmd(char **tab, char *tmp)
 	j = -1;
 	while (++j < word_count(tmp) && tmp[i])
 	{
-		len = w_len(tmp, i);
+		len = w_len(tmp, i, 0);
 		if (!(tab[j] = (char *)malloc(sizeof(char) * (len + 1))))
 			return (0);
 		k = 0;

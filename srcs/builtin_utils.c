@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 17:27:33 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 11:20:08 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 16:12:42 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,9 @@ void	close_fd(t_data *data)
 		tmp = NULL;
 	}
 	data->fd = NULL;
+}
+
+int		is_quotes(char *str, int i)
+{
+	return (str[i] && (str[i] == '\"' || str[i] == '\'') && is_meta(str, i));
 }

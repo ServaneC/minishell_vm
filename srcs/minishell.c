@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 13:41:51 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 15:49:25 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,32 +51,7 @@ static t_data		*init_data(char **main_env)
 	data->input = 0;
 	return (data);
 }
-/*
-static void			exec_shell(t_data *data, char *line)
-{
-	int		i;
-	//char	*tmp;
 
-	i = -1;
-	//tmp = echo_str(line, data);
-	data->multi = split_quotes(line, data);
-	//free(tmp);
-	//tmp = NULL;
-	free(line);
-	line = NULL;
-	if (data->multi)
-	{
-		while (data->multi[++i])
-		{
-			data->line = ft_strtrim(data->multi[i], " \n\t");
-			exec_line(data);
-			close_fd(data);
-		}
-		ft_free(data->multi);
-		data->multi = NULL;
-	}
-}
-*/
 static void			exec_shell(t_data *data, char *line)
 {
 	int		i;
@@ -105,7 +80,6 @@ static void			exec_shell(t_data *data, char *line)
 		data->multi = NULL;
 	}
 }
-
 
 int					main(int ac, char **av, char **env)
 {

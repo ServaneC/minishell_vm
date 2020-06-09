@@ -24,7 +24,8 @@ SRCS =	builtin.c \
 		echo_str.c \
 		env_utils.c \
 		parse_error.c \
-		escape.c
+		escape.c \
+		comments.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 

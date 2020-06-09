@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:43:41 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 17:15:15 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 15:50:28 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int		nb_word(char *str)
 				if (str[i] == c)
 					break ;
 			if (!str[i] && count > 1)
-				return(count -1);
+				return (count - 1);
 		}
 		else
 			i = else_nb_w(str, i);
@@ -69,13 +69,13 @@ static int		w_len(char *str, int i)
 			while (str[++i] != c && str[i])
 				len++;
 			if (!str[i])
-				return(len + 1);
+				return (len + 1);
 			return (len + 2);
 		}
 		else if (str[i])
 			len++;
 		if (!str[i])
-			return(len);
+			return (len);
 	}
 	return (len);
 }
