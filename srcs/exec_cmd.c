@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 17:32:44 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 13:41:57 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,13 @@ void			exec_line(t_data *data)
 	saved_stdout = fd_handling(data, 1);
 	if (data->line[0] && saved_stdout != -1)
 	{
-		data->cmd = split_spaces(data->line, " \n\t");
+		data->cmd = split_spaces(data->line, " \n\t\v\r\f");
 		while (data->cmd[++i])
 		{
 			//printf("cmd[%d] = {%s}\n", i, data->cmd[i]);
 			tmp = echo_str(data->cmd[i], data);
 			free(data->cmd[i]);
-			data->cmd[i] = ft_strdup(tmp);
-			free(tmp);
+			data->cmd[i] = tmp;
 		}
 		if (data->cmd[0] && is_builtin(data->cmd[0]))
 			exec_builtin(data);

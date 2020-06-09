@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 17:12:41 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 14:51:13 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 
 static int		next_s(t_data *data, char *cmd)
 {
-	int		ret;
-	char	*str;
-
-	ret = 0;
-	str = echo_str(cmd, data);
-	if (str[0] && ft_strncmp(str, " ", ft_strlen(str) != 0))
-		ret++;
-	free(str);
-	return (ret);
+	(void) data;
+	if (!cmd || !(cmd[0]) || (!cmd[1] && cmd[0] == ' '))
+		return (0);
+	return (1);
 }
 
 static char		*remove_dq_in_echo(char *str)

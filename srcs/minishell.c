@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 11:30:51 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 13:41:51 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,7 @@ static void			exec_shell(t_data *data, char *line)
 			{
 				tmp = ft_substr(data->multi[i], 0, com);
 				free(data->multi[i]);
-				data->multi[i] = ft_strdup(tmp);
-				free(tmp);
+				data->multi[i] = tmp;
 			}
 			data->line = ft_strtrim(data->multi[i], " \n\t");
 			exec_line(data);

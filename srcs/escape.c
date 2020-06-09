@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 11:19:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 12:55:30 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 14:23:09 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ int			is_meta(char *str, int i) //not an escape char
 {
 	if (i == 0)
 		return (1);
-	return (str[i - 1] && str[i - 1] != '\\' && between_quotes(str, i) != 1);
+	if (str[i - 1] && str[i - 1] == '\\')
+		return (str[i - 2] && str[i - 2] == '\\');
+	return (str[i - 1] && str[i - 1] != '\\');
 }
 
 int			contains_comment(char *str)

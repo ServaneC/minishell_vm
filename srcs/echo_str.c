@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:37:25 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 12:41:32 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 15:03:30 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,13 @@ char			*echo_str(char *str, t_data *data)
 		return (ret);
 	if ((s = get_s(str)) != NULL)
 	{
+		//printf("==%s==\n", s);
 		while (s[++i])
 		{
+			//printf("s[%d]{%s}\n", i, &s[i]);
 			if (s[i] == '\\')
 			{
-				if (!s[i + 1])
-					ret = clean_ft_strjoin(ret, ft_strdup(" "));
-				else
-					ret = clean_ft_strjoin(ret, ft_substr(s, i + 1, 1));
+				ret = clean_ft_strjoin(ret, ft_substr(s, i + 1, 1));
 				i++;
 			}
 			else if (s[i] == '$' && s[i + 1] && 

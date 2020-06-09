@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/17 16:16:32 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 12:56:46 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 14:11:34 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,18 @@ static int	word_count(char *s)
 	count = 0;
 	while (s[++i])
 	{
+		while (s[i] && s[i] == ';')
+			i++;
 		if ((s[i] != ';' && i == 0) || (s[i] != ';' && s[i - 1] == ';'))
 			count++;
-		if (s[i] == '\'' || s[i] == '\"')
+		if ((s[i] == '\'' || s[i] == '\"') && is_meta(s, i))
 		{
 			c2 = s[i];
-			while (s[++i] && s[i] != c2)
-				;
+			while (s[++i])
+			{
+				if (s[i] == c2 && is_meta(s, i))
+					break ;
+			}
 		}
 		if (!s[i])
 			break ;
@@ -44,11 +49,15 @@ static int	w_len(char *s, int i)
 	len = 0;
 	while (s[i])
 	{
-		if (s[i] == '\'' || s[i] == '\"')
+		if ((s[i] == '\'' || s[i] == '\"') && is_meta(s, i))
 		{
 			c2 = s[i];
-			while (s[++i] && s[i] != c2)
+			while (s[++i])
+			{
+				if (s[i] == c2 && is_meta(s, i))
+					break ;
 				len++;
+			}
 			if (!s[i])
 				return (len + 1);
 			len += 2;
@@ -80,7 +89,7 @@ static int	fill_cmd(char **tab, char *tmp)
 		while (tmp[i] && k < len)
 			tab[j][k++] = tmp[i++];
 		tab[j][k] = 0;
-		if (tmp[i] && tmp[i] == ';')
+		if (tmp[i] && tmp[i + 1])
 			i++;
 	}
 	tab[j] = 0;

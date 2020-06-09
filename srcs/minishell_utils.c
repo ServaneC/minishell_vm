@@ -6,72 +6,64 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 11:16:14 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 15:23:28 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static char	*get_tmp(char *cmd, char *tmp)
+static char	*get_tmp(char *cmd)
 {
+	char	*tmp;
 	int		i;
 	int		j;
 	char	c;
 
 	i = -1;
 	j = -1;
-	//printf("-[%s]\n", cmd);
+	tmp = ft_strdup("\0");
 	while (cmd[++i])
 	{
-		//printf("(%s)\n", &cmd[i]);
-		if ((cmd[i] == '\'' || cmd[i] == '\"'))
+		if ((cmd[i] == '\'' || cmd[i] == '\"') && is_meta(cmd, i))
 		{
-			if (cmd[i+1] && cmd[i + 1] == cmd[i])
-			{
-				tmp[++j] = '\"';
-				tmp[++j] = '\"';
-			}
+			if (cmd[i + 1] && cmd[i + 1] == cmd[i] && is_meta(cmd, i + 1))
+				tmp = clean_ft_strjoin(tmp, ft_strdup("\"\""));
 			c = cmd[i];
 			while (cmd[++i])
 			{
-				if (cmd[i] == c /*&& cmd[i - 1] != '\\'*/)
+				if (cmd[i] == c)
 					break ;
-				if (cmd[i] == '\\' && cmd[i + 1] && cmd[i + 1] == '$')
-					tmp[++j] = cmd[i];
-				else if (cmd[i])
+				if (cmd[i])
 				{
-					if (cmd[i] == '\\')
-					{
-						if (cmd[i + 1] && cmd[i + 1] == '\"')
-							i++;
-						else
-							tmp[++j] = '\\';
-					}
-					tmp[++j] = cmd[i];
+					if (cmd[i] == '\\' && cmd[i + 1] && cmd[i + 1] == '\"')
+						i++;
+					else if (cmd[i] == '\\' && ((cmd[i + 1] && cmd[i + 1] != '$') || !cmd[i + 1]))
+						tmp = clean_ft_strjoin(tmp, ft_strdup("\\"));
+					tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
+					if (cmd[i + 1] && cmd[i + 1] == '\\' && cmd[i + 2] && cmd[i + 2]== '\"')
+						i++;
 				}
 				else if (cmd[++i])
-					tmp[++j] = cmd[i];
+					tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
 			}
 		}
 		else if (cmd[i])
 		{
 			if (cmd[i] != '\\')
-				tmp[++j] = cmd[i];
+				tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
 			else if (cmd[i + 1] && (cmd[i + 1] == '\\' || cmd[i + 1] == '$'))
 			{
-				tmp[++j] = cmd[i];
-				tmp[++j] = cmd[++i];
+				tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 2));
+				i++;
 			}
 			else if (cmd[++i])
-				tmp[++j] = cmd[i];
+				tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
 			else
-				tmp[++j] = ' ';
+				tmp = clean_ft_strjoin(tmp, ft_strdup(" "));
 		}
 		if (!cmd[i])
 			break ;
 	}
-	tmp[++j] = '\0';
-	//printf("->[%s]\n", tmp);
 	return (tmp);
 }
 
@@ -79,9 +71,7 @@ char		*remove_quotes(char *cmd)
 {
 	char *tmp;
 
-	if (!(tmp = malloc(sizeof(char) * ft_strlen(cmd) + 1)))
-		return (NULL);
-	get_tmp(cmd, tmp);
+	tmp = get_tmp(cmd);
 	free(cmd);
 	cmd = ft_strdup(tmp);
 	free(tmp);
