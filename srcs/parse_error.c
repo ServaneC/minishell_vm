@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 15:46:45 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 12:39:27 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 16:20:24 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ static int		check_exception(char *s, int i)
 	return (i);
 }
 
+static int		is_redirect_char(char *s, int i)
+{
+	return (s[i] && (s[i] == ';' || s[i] == '>' || s[i] == '<' || s[i] == '|')
+		&& is_meta(s, i));
+}
+
 int				parse_error(char *s)
 {
 	int		i;
@@ -49,22 +55,17 @@ int				parse_error(char *s)
 		return (print_parse_error(s[0]));
 	while (s[++i])
 	{
-		if (!is_meta(s, i))
-			;
-		else if ((s[i] == '\'' || s[i] == '\"'))
+		if (is_quotes(s, i))
 		{
 			c = s[i];
-			while (s[++i] && s[i] != c)
-			{
+			while (s[++i])
 				if (s[i] == c && is_meta(s, i))
 					break ;
-			}
 		}
-		else if ((s[i] == ';' || s[i] == '>' || s[i] == '<' || s[i] == '|'))
+		else if (is_redirect_char(s, i))
 		{
 			i = check_exception(s, i);
-			if (s[i] && (s[i] == ';' || s[i] == '>' || s[i] == '<'
-				|| s[i] == '|') && is_meta(s, i))
+			if (is_redirect_char(s, i))
 				return (print_parse_error(s[i]));
 		}
 		if (!s[i])

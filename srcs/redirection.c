@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 15:59:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 16:38:39 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,8 @@ static int		fill_name(t_data *data, int i, int d, int len)
 	{
 		c = data->line[i];
 		len++;
-		while (data->line[++i])
-		{
-			if (is_meta(data->line, i) && data->line[i] == c)
-				break ;
+		while (check_char_q(data->line, ++i, c))
 			len++;
-		}
 	}
 	while (data->line[i] && !(ft_isspace(data->line[i])))
 	{
@@ -94,12 +90,8 @@ static char		*new_line(t_data *data, int i, int j, char *tmp)
 		if (is_quotes(data->line, i))
 		{
 			tmp[++j] = get_c_input(&c, data->line[i]);
-			while (data->line[++i])
-			{
-				if (data->line[i] == c && is_meta(data->line, i))
-					break ;
+			while (check_char_q(data->line, ++i, c))
 				tmp[++j] = data->line[i];
-			}
 			if (data->line[i])
 				tmp[++j] = data->line[i];
 		}

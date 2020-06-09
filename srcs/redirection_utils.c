@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 15:52:23 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 16:12:23 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 16:36:52 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,13 @@ char	get_c_input(char *c, char str_i)
 {
 	*c = str_i;
 	return (*c);
+}
+
+int		check_char_q(char *s, int i, char c)
+{
+	if (!s[i])
+		return (0);
+	if (s[i] == c && is_meta(s, i))
+		return (0);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 15:58:54 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/09 16:35:41 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ int				parse_error(char *s);
 int				is_meta(char *str, int i);
 int				contains_comment(char *str);
 int				is_quotes(char *str, int i);
+int				check_char_q(char *s, int i, char c);
 
 #endif
