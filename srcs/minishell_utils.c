@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 11:23:15 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 14:21:29 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,26 @@ char		*var_value(t_list *env, char *var)
 	if (ft_isdigit(name[0]) && name[1])
 		return (&name[1]);
 	return (NULL);
+}
+
+int			try_path(char *path)
+{
+	DIR			*dir;
+	int			ret;
+	struct stat *buf;
+
+	if (!(buf = (struct stat *)malloc(sizeof(struct stat))))
+		return (-1);
+	ret = lstat(path, buf);
+	free(buf);
+	buf = NULL;
+	if (ret == 0)
+	{
+		if ((dir = opendir(path)) == NULL)
+			return (ret);
+		closedir(dir);
+		errno = 21;
+		return (-1);
+	}
+	return (ret);
 }

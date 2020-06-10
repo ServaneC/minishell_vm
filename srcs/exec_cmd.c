@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 15:46:47 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 14:21:12 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 static void		create_path(char **cmd, char *path)
 {
-	struct stat	*buf;
 	char		**p_tab;
 	char		*bin;
 	char		*tmp;
 	int			i;
 
 	p_tab = ft_split(path, ':');
-	buf = (struct stat *)malloc(sizeof(struct stat));
 	i = -1;
 	while (p_tab[++i])
 	{
@@ -29,14 +27,13 @@ static void		create_path(char **cmd, char *path)
 		tmp = ft_strjoin(bin, cmd[0]);
 		free(bin);
 		bin = tmp;
-		if (lstat(bin, buf) == 0)
+		if (try_path(bin) == 0)
 			break ;
 		free(bin);
 		bin = NULL;
 	}
 	ft_free(p_tab);
 	free(cmd[0]);
-	free(buf);
 	cmd[0] = bin;
 }
 
@@ -68,7 +65,18 @@ static void		exec_cmd(t_data *data, char **save)
 	g_child_pid = 0;
 }
 
-static void		get_path(t_data *data, int saved_stdout)
+static void		print_exec_error(char *cmd)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putendl_fd(cmd, 2);
+	ft_putstr_fd(": ", 2);
+	if (errno != 2)
+		ft_putendl_fd(strerror(errno), 2);
+	else
+		ft_putendl_fd("command not found", 2);
+}
+
+static void		get_path(t_data *data)
 {
 	char	*path;
 	char	*save;
@@ -79,14 +87,17 @@ static void		get_path(t_data *data, int saved_stdout)
 		create_path(data->cmd, path);
 	free(path);
 	path = NULL;
-	if (data->cmd[0] != NULL)
+	if (data->cmd[0] && try_path(data->cmd[0]) == 0)
 		exec_cmd(data, &save);
 	else
 	{
 		data->status = 127;
-		data->cmd[0] = save;
-		ft_putstr_fd("minishell: command not found: ", saved_stdout);
-		ft_putendl_fd(data->cmd[0], saved_stdout);
+		if (errno != 2)
+			data->status = 126;
+		if (!data->cmd[0])
+			data->cmd[0] = ft_strdup(save);
+		free(save);
+		print_exec_error(data->cmd[0]);
 	}
 }
 
@@ -110,7 +121,7 @@ void			exec_line(t_data *data)
 		if (data->cmd[0] && is_builtin(data->cmd[0]))
 			exec_builtin(data);
 		else if (data->cmd[0])
-			get_path(data, saved_stdout);
+			get_path(data);
 		ft_free(data->cmd);
 		data->cmd = NULL;
 	}
