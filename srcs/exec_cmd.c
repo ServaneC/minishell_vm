@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 14:23:34 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 15:45:50 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void		print_exec_error(char *cmd)
 		ft_putendl_fd("command not found", 2);
 }
 
-static void		get_path(t_data *data)
+static void		exec_path(t_data *data)
 {
 	char	*path;
 	char	*save;
@@ -121,7 +121,7 @@ void			exec_line(t_data *data)
 		if (data->cmd[0] && is_builtin(data->cmd[0]))
 			exec_builtin(data);
 		else if (data->cmd[0])
-			get_path(data);
+			exec_path(data);
 		ft_free(data->cmd);
 		data->cmd = NULL;
 	}

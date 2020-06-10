@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 12:47:57 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 16:01:32 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int					main(int ac, char **av, char **env)
 		ft_putstr_fd("minishell>> ", 2);
 	}
 	if (line)
-		free(line);
+		exec_shell(data, line);
 	builtin_exit(data, 1);
 	return (0);
 }

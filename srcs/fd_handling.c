@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 15:56:33 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 14:31:33 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 15:57:41 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,11 @@ int			handling_stdin(t_data *data, int start)
 		saved_input = dup(STDIN_FILENO);
 		dup2(data->input, STDIN_FILENO);
 	}
-	else if (saved_input)
+	else if (saved_input && !start)
 	{
 		dup2(saved_input, STDIN_FILENO);
 		close(saved_input);
+		data->input = 0;
 		saved_input = 0;
 	}
 	return (0);
