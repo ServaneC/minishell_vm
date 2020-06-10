@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:37:25 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 15:38:46 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 11:33:59 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ static char		*get_s(char *str, t_data *data)
 	char	*ret;
 	int		i;
 
-	ret = ft_strdup("\0");
 	if (str[0] != '\'')
 	{
+		ret = ft_strdup("\0");
 		s = remove_quotes(ft_strdup(str));
 		i = -1;
 		while (s[++i])

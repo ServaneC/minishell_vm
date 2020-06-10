@@ -6,80 +6,11 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 16:11:37 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 16:47:38 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 11:23:15 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-static char	*get_tmp(char *cmd)
-{
-	char	*tmp;
-	int		i;
-	int		j;
-	char	c;
-
-	i = -1;
-	j = -1;
-	tmp = ft_strdup("\0");
-	while (cmd[++i])
-	{
-		if (is_quotes(cmd, i))
-		{
-			if (cmd[i + 1] && cmd[i + 1] == cmd[i] && is_meta(cmd, i + 1))
-				tmp = clean_ft_strjoin(tmp, ft_strdup("\"\""));
-			c = cmd[i];
-			while (cmd[++i])
-			{
-				if (cmd[i] == c)
-					break ;
-				if (cmd[i])
-				{
-					if (cmd[i] == '\\' && cmd[i + 1] && cmd[i + 1] == '\"')
-						i++;
-					else if (cmd[i] == '\\' &&
-						((cmd[i + 1] && cmd[i + 1] != '$') || !cmd[i + 1]))
-						tmp = clean_ft_strjoin(tmp, ft_strdup("\\"));
-					tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
-					if (cmd[i + 1] &&
-						cmd[i + 1] == '\\' && cmd[i + 2] && cmd[i + 2] == '\"')
-						i++;
-				}
-				else if (cmd[++i])
-					tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
-			}
-		}
-		else if (cmd[i])
-		{
-			if (cmd[i] != '\\')
-				tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
-			else if (cmd[i + 1] && (cmd[i + 1] == '\\' || cmd[i + 1] == '$'))
-			{
-				tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 2));
-				i++;
-			}
-			else if (cmd[++i])
-				tmp = clean_ft_strjoin(tmp, ft_substr(cmd, i, 1));
-			else
-				tmp = clean_ft_strjoin(tmp, ft_strdup(" "));
-		}
-		if (!cmd[i])
-			break ;
-	}
-	return (tmp);
-}
-
-char		*remove_quotes(char *cmd)
-{
-	char *tmp;
-
-	tmp = get_tmp(cmd);
-	free(cmd);
-	cmd = ft_strdup(tmp);
-	free(tmp);
-	tmp = NULL;
-	return (cmd);
-}
 
 void		ft_free(char **tab)
 {
