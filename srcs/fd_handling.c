@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 15:56:33 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 14:26:03 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 14:31:33 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@ int			handling_stdin(t_data *data, int start)
 {
 	static int	saved_input;
 
-	if (start && fill_fd(data) == -1)
+	if (start && (fill_fd(data) == -1 || find_input(data) == -1))
 	{
 		data->status = 1;
 		return (-1);
 	}
-	if (start && find_input(data) == -1)
-		return (-1);
 	if (data->input != 0 && start)
 	{
 		saved_input = dup(STDIN_FILENO);
