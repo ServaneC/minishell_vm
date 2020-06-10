@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 14:21:12 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/10 14:23:34 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static void		exec_cmd(t_data *data, char **save)
 static void		print_exec_error(char *cmd)
 {
 	ft_putstr_fd("minishell: ", 2);
-	ft_putendl_fd(cmd, 2);
+	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": ", 2);
 	if (errno != 2)
 		ft_putendl_fd(strerror(errno), 2);
