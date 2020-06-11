@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 16:09:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 12:44:02 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void			builtin_unset(t_data *data);
 void			builtin_exit(t_data *data, int end);
 void			builtin_echo(t_data *data);
 char			*var_value(t_list *env, char *var);
-char			**split_quotes(char *s, t_data *data);
+char			**split_quotes(char *s, t_data *data, char sep);
 char			**split_spaces(char *s, char const *charset);
 char			*remove_quotes(char *cmd);
 void			ft_free(char **tab);

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 15:46:45 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 16:20:24 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 12:40:48 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int				parse_error(char *s)
 	char	c;
 
 	i = -1;
-	if (s[0] == '|')
+	if (s[0] == '|' || s[0] == ';')
 		return (print_parse_error(s[0]));
 	while (s[++i])
 	{
