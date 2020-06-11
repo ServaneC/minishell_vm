@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/08 17:09:27 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 15:40:41 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,17 @@ static int	word_count(char *str, const char *charset)
 	nbwords = 0;
 	while (str[++i])
 	{
-		if (i == 0 || (i > 0 &&
-			(!(is_sep(str[i], charset)) && is_sep(str[i - 1], charset))))
+		if ((i == 0 && !is_sep(str[i], charset)) ||
+			(!is_sep(str[i], charset) && is_sep(str[i - 1], charset)))
 			nbwords++;
-		if (str[i] == '\'' || str[i] == '\"')
+		if (is_quotes(str, i))
 		{
 			c = str[i];
-			while (str[++i] && str[i] != c)
-				;
+			while (str[++i])
+			{
+				if (str[i] == c && is_meta(str, i))
+					break ;
+			}
 		}
 		if (!str[i])
 			break ;
@@ -59,11 +62,15 @@ static int	w_len(char *s, int i, const char *charset)
 	len = 0;
 	while (s[i])
 	{
-		if (s[i] == '\'' || s[i] == '\"')
+		if (is_quotes(s, i))
 		{
 			c2 = s[i];
-			while (s[++i] && s[i] != c2)
+			while (s[++i])
+			{
+				if (s[i] == c2 && is_meta(s, i))
+					break ;	
 				len++;
+			}
 			if (!s[i])
 				return (len + 1);
 			len += 2;
@@ -96,8 +103,8 @@ static int	fill_sp_tab(char **tab, char *tmp, char const *charset)
 		k = 0;
 		while (tmp[i] && k < len)
 			tab[j][k++] = tmp[i++];
-		tab[j][k] = '\0';
-		if (tmp[i] && is_sep(tmp[i], charset))
+		tab[j][k] = 0;
+		if (tmp[i] && tmp[i + 1])
 			i++;
 	}
 	tab[j] = 0;

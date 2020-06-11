@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 13:49:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 15:41:38 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,12 @@ static void			exec_shell(t_data *data, char *line)
 		free(line);
 		line = tmp;
 	}
-	data->multi = split_quotes(line, data, ';');
+	if (line && parse_error(line))
+	{
+		data->status = 2;
+		return ;
+	}
+	data->multi = split_spaces(line, ";");
 	free(line);
 	line = NULL;
 	if (data->multi)
