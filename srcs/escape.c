@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 11:19:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 11:43:14 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 13:58:50 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ static int	tmp_not_quotes(int i, char **tmp, char *cmd)
 {
 	if (cmd[i] != '\\')
 		*tmp = clean_ft_strjoin(*tmp, ft_substr(cmd, i, 1));
-	else if (cmd[i + 1] && (cmd[i + 1] == '\\' || cmd[i + 1] == '$'))
+	else if ((cmd[i - 1] && cmd[i - 1] == '$') ||
+		(cmd[i + 1] && (cmd[i + 1] == '\\' || cmd[i + 1] == '$')))
 	{
 		*tmp = clean_ft_strjoin(*tmp, ft_substr(cmd, i, 2));
 		i++;
