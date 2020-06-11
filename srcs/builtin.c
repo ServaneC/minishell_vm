@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 18:35:08 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 15:56:19 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ void	builtin_exit(t_data *data, int end)
 		status = get_status(data);
 	if (end || status != -1)
 	{
+		if (data->pipe)
+			ft_free(data->pipe);
 		if (data->cmd)
 			ft_free(data->cmd);
 		if (data->multi)

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 15:41:38 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 15:56:52 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static t_data		*init_data(char **main_env)
 	data->fd = NULL;
 	data->line = NULL;
 	data->multi = NULL;
+	data->pipe = NULL;
 	data->dir = ft_strdup(var_value(data->env, "$PWD"));
 	data->status = 0;
 	data->input = 0;
@@ -55,6 +56,7 @@ static t_data		*init_data(char **main_env)
 static void			exec_shell(t_data *data, char *line)
 {
 	int		i;
+	int		j;
 	int		com;
 	char	*tmp;
 
@@ -65,11 +67,6 @@ static void			exec_shell(t_data *data, char *line)
 		free(line);
 		line = tmp;
 	}
-	if (line && parse_error(line))
-	{
-		data->status = 2;
-		return ;
-	}
 	data->multi = split_spaces(line, ";");
 	free(line);
 	line = NULL;
@@ -77,9 +74,19 @@ static void			exec_shell(t_data *data, char *line)
 	{
 		while (data->multi[++i])
 		{
-			data->line = ft_strtrim(data->multi[i], " \n\t");
-			exec_line(data);
-			close_fd(data);
+			data->pipe = split_spaces(data->multi[i], "|");
+			if (data->pipe)
+			{
+				j = -1;
+				while (data->pipe[++j])
+				{
+					data->line = ft_strtrim(data->pipe[j], " \n\t");
+					exec_line(data);
+				}
+				ft_free(data->pipe);
+				data->pipe = NULL;
+				close_fd(data);
+			}
 		}
 		ft_free(data->multi);
 		data->multi = NULL;
@@ -106,7 +113,10 @@ int					main(int ac, char **av, char **env)
 			data->status = 131;
 		g_ctrl_c = 0;
 		g_ctrl_q = 0;
-		exec_shell(data, line);
+		if (parse_error(line))
+			data->status = 2;
+		else
+			exec_shell(data, line);
 		ft_putstr_fd("minishell>> ", 2);
 	}
 	if (line)

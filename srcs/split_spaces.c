@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 15:40:41 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/11 15:47:49 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,10 @@ static int	word_count(char *str, const char *charset)
 	return (nbwords);
 }
 
-static int	w_len(char *s, int i, const char *charset)
+static int	w_len(char *s, int i, int len, const char *charset)
 {
-	int		len;
 	char	c2;
 
-	len = 0;
 	while (s[i])
 	{
 		if (is_quotes(s, i))
@@ -68,7 +66,7 @@ static int	w_len(char *s, int i, const char *charset)
 			while (s[++i])
 			{
 				if (s[i] == c2 && is_meta(s, i))
-					break ;	
+					break ;
 				len++;
 			}
 			if (!s[i])
@@ -97,7 +95,7 @@ static int	fill_sp_tab(char **tab, char *tmp, char const *charset)
 	{
 		while (is_sep(tmp[i], charset))
 			i++;
-		len = w_len(tmp, i, charset);
+		len = w_len(tmp, i, 0, charset);
 		if (!(tab[j] = (char *)malloc(sizeof(char) * len + 1)))
 			return (0);
 		k = 0;

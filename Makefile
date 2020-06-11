@@ -12,7 +12,6 @@ SRCS =	builtin.c \
 		minishell.c \
 		minishell_utils.c \
 		builtin_cd.c \
-		split_cmd.c \
 		split_spaces.c \
 		split_quotes.c \
 		redirection.c \
