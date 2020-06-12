@@ -24,7 +24,8 @@ SRCS =	builtin.c \
 		env_utils.c \
 		parse_error.c \
 		escape.c \
-		comments.c
+		comments.c \
+		pipes.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 

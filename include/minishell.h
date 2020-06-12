@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 11:30:03 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 16:25:42 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # include <dirent.h>
 
 # define MAX_PATH 4096
+# define RD_END 0
+# define WR_END 1
 
 pid_t g_child_pid;
 
@@ -79,5 +81,6 @@ int				contains_comment(char *str);
 int				is_quotes(char *str, int i);
 int				check_char_q(char *s, int i, char c);
 int				try_path(char *path);
+void			handle_pipe(t_data *data, int i);
 
 #endif
