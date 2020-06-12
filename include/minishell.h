@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 15:55:07 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 11:30:03 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct	s_data
 	char		**cmd;
 	char		**pipe;
 	int			status;
-	t_list		*fd;
+	int			output;
 	int			input;
 	char		*dir;
 }				t_data;

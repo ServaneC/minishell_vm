@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:50:13 by schene            #+#    #+#             */
-/*   Updated: 2020/06/10 15:57:25 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 11:16:52 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ static int		open_fd(t_data *data, char *name, int i)
 	free(name);
 	name = tmp;
 	my_fd = open(name, O_RDONLY);
+	if (data->input)
+		close(data->input);
+	data->input = 0;
 	if (my_fd == -1)
-	{
-		data->input = 0;
 		return (ft_error(&name));
-	}
 	data->input = my_fd;
 	free(name);
 	return (i);

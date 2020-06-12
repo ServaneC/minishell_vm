@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:21:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 15:56:19 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 11:36:45 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	builtin_exit(t_data *data, int end)
 		status = get_status(data);
 	if (end || status != -1)
 	{
+		close_fd(data);
 		if (data->pipe)
 			ft_free(data->pipe);
 		if (data->cmd)
@@ -122,7 +123,6 @@ void	builtin_exit(t_data *data, int end)
 			free(data->line);
 		if (data->env)
 			free_lst(data->env);
-		close_fd(data);
 		if (data->dir)
 			free(data->dir);
 		if (data)

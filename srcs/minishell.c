@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 15:56:52 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 11:29:54 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static t_data		*init_data(char **main_env)
 		return (NULL);
 	data->env = create_env(main_env);
 	data->cmd = NULL;
-	data->fd = NULL;
+	data->output = 0;
 	data->line = NULL;
 	data->multi = NULL;
 	data->pipe = NULL;
@@ -56,7 +56,6 @@ static t_data		*init_data(char **main_env)
 static void			exec_shell(t_data *data, char *line)
 {
 	int		i;
-	int		j;
 	int		com;
 	char	*tmp;
 
@@ -77,16 +76,14 @@ static void			exec_shell(t_data *data, char *line)
 			data->pipe = split_spaces(data->multi[i], "|");
 			if (data->pipe)
 			{
-				j = -1;
-				while (data->pipe[++j])
-				{
-					data->line = ft_strtrim(data->pipe[j], " \n\t");
-					exec_line(data);
-				}
-				ft_free(data->pipe);
-				data->pipe = NULL;
+				data->line = ft_strdup(data->pipe[0]);
+				if (data->line[1])
+					;
+				exec_line(data);
 				close_fd(data);
 			}
+			ft_free(data->pipe);
+			data->pipe = NULL;
 		}
 		ft_free(data->multi);
 		data->multi = NULL;

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/01 12:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/09 16:38:39 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 11:34:16 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,21 @@ static int		add_fd(t_data *data, char *name, int d, int i)
 {
 	int		my_fd;
 	char	*tmp;
-	int		*ptr;
-	t_list	*new_fd;
 
 	my_fd = -1;
 	tmp = echo_str(name, data);
 	free(name);
 	name = tmp;
+	if (data->output)
+		close(data->output);
+	data->output = 0;
 	if (d)
 		my_fd = open(name, O_WRONLY | O_APPEND);
 	if (my_fd == -1 && errno != EACCES)
 		my_fd = open(name, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0666);
 	if (my_fd == -1)
 		return (ft_error(&name));
-	ptr = malloc(sizeof(int *) * 4);
-	ft_bzero(ptr, 16);
-	ptr = ft_memcpy(ptr, &my_fd, 16);
-	new_fd = ft_lstnew(ptr);
-	ft_lstadd_back(&data->fd, new_fd);
+	data->output = my_fd;
 	free(name);
 	return (i);
 }
