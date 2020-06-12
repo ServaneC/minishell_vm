@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 13:50:00 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 19:10:40 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void		exec_cmd(t_data *data, char **save)
 		if (execve(data->cmd[0], data->cmd, tab_env) == -1)
 			ft_putendl_fd(strerror(errno), 2);
 		free(tab_env);
-		exit(EXIT_FAILURE);
+		exit(data->status);
 	}
 	if (data->status > 255)
 		data->status -= 255;

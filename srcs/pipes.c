@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 12:18:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 18:08:00 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 19:35:30 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,12 @@ static void		exec_pipe(t_data *data, int i, int fd, pid_t pid)
 				dup2(pipefd[WR_END], STDOUT_FILENO);
 			close(pipefd[RD_END]);
 			exec_line(data);
-			exit(EXIT_FAILURE);
+			exit(data->status);
 		}
 		else
 		{
 			waitpid(pid, &data->status, 0);
+			//printf("data->status = %d\n", data->status);
 			kill(pid, SIGTERM);
 			close(pipefd[WR_END]);
 			fd = pipefd[RD_END];
@@ -49,6 +50,4 @@ void			handle_pipe(t_data *data)
 		return (exec_line(data));
 	}
 	exec_pipe(data, 0, 0, -1);
-	if (data->status >= 255)
-		data->status -= 255;
 }
