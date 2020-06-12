@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 16:25:42 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 17:59:52 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ char			*removeplus(char *str);
 char			get_c_input(char *c, char str_i);
 int				parse_error(char *s);
 int				is_meta(char *str, int i);
-int				contains_comment(char *str);
+char			*contains_comment(char *str);
 int				is_quotes(char *str, int i);
 int				check_char_q(char *s, int i, char c);
 int				try_path(char *path);
-void			handle_pipe(t_data *data, int i);
+void			handle_pipe(t_data *data);
 
 #endif

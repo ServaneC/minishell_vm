@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 15:42:38 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 15:50:37 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/12 17:16:30 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,18 @@ static int	between_quotes(char *str, int i)
 	return (0);
 }
 
-int			contains_comment(char *str)
+char		*contains_comment(char *str)
 {
-	int i;
+	char	*ret;
+	int		i;
 
 	i = -1;
 	while (str[++i])
 	{
 		if (str[i] == '#' && is_meta(str, i) && !between_quotes(str, i) &&
 			(!str[i - 1] || ft_isspace(str[i - 1])))
-			return (i);
+			break ;
 	}
-	return (-1);
+	ret = ft_substr(str, 0, i);
+	return (ret);
 }
