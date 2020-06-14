@@ -6,11 +6,25 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 12:18:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 13:07:30 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 13:40:29 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+static int		exec_child_pipe(t_data *data, int pipefd[2], int *fd, int i)
+{
+	close(pipefd[RD_END]);
+	data->line = ft_strdup(data->pipe[i]);
+	dup2(*fd, STDIN_FILENO);
+	if (data->pipe[i + 1])
+		dup2(pipefd[WR_END], STDOUT_FILENO);
+	close(pipefd[WR_END]);
+	exec_line(data);
+	if (data->status > 255)
+		data->status -= 255;
+	return (data->status);
+}
 
 static void		exec_pipe(t_data *data, int i, int fd, pid_t pid)
 {
@@ -22,18 +36,7 @@ static void		exec_pipe(t_data *data, int i, int fd, pid_t pid)
 		if (pipe(pipefd) == -1 || (pid = fork()) == -1)
 			return (ft_putendl_fd(strerror(errno), 2));
 		else if (pid == 0)
-		{
-			close(pipefd[RD_END]);
-			data->line = ft_strdup(data->pipe[i]);
-			dup2(fd, STDIN_FILENO);
-			if (data->pipe[i + 1])
-				dup2(pipefd[WR_END], STDOUT_FILENO);
-			close(pipefd[WR_END]);
-			exec_line(data);
-			if (data->status > 255)
-				data->status -= 255;
-			exit(data->status);
-		}
+			exit(exec_child_pipe(data, pipefd, &fd, i));
 		else
 		{
 			close(pipefd[WR_END]);

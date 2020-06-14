@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 18:29:27 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 13:26:21 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@ static int			check_var_name(char **str, t_data *data)
 	char	*name;
 
 	name = ft_substr(*str, 0,
-		(ft_strlen(*str) - ft_strlen(ft_strchr(*str, '='))));	
-	if (!name[0])
-		return (error_name(str, &name, data));
-	if (ft_isdigit(name[0]))
+		(ft_strlen(*str) - ft_strlen(ft_strchr(*str, '='))));
+	if (!name[0] || ft_isdigit(name[0]))
 		return (error_name(str, &name, data));
 	i = -1;
 	while (name[++i])

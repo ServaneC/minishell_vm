@@ -6,28 +6,25 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 11:26:41 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 13:34:48 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static void		create_path(char **cmd, char *path)
+static void		create_path(char **cmd, char *path, int i)
 {
 	char		**p_tab;
 	char		*bin;
 	char		*tmp;
-	int			i;
 
 	if (path == NULL)
 	{
-		free(cmd[0]);
 		cmd[0] = NULL;
 		errno = 2;
-        return ;
+		return (free(cmd[0]));
 	}
 	p_tab = ft_split(path, ':');
-	i = -1;
 	while (p_tab[++i])
 	{
 		bin = ft_strjoin(p_tab[i], "/");
@@ -90,7 +87,7 @@ static void		exec_path(t_data *data)
 	save = ft_strdup(data->cmd[0]);
 	path = ft_strdup(var_value(data->env, "$PATH"));
 	if (data->cmd[0][0] != '/' && (ft_strncmp(data->cmd[0], "./", 2) != 0))
-		create_path(data->cmd, path);
+		create_path(data->cmd, path, -1);
 	free(path);
 	path = NULL;
 	if (data->cmd[0] && try_path(data->cmd[0]) == 0)
