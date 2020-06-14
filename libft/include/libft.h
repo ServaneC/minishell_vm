@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:33:29 by lemarabe          #+#    #+#             */
-/*   Updated: 2020/05/30 17:00:39 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 13:48:30 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include "get_next_line.h"
-# include "ft_printf.h"
 
 typedef struct		s_list
 {

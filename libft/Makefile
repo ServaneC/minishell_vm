@@ -54,17 +54,6 @@ SRCS =	ft_atoi.c	\
 		ft_atoi_ptr.c \
 		ft_abs.c \
 		ft_atoi_from.c \
-		ft_numeric_values_utils.c	\
-		ft_itoa_base_di.c	\
-		ft_itoa_base_ux.c	\
-		ft_printf_parsing.c	\
-		ft_printf.c	\
-		ft_printf_addr.c	\
-		ft_printf_char.c	\
-		ft_printf_nbr.c	\
-		ft_printf_nbr_hx.c	\
-		ft_printf_nbr_u.c	\
-		ft_printf_str.c \
 		ft_lstadd_back.c \
 		ft_lstadd_front.c \
 		ft_lstdelone.c \
