@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 13:26:21 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 15:14:56 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void				builtin_export(t_data *data)
 
 	data->status = 0;
 	if (data->cmd[1] == NULL)
-		print_env(data);
+		print_export(data);
 	i = 0;
 	while (data->cmd[++i])
 	{

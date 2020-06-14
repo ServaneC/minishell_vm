@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:37:25 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 19:59:10 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 16:39:47 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,18 +40,15 @@ static char		*echo_str_sgl(char *str)
 {
 	int		i;
 	char	*ret;
-	char	*s;
 
-	i = -1;
+	i = 0;
 	ret = ft_strdup("\0");
-	s = ft_strtrim(str, "\'");
-	while (s[++i])
+	while (str[++i])
 	{
-		ret = clean_ft_strjoin(ret, ft_substr(s, i, 1));
-		if (!s[i])
+		if (!str[i] || str[i] == '\'')
 			break ;
+		ret = clean_ft_strjoin(ret, ft_substr(str, i, 1));
 	}
-	free(s);
 	return (ret);
 }
 

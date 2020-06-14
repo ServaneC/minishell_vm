@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 17:59:52 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 15:12:33 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ int				is_quotes(char *str, int i);
 int				check_char_q(char *s, int i, char c);
 int				try_path(char *path);
 void			handle_pipe(t_data *data);
+void			print_export(t_data *data);
 
 #endif
