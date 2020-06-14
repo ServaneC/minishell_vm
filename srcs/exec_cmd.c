@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 19:10:40 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 11:26:41 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@ static void		create_path(char **cmd, char *path)
 	char		*tmp;
 	int			i;
 
+	if (path == NULL)
+	{
+		free(cmd[0]);
+		cmd[0] = NULL;
+		errno = 2;
+        return ;
+	}
 	p_tab = ft_split(path, ':');
 	i = -1;
 	while (p_tab[++i])
@@ -43,7 +50,6 @@ static void		exec_cmd(t_data *data, char **save)
 
 	free(*save);
 	g_child_pid = 0;
-	data->status = 0;
 	g_child_pid = fork();
 	if (g_child_pid == -1)
 		ft_putendl_fd(strerror(errno), 2);

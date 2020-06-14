@@ -6,11 +6,24 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/07 14:41:48 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/14 11:44:54 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+t_list			*create_basic_env(void)
+{
+	char	cwd[MAX_PATH];
+	char	*str;
+	t_list	*env;
+
+	getcwd(cwd, MAX_PATH);
+	str = ft_strdup("PWD=");
+	str = clean_ft_strjoin(str, ft_strdup(cwd));
+	env = ft_lstnew(str);
+	return (env);
+}
 
 t_list			*create_env(char **env)
 {
@@ -19,6 +32,8 @@ t_list			*create_env(char **env)
 	t_list	*my_env;
 	t_list	*next;
 
+	if (!env[0])
+		return(create_basic_env());
 	str = ft_strdup(env[0]);
 	my_env = ft_lstnew(str);
 	i = 0;
