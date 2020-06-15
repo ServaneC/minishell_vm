@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 15:22:06 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 13:28:40 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 13:20:58 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ char	*rm_quotes_env(char *var)
 	len = ft_strncmp(ret, var, ft_strlen(var));
 	free(ret);
 	ret = NULL;
+	if (ft_strchr(var, '=') == NULL)
+		return (var);
 	if (len == 0)
 	{
 		len = ft_strlen(var) - ft_strlen(ft_strchr(var, '='));
@@ -90,7 +92,26 @@ int		len_variable(void *str)
 
 	s = (char *)str;
 	len = 0;
-	while (s[len] != '=')
+	while (s[len] && s[len] != '=')
 		len++;
 	return (len);
+}
+
+char	**convert_env_to_tab(t_list *env)
+{
+	char	**tab;
+	int		i;
+	int		len;
+
+	len = ft_lstsize(env);
+	if (!(tab = malloc(sizeof(char *) * (len + 1))))
+		return (NULL);
+	i = -1;
+	while (++i < len && env)
+	{
+		tab[i] = env->content;
+		tab[i + 1] = NULL;
+		env = env->next;
+	}
+	return (tab);
 }

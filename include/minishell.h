@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 15:12:33 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 13:10:38 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,6 @@ int				check_char_q(char *s, int i, char c);
 int				try_path(char *path);
 void			handle_pipe(t_data *data);
 void			print_export(t_data *data);
+int				replace_ifexist(t_list *env, char *str);
 
 #endif

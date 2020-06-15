@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:30:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 15:14:56 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 13:16:46 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void			append_var(char **str, t_list *env, int i)
 	*str = tmp;
 }
 
-static int			replace_ifexist(t_list *env, char *str)
+int					replace_ifexist(t_list *env, char *str)
 {
 	int		i;
 	int		len;
@@ -101,18 +101,15 @@ void				builtin_export(t_data *data)
 	i = 0;
 	while (data->cmd[++i])
 	{
-		if (ft_strchr(data->cmd[i], '=') != NULL)
+		str = rm_quotes_env(ft_strdup(data->cmd[i]));
+		if (check_var_name(&str, data) == -1)
+			break ;
+		if ((ret = replace_ifexist(data->env, str)) == 0)
 		{
-			str = rm_quotes_env(ft_strdup(data->cmd[i]));
-			if (check_var_name(&str, data) == -1)
-				break ;
-			if ((ret = replace_ifexist(data->env, str)) == 0)
-			{
-				new = ft_lstnew(removeplus(str));
-				ft_lstadd_back(&data->env, new);
-			}
-			else if (ret == -1)
-				ft_putendl_fd(strerror(errno), 2);
+			new = ft_lstnew(removeplus(str));
+			ft_lstadd_back(&data->env, new);
 		}
+		else if (ret == -1)
+			ft_putendl_fd(strerror(errno), 2);
 	}
 }
