@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/18 15:59:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/11 15:47:49 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 16:00:59 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	is_sep(char c, const char *charset)
 	i = 0;
 	while (charset[i])
 	{
-		if (c == charset[i])
+		if (c == charset[i] && is_meta(&c, 0))
 			return (1);
 		++i;
 	}

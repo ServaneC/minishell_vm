@@ -6,28 +6,30 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 14:37:25 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 16:39:47 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 16:09:15 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static int		echo_variable(char *s, t_data *data, char **ret, int i)
+int				echo_variable(char *s, t_data *data, char **ret, int i)
 {
-	char	*tmp;
+	int		x;
+	char	*value;
 
 	if (s[i + 1] == '?')
 	{
 		*ret = clean_ft_strjoin(*ret, ft_itoa(data->status));
-		i += 1;
+		return (i + 1);
 	}
 	else
 	{
 		if (var_value(data->env, &s[i]) != NULL)
 		{
-			tmp = ft_strjoin(*ret, var_value(data->env, &s[i]));
-			free(*ret);
-			*ret = tmp;
+			value = var_value(data->env, &s[i]);
+			x = -1;
+			while (value[++x] && !is_quotes(value, x))
+				*ret = clean_ft_strjoin(*ret, ft_substr(value, x, 1));
 		}
 		while (s[++i] && (ft_isalnum(s[i]) || s[i] == '_'))
 			;
@@ -52,33 +54,64 @@ static char		*echo_str_sgl(char *str)
 	return (ret);
 }
 
-static char		*get_s(char *str, t_data *data)
+static char		*escape_str(char *str, t_data *data)
 {
-	char	*s;
 	char	*ret;
 	int		i;
 
-	if (str[0] != '\'')
+	i = -1;
+	ret = ft_strdup("\0");
+	if (str[0] == '\\' && !str[1])
+		return(clean_ft_strjoin(ret, ft_strdup(" ")));
+	while (str[++i])
 	{
-		ret = ft_strdup("\0");
-		s = remove_quotes(ft_strdup(str));
-		i = -1;
-		while (s[++i])
+		if (str[i] == '\'' && is_meta(str, i))
 		{
-			if (s[i] == '\\')
-				ret = clean_ft_strjoin(ret, ft_substr(s, ++i, 1));
-			else if (s[i] == '$' && s[i + 1] &&
-				(ft_isalnum(s[i + 1]) || s[i + 1] == '?'))
-				i = echo_variable(s, data, &ret, i);
-			else if (s[i])
-				ret = clean_ft_strjoin(ret, ft_substr(s, i, 1));
-			if (!s[i])
-				break ;
+			ret = clean_ft_strjoin(ret, echo_str_sgl(&str[i]));
+			while (str[++i] && str[i] != '\'')
+				;
 		}
-		free(s);
-		return (ret);
+		else if (str[i] && str[i] == '\"' && is_meta(str, i))
+		{
+			if (i == 0 && str[i + 1] && str[i + 1] == '\"' && !str[i + 2])
+				ret = clean_ft_strjoin(ret, ft_strdup(" "));
+			else if (str[i + 1])
+			{
+				while (str[++i])
+				{
+					if (str[i] == '\"' && is_meta(str, i))
+						break ;
+					else if (str[i] == '$' && is_meta(str, i) && str[i + 1] 
+						&& (ft_isalnum(str[i + 1]) || str[i + 1] == '_' || str[i + 1] == '?'))
+						i = echo_variable(str, data, &ret, i);
+					else if (str[i])
+					{
+						if (str[i] == '\\' && str[i + 1] && (str[i + 1] == '\\' ||
+							str[i + 1] == '$' || str[i + 1] == '\"'))
+							i++;
+						if (str[i])
+							ret = clean_ft_strjoin(ret, ft_substr(str, i, 1));
+					}
+				}
+			}
+
+		}
+		else if (str[i])
+		{
+			if (str[i] == '$' && is_meta(str, i) && str[i + 1] &&
+				str[i + 1] != '\\' && (ft_isalnum(str[i + 1]) ||
+				str[i + 1] == '_' || str[i + 1] == '?'))
+				i = echo_variable(str, data, &ret, i);
+			else if (str[i])
+			{
+				if (str[i] == '\\')
+					i++;
+				if (str[i])
+					ret = clean_ft_strjoin(ret, ft_substr(str, i, 1));
+			}
+		}
 	}
-	return (NULL);
+	return (ret);
 }
 
 char			*echo_str(char *str, t_data *data)
@@ -87,8 +120,6 @@ char			*echo_str(char *str, t_data *data)
 
 	if (!str[0])
 		return (ft_strdup("\0"));
-	ret = get_s(str, data);
-	if (ret == NULL)
-		ret = echo_str_sgl(str);
+	ret = escape_str(str, data);
 	return (ret);
 }

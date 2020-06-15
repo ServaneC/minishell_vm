@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/11 12:18:34 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 13:40:29 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 16:07:48 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ static void		exec_pipe(t_data *data, int i, int fd, pid_t pid)
 	}
 }
 
-void			handle_pipe(t_data *data)
+void			handle_pipe(t_data *data, int i)
 {
 	if (!data->pipe[1])
 	{
-		data->line = ft_strdup(data->pipe[0]);
+		data->line = ft_strdup(data->multi[i]);
 		return (exec_line(data));
 	}
 	exec_pipe(data, 0, 0, -1);

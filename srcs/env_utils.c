@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/07 15:22:06 by schene            #+#    #+#             */
-/*   Updated: 2020/06/15 13:20:58 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 15:57:38 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ char	*rm_quotes_env(char *var)
 	int		len;
 
 	ret = ft_strdup(var);
-	var = remove_quotes(var);
 	len = ft_strncmp(ret, var, ft_strlen(var));
 	free(ret);
 	ret = NULL;

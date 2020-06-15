@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/04 18:00:00 by schene            #+#    #+#             */
-/*   Updated: 2020/06/15 13:20:31 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 13:26:02 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ t_list			*create_env(char **env)
 
 static void		print_elem(void *str)
 {
-	ft_putendl_fd((char *)str, 1);
+	if (ft_strchr(str, '=') != NULL)
+		ft_putendl_fd((char *)str, 1);
 }
 
 void			print_env(t_data *data)

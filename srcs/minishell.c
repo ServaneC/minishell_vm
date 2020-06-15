@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 13:07:55 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 16:07:20 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static void			exec_shell(t_data *data, char *line)
 		while (data->multi[++i])
 		{
 			data->pipe = split_spaces(data->multi[i], "|");
-			handle_pipe(data);
+			handle_pipe(data, i);
 			close_fd(data);
 			ft_free(data->pipe);
 			data->pipe = NULL;
