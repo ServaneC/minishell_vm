@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/04 14:50:13 by schene            #+#    #+#             */
-/*   Updated: 2020/06/12 11:16:52 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 16:36:57 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int		open_fd(t_data *data, char *name, int i)
 	int		my_fd;
 	char	*tmp;
 
-	tmp = echo_str(name, data);
+	tmp = escape_str(name, data);
 	free(name);
 	name = tmp;
 	my_fd = open(name, O_RDONLY);

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:40:08 by schene            #+#    #+#             */
-/*   Updated: 2020/06/15 15:29:30 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 16:16:36 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,6 @@ void			builtin_cd(t_data *data)
 	}
 	else
 	{
-		//str = echo_str(data->cmd[1], data);
 		str = ft_strdup(data->cmd[1]);
 		if (str[0] == '~')
 		{

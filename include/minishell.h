@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/15 16:11:52 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/15 16:39:49 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int				double_r(char *line, int i);
 char			*return_free(char **str);
 int				fd_handling(t_data *data, int start);
 char			*rm_quotes_env(char *var);
-char			*echo_str(char *str, t_data *data);
 int				len_variable(void *str);
 char			*removeplus(char *str);
 char			get_c_input(char *c, char str_i);
@@ -83,6 +82,6 @@ int				try_path(char *path);
 void			handle_pipe(t_data *data, int i);
 void			print_export(t_data *data);
 int				replace_ifexist(t_list *env, char *str);
-int				echo_variable(char *s, t_data *data, char **ret, int i);
+char			*escape_str(char *str, t_data *data);
 
 #endif

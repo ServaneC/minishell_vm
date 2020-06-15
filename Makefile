@@ -20,7 +20,6 @@ SRCS =	builtin.c \
 		redirection_utils.c \
 		fd_handling.c \
 		env_unset.c \
-		echo_str.c \
 		env_utils.c \
 		parse_error.c \
 		escape.c \
