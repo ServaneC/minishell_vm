@@ -91,7 +91,7 @@ int		len_variable(void *str)
 
 	s = (char *)str;
 	len = 0;
-	while (s[len] && s[len] != '=')
+	while (ft_isalnum(s[len]) || s[len] == '_')
 		len++;
 	return (len);
 }

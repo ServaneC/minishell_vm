@@ -18,12 +18,6 @@ static void		create_path(char **cmd, char *path, int i)
 	char		*bin;
 	char		*tmp;
 
-	if (path == NULL)
-	{
-		cmd[0] = NULL;
-		errno = 2;
-		return (free(cmd[0]));
-	}
 	p_tab = ft_split(path, ':');
 	while (p_tab[++i])
 	{
@@ -79,14 +73,18 @@ static void		print_exec_error(char *cmd)
 		ft_putendl_fd("command not found", 2);
 }
 
-static void		exec_path(t_data *data)
+static void		exec_path(t_data *data, char *path)
 {
-	char	*path;
 	char	*save;
 
 	save = ft_strdup(data->cmd[0]);
-	path = ft_strdup(var_value(data->env, "$PATH"));
-	if (data->cmd[0][0] != '/' && (ft_strncmp(data->cmd[0], "./", 2) != 0))
+	if (path == NULL)
+	{
+		free(data->cmd[0]);
+		data->cmd[0] = NULL;
+		errno = 2;
+	}
+	else if (data->cmd[0][0] != '/' && (ft_strncmp(data->cmd[0], "./", 2) != 0))
 		create_path(data->cmd, path, -1);
 	free(path);
 	path = NULL;
@@ -124,7 +122,7 @@ void			exec_line(t_data *data)
 		if (data->cmd[0] && is_builtin(data->cmd[0]))
 			exec_builtin(data);
 		else if (data->cmd[0])
-			exec_path(data);
+			exec_path(data, ft_strdup(var_value(data->env, "$PATH")));
 		ft_free(data->cmd);
 		data->cmd = NULL;
 	}

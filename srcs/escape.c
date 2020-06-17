@@ -86,7 +86,7 @@ static int		echo_simple_str(char *str, int i, char **ret, t_data *data)
 	{
 		if (str[i] == '\\')
 			i++;
-		if (str[i])
+		if (str[i] && !(str[i] == '$' && str[i + 1] && str[i + 1] == '\"'))
 			*ret = clean_ft_strjoin(*ret, ft_substr(str, i, 1));
 	}
 	return (i);
