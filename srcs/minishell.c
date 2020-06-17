@@ -65,6 +65,7 @@ static void			exec_shell(t_data *data, char *line)
 	data->multi = split_spaces(line, ";");
 	free(line);
 	line = NULL;
+	tmp = NULL;
 	if (data->multi)
 	{
 		while (data->multi[++i])
@@ -80,6 +81,24 @@ static void			exec_shell(t_data *data, char *line)
 	}
 }
 
+void				get_user_input(t_data *data, char **line)
+{
+	while (get_next_line(0, line) > 0)
+	{
+		if (g_ctrl_c || g_ctrl_q)
+			data->status = 130 + g_ctrl_q;
+		g_ctrl_c = 0;
+		g_ctrl_q = 0;
+		if (parse_error(*line))
+			data->status = 2;
+		else
+			exec_shell(data, *line);
+		ft_putstr_fd("minishell>> ", 2);
+	}
+	if (*line && **line != '\0')
+		get_user_input(data, line);
+}
+
 int					main(int ac, char **av, char **env)
 {
 	char	*line;
@@ -91,20 +110,9 @@ int					main(int ac, char **av, char **env)
 	signal(SIGINT, &ctr_c);
 	signal(SIGQUIT, &ctr_q);
 	data = init_data(env);
-	while (get_next_line(0, &line) > 0)
-	{
-		if (g_ctrl_c || g_ctrl_q)
-			data->status = 130 + g_ctrl_q;
-		g_ctrl_c = 0;
-		g_ctrl_q = 0;
-		if (parse_error(line))
-			data->status = 2;
-		else
-			exec_shell(data, line);
-		ft_putstr_fd("minishell>> ", 2);
-	}
+	get_user_input(data, &line);
 	if (line)
-		exec_shell(data, line);
+		free(line);
 	builtin_exit(data, 1);
 	return (0);
 }
