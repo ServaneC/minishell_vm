@@ -111,6 +111,8 @@ char			*escape_str(char *str, t_data *data)
 			i = echo_dbl_quotes(str, i, &ret, data);
 		else if (str[i])
 			i = echo_simple_str(str, i, &ret, data);
+		if (!str[i])
+			return (ret);
 	}
 	return (ret);
 }

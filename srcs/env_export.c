@@ -101,7 +101,7 @@ void				builtin_export(t_data *data)
 	i = 0;
 	while (data->cmd[++i])
 	{
-		str = rm_quotes_env(ft_strdup(data->cmd[i]));
+		str = ft_strdup(data->cmd[i]);
 		if (check_var_name(&str, data) == -1)
 			break ;
 		if ((ret = replace_ifexist(data->env, str)) == 0)

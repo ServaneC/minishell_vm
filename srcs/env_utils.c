@@ -39,34 +39,6 @@ char	*rm_quote_value(char *str)
 	return (ret);
 }
 
-char	*rm_quotes_env(char *var)
-{
-	char	*name;
-	char	*value;
-	char	*ret;
-	int		len;
-
-	ret = ft_strdup(var);
-	len = ft_strncmp(ret, var, ft_strlen(var));
-	free(ret);
-	ret = NULL;
-	if (ft_strchr(var, '=') == NULL)
-		return (var);
-	if (len == 0)
-	{
-		len = ft_strlen(var) - ft_strlen(ft_strchr(var, '='));
-		name = ft_substr(var, 0, ++len);
-		value = ft_strdup(&var[len]);
-		value = rm_quote_value(value);
-		ret = ft_strjoin(name, value);
-		free(value);
-		free(var);
-		free(name);
-		return (ret);
-	}
-	return (var);
-}
-
 char	*removeplus(char *str)
 {
 	char	*start;

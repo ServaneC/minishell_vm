@@ -69,7 +69,6 @@ int				simple_r(char *line, int i, char r);
 int				double_r(char *line, int i);
 char			*return_free(char **str);
 int				fd_handling(t_data *data, int start);
-char			*rm_quotes_env(char *var);
 int				len_variable(void *str);
 char			*removeplus(char *str);
 char			get_c_input(char *c, char str_i);
