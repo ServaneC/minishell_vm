@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/30 11:26:54 by schene            #+#    #+#             */
-/*   Updated: 2020/06/14 16:22:59 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/18 15:22:21 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int		next_s(char *cmd)
 {
-	if (!cmd || !(cmd[0]) || (!cmd[1] && cmd[0] == ' '))
+	if (!cmd || !(cmd[0]))
 		return (0);
 	return (1);
 }
@@ -27,6 +27,8 @@ static char		*remove_dq_in_echo(char *str)
 
 	i = -1;
 	j = -1;
+	if (str[0] == ' ' && !str[1])
+		return (ft_strdup("\0"));
 	if (!(ret = (char *)malloc(sizeof(char) * ft_strlen(str) + 1)))
 		return (NULL);
 	while (str[++i] && ft_isspace(str[i]))

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/18 15:00:21 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/18 15:37:58 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,10 @@ void				get_user_input(t_data *data, char **line)
 	save = NULL;
 	if (*line != NULL)
 		save = ft_strdup(*line);
-	if (g_ctrl_c)
-		printf("control_c\n");
 	while (get_next_line(0, line) > 0)
 	{
 		rm_save(line, &save);
+		save = NULL;
 		if (g_ctrl_c || g_ctrl_q)
 			data->status = 130 + g_ctrl_q;
 		g_ctrl_c = 0;
@@ -74,6 +73,7 @@ void				get_user_input(t_data *data, char **line)
 			exec_shell(data, *line);
 		ft_putstr_fd("minishell>> ", 2);
 	}
+	rm_save(line, &save);
 	if (*line && **line != '\0')
 		get_user_input(data, line);
 }
