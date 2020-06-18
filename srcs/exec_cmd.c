@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/27 15:48:44 by schene            #+#    #+#             */
-/*   Updated: 2020/06/15 16:36:45 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/18 15:02:48 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,6 @@ static void		exec_cmd(t_data *data, char **save)
 	if (data->status > 255)
 		data->status -= 255;
 	g_child_pid = 0;
-}
-
-static void		print_exec_error(char *cmd)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	if (errno != 2)
-		ft_putendl_fd(strerror(errno), 2);
-	else
-		ft_putendl_fd("command not found", 2);
 }
 
 static void		exec_path(t_data *data, char *path)
@@ -129,4 +118,32 @@ void			exec_line(t_data *data)
 	fd_handling(data, 0);
 	free(data->line);
 	data->line = NULL;
+}
+
+void			exec_shell(t_data *data, char *line)
+{
+	int		i;
+	char	*tmp;
+
+	i = -1;
+	tmp = contains_comment(line);
+	free(line);
+	line = tmp;
+	data->multi = split_spaces(line, ";");
+	free(line);
+	line = NULL;
+	tmp = NULL;
+	if (data->multi)
+	{
+		while (data->multi[++i])
+		{
+			data->pipe = split_spaces(data->multi[i], "|");
+			handle_pipe(data, i);
+			close_fd(data);
+			ft_free(data->pipe);
+			data->pipe = NULL;
+		}
+		ft_free(data->multi);
+		data->multi = NULL;
+	}
 }

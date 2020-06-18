@@ -65,6 +65,8 @@ int		len_variable(void *str)
 	len = 0;
 	while (ft_isalnum(s[len]) || s[len] == '_')
 		len++;
+	if (s[len] == '+')
+		len++;
 	return (len);
 }
 

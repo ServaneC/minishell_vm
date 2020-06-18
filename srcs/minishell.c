@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/24 16:49:51 by schene            #+#    #+#             */
-/*   Updated: 2020/06/15 16:07:20 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/18 15:00:21 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,56 +35,35 @@ static void			ctr_q(int num)
 	}
 }
 
-static t_data		*init_data(char **main_env)
+void				rm_save(char **line, char **save)
 {
-	t_data	*data;
-
-	if (!(data = (t_data *)malloc(sizeof(t_data))))
-		return (NULL);
-	data->env = create_env(main_env);
-	data->cmd = NULL;
-	data->output = 0;
-	data->line = NULL;
-	data->multi = NULL;
-	data->pipe = NULL;
-	data->dir = ft_strdup(var_value(data->env, "$PWD"));
-	data->status = 0;
-	data->input = 0;
-	return (data);
-}
-
-static void			exec_shell(t_data *data, char *line)
-{
-	int		i;
 	char	*tmp;
 
-	i = -1;
-	tmp = contains_comment(line);
-	free(line);
-	line = tmp;
-	data->multi = split_spaces(line, ";");
-	free(line);
-	line = NULL;
-	tmp = NULL;
-	if (data->multi)
+	if (g_ctrl_c && *save)
 	{
-		while (data->multi[++i])
-		{
-			data->pipe = split_spaces(data->multi[i], "|");
-			handle_pipe(data, i);
-			close_fd(data);
-			ft_free(data->pipe);
-			data->pipe = NULL;
-		}
-		ft_free(data->multi);
-		data->multi = NULL;
+		tmp = ft_substr(*line, ft_strlen(*save), ft_strlen(*line));
+		free(*line);
+		*line = tmp;
+	}
+	if (*save)
+	{
+		free(*save);
+		*save = NULL;
 	}
 }
 
 void				get_user_input(t_data *data, char **line)
 {
+	char	*save;
+
+	save = NULL;
+	if (*line != NULL)
+		save = ft_strdup(*line);
+	if (g_ctrl_c)
+		printf("control_c\n");
 	while (get_next_line(0, line) > 0)
 	{
+		rm_save(line, &save);
 		if (g_ctrl_c || g_ctrl_q)
 			data->status = 130 + g_ctrl_q;
 		g_ctrl_c = 0;
@@ -106,10 +85,11 @@ int					main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	ft_putstr_fd("minishell>> ", 2);
 	signal(SIGINT, &ctr_c);
 	signal(SIGQUIT, &ctr_q);
+	ft_putstr_fd("minishell>> ", 2);
 	data = init_data(env);
+	line = NULL;
 	get_user_input(data, &line);
 	if (line)
 		free(line);

@@ -6,7 +6,7 @@
 /*   By: schene <schene@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/02 16:28:49 by schene            #+#    #+#             */
-/*   Updated: 2020/06/15 16:39:49 by schene           ###   ########.fr       */
+/*   Updated: 2020/06/18 15:05:12 by schene           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,8 @@ void			handle_pipe(t_data *data, int i);
 void			print_export(t_data *data);
 int				replace_ifexist(t_list *env, char *str);
 char			*escape_str(char *str, t_data *data);
+t_data			*init_data(char **main_env);
+void			exec_shell(t_data *data, char *line);
+void			print_exec_error(char *cmd);
 
 #endif

@@ -25,7 +25,8 @@ SRCS =	builtin.c \
 		escape.c \
 		comments.c \
 		pipes.c \
-		export.c
+		export.c \
+		exec_cmd_utils.c
 
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 

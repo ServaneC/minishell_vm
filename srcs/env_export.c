@@ -43,8 +43,6 @@ static int			check_var_name(char **str, t_data *data)
 				return (1);
 			}
 			data->status = 1;
-			ft_putstr_fd("minishell: export: invalid variable name: ", 2);
-			ft_putendl_fd(name, 2);
 			return (error_name(str, &name, data));
 		}
 	}
